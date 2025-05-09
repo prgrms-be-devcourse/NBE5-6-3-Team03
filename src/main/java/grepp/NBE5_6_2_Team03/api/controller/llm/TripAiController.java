@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping("/api/ai")
 public class TripAiController {
 
     private final ChatLanguageModel chatLanguageModel;
