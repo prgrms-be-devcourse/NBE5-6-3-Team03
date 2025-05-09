@@ -4,5 +4,4 @@ import java.util.List;
 
 public record PlaceRecommendResponse(List<PlaceDto> places,
                                      String reason) {
-
 }
