@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인 화면</title>
+    <link rel="stylesheet" href="aa383dd9-7613-461f-abfd-fa1b92bb3d0e.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            margin: 0;
+            background-color: #f4f6f8;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            color: #333;
+        }
+        header, footer {
+            width: 100%;
+            padding: 15px;
+            background-color: #ffffff;
+            color: #555;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 320px;
+            margin: auto;
+        }
+        .btn {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: #3a5f8a;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        h1 {
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h2>Welcome to Our Site</h2>
+</header>
+
+<div class="container">
+    <h1>로그인</h1>
+    <form action="/users/login" method="POST">
+        <input type="text" name="username" placeholder="아이디" required>
+        <input type="password" name="password" placeholder="비밀번호" required>
+        <button type="submit" class="btn">로그인</button>
+    </form>
+    <button class="btn" onclick="location.href='/users/sign-up'">회원가입</button>
+</div>
+
+<footer>
+    &copy; 2025 My Website. All rights reserved.
+</footer>
+</body>
+</html>
