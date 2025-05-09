@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.admin.place;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +18,16 @@ public class PlaceService {
     private String apiKey;
 
     private final RestTemplate restTemplate = new RestTemplate();
-//    private final ObjectMapper objectMapper = new ObjectMapper();
     private final List<String> fields = List.of("name", "geometry/location",
     "address_components", "photos");
 
+//    private final AddressParser addressParser;
+//
+//    public PlaceService(AddressParser addressParser) {
+//        this.addressParser = addressParser;
+//    }
+
+    // limit은 최대 3번까지 가능, next_page_token 이 있는 경우 한정
     public List<String> searchPlaceIds(double lat, double lng, int radius, String type, int limit) {
         List<String> placeIds = new ArrayList<>();
         String nextPageToken = null;
@@ -59,7 +64,7 @@ public class PlaceService {
             // next_page_Token 를 포함한 요청은 2-5초후 요청해야 INVALID TOKEN 이 안뜸
             if (nextPageToken != null) {
                 try {
-                    Thread.sleep(2000);
+                    Thread.sleep(3000);
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
                     break;
@@ -88,6 +93,7 @@ public class PlaceService {
             .fromHttpUrl("https://maps.googleapis.com/maps/api/place/details/json")
             .queryParam("place_id", placeId)
             .queryParam("fields", fieldsString)
+            .queryParam("language", "ko")
             .queryParam("key", apiKey)
             .build()
             .encode()
@@ -101,7 +107,9 @@ public class PlaceService {
         double lat = geometry.path("lat").asDouble();
         double lng = geometry.path("lng").asDouble();
         String country = null;
-        String administrativeAreaLevel1 = null;
+        String city = null;
+//        String country = addressParser.parsingCountry(result.path("address_components"));
+//        String administrativeAreaLevel1 = addressParser.parsingCity(result.path("address_components"));
 
         for (JsonNode component : result.path("address_components")) {
             JsonNode types = component.path("types");
@@ -110,7 +118,7 @@ public class PlaceService {
                 if (typeText.equals("country")) {
                     country = component.path("long_name").asText();
                 } else if (typeText.equals("administrative_area_level_1")) {
-                    administrativeAreaLevel1 = component.path("long_name").asText();
+                    city = component.path("long_name").asText();
                 }
             }
         }
@@ -120,8 +128,7 @@ public class PlaceService {
         placeEntity.setLatitude(lat);
         placeEntity.setLongitude(lng);
         placeEntity.setCountry(country);
-        placeEntity.setCity(administrativeAreaLevel1);
-
+        placeEntity.setCity(city);
 
         return placeEntity;
     }

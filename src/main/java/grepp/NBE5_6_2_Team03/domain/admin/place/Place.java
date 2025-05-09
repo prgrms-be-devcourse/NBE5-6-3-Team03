@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.domain.admin.place.entity;
+package grepp.NBE5_6_2_Team03.domain.admin.place;
 import grepp.NBE5_6_2_Team03.global.entity.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
