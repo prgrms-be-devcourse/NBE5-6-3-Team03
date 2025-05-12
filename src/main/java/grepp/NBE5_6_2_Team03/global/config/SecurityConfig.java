@@ -21,23 +21,23 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-            .authorizeHttpRequests(
-                (auth) -> auth
-                    .requestMatchers("/", "/users/**").permitAll()
-                    .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/recommend").permitAll()
-                    .anyRequest().authenticated()
-            );
+                .authorizeHttpRequests(
+                        (auth) -> auth
+                                .requestMatchers("/", "/users/**").permitAll()
+                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/recommend").permitAll()
+                                .anyRequest().authenticated()
+                );
 
         http.csrf((auth) -> auth.disable());
 
         http
-            .formLogin(auth -> auth
-                .loginProcessingUrl("/users/login-process")
-                .usernameParameter("email")
-                .passwordParameter("password")
-                .defaultSuccessUrl("/users")
-                .permitAll()
-            );
+                .formLogin(auth -> auth
+                        .loginProcessingUrl("/users/login-process")
+                        .usernameParameter("email")
+                        .passwordParameter("password")
+                        .defaultSuccessUrl("/users")
+                        .permitAll()
+                );
 
         return http.build();
     }
