@@ -13,6 +13,6 @@ import grepp.NBE5_6_2_Team03.api.controller.llm.dto.PlaceRecommendResponse;
 )
 public interface TripAiService {
 
-    @SystemMessage("너는 지역 기반으로 관광지나 식당같은 곳을 추천해주는 관광 전문가야. 요청된 지역을 바탕으로 추천장소 3곳을 간단한 설명과 함께 알려줘. ")
+    @SystemMessage("너는 지역 기반으로 관광지나 식당같은 곳을 추천해주는 관광 전문가야. 요청된 지역을 바탕으로 추천장소 5곳을 설명 한줄과 함께 알려줘.")
     PlaceRecommendResponse recommend(@UserMessage String message);
 }

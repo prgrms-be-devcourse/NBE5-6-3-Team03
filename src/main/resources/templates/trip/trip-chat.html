@@ -80,10 +80,10 @@
   </style>
 </head>
 <body>
-<h2>어디 관광지나 식당 추천해줘!</h2>
+<h2>관광지/식당 추천!</h2>
 <div id="chat-box"></div>
 <div id="input-area">
-  <input type="text" id="chat-input" placeholder="도쿄에서 뭐 할까?" />
+  <input type="text" id="chat-input" placeholder="여행 장소/식당 추천해줄까?" />
   <button id="send-button" onclick="sendMessage()">보내기</button>
 </div>
 
@@ -103,11 +103,7 @@
     places.forEach(place => {
       const card = document.createElement("div");
       card.className = "place-card";
-      if (place.imageUrl) {
-        const img = document.createElement("img");
-        img.src = place.imageUrl;
-        card.appendChild(img);
-      }
+
       const name = document.createElement("h4");
       name.textContent = place.name;
       card.appendChild(name);
@@ -115,6 +111,10 @@
       const addr = document.createElement("p");
       addr.textContent = place.address;
       card.appendChild(addr);
+
+      const desc = document.createElement("p");
+      desc.textContent = place.description || "";
+      card.appendChild(desc);
 
       chatBox.appendChild(card);
     });
