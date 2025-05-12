@@ -19,7 +19,7 @@ import lombok.ToString;
 @Table(name = "place")
 @Getter @Setter @ToString
 @NoArgsConstructor
-public class Place extends BaseEntity {
+public class Place {
 
     @Id
     private String placeId;
