@@ -1,9 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.user;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -18,6 +15,8 @@ public class User {
     private String password;
     private String name;
     private String phoneNumber;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
 
     protected User() {
