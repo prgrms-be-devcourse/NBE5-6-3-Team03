@@ -1,0 +1,82 @@
+package grepp.NBE5_6_2_Team03.domain.schedule.service;
+
+import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleRequest;
+import grepp.NBE5_6_2_Team03.domain.plan.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
+import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.schedule.code.Status;
+import grepp.NBE5_6_2_Team03.domain.schedule.repository.TravelScheduleRepository;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+public class TravelScheduleService {
+
+    private final TravelScheduleRepository travelScheduleRepository;
+    private final TravelPlanRepository travelPlanRepository;
+
+    public void addSchedule(Long travelPlanId, TravelScheduleRequest request) {
+        TravelPlan plan = travelPlanRepository.findById(travelPlanId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 여행 계획이 존재하지 않습니다."));
+
+        TravelSchedule schedule = TravelSchedule.builder()
+            .travelPlan(plan)
+            .content(request.getContent())
+            .isFinished(Status.PLANNED)
+            .createdDateTime(LocalDateTime.now())
+            .modifiedDateTime(LocalDateTime.now())
+            .build();
+
+        travelScheduleRepository.save(schedule);
+    }
+
+    @Transactional
+    public Long updateSchedule(Long travelScheduleId, TravelScheduleRequest request) {
+        TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+
+        schedule.setContent(request.getContent());
+        schedule.setModifiedDateTime(LocalDateTime.now());
+
+        return schedule.getTravelPlan().getTravelPlanId();
+    }
+
+    @Transactional
+    public void deleteSchedule(Long travelScheduleId) {
+        TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+
+        travelScheduleRepository.delete(schedule);
+    }
+
+    @Transactional
+    public void scheduleStatus(Long travelScheduleId) {
+        TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+
+        if (schedule.getIsFinished() == Status.COMPLETED) {
+            schedule.setIsFinished(Status.PLANNED);
+            schedule.setModifiedDateTime(LocalDateTime.now());
+        } else {
+            schedule.setIsFinished(Status.COMPLETED);
+            schedule.setModifiedDateTime(LocalDateTime.now());
+        }
+    }
+
+    public List<TravelSchedule> getSchedulesByPlanId(Long travelPlanId) {
+        TravelPlan plan = travelPlanRepository.findById(travelPlanId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 여행 계획이 존재하지 않습니다."));
+
+        return travelScheduleRepository.findByTravelPlan(plan);
+    }
+
+    public TravelSchedule findById(Long travelScheduleId) {
+        return travelScheduleRepository.findById(travelScheduleId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+    }
+}
