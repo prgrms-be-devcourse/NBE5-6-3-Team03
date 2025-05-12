@@ -7,8 +7,8 @@ import grepp.NBE5_6_2_Team03.domain.llm.service.TripAiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -20,7 +20,7 @@ public class TripAiController {
     private final TripAiService tripAiService;
 
     @PostMapping("/chat")
-    public ResponseEntity<PlaceRecommendResponse> recommend(@RequestParam String message){
+    public ResponseEntity<PlaceRecommendResponse> recommend(@RequestBody String message){
         PlaceRecommendResponse response = tripAiService.recommend(message);
         return ResponseEntity.ok(response);
     }
