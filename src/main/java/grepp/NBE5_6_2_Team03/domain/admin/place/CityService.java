@@ -3,6 +3,8 @@ package grepp.NBE5_6_2_Team03.domain.admin.place;
 import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CityDto;
 import grepp.NBE5_6_2_Team03.domain.admin.place.entity.City;
 import grepp.NBE5_6_2_Team03.domain.admin.place.repository.CityRepository;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +26,16 @@ public class CityService {
             city.getLongitude(),
             city.getCityRange()
         );
+    }
+
+    public List<CityDto> getAllCities() {
+        return cityRepository.findAll().stream()
+            .map(city -> new CityDto(
+                city.getCityName(),
+                city.getLatitude(),
+                city.getLongitude(),
+                city.getCityRange()
+            ))
+            .collect(Collectors.toList());
     }
 }

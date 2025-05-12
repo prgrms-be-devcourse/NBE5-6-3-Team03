@@ -2,8 +2,10 @@ package grepp.NBE5_6_2_Team03.domain.admin.place;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
+import grepp.NBE5_6_2_Team03.domain.admin.place.repository.PlaceRepository;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +21,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GooglePlaceService {
+
+    private final PlaceRepository placeRepository;
 
     @Value("${google.maps.api.key}")
     private String apiKey;
@@ -89,6 +93,7 @@ public class GooglePlaceService {
 
         for (String id : placeIds) {
             Place place = getDetailsByPlaceId(id);
+            place.setPlaceId(id);
             resultMap.put(id, place);
         }
 
@@ -130,5 +135,23 @@ public class GooglePlaceService {
         }
 
         return new Place(country, city, name, address);
+    }
+
+    @Transactional
+    public void saveAll(Collection<Place> values) {
+        placeRepository.saveAll(values);
+    }
+
+    @Transactional
+    public void save(Place place) {
+        placeRepository.save(place);
+    }
+
+    public boolean isDataInitialized() {
+        return placeRepository.count() > 0;
+    }
+
+    public void setDataInitialized(boolean b) {
+
     }
 }
