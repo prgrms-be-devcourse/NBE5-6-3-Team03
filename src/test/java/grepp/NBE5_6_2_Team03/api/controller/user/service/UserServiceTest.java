@@ -3,7 +3,8 @@ package grepp.NBE5_6_2_Team03.api.controller.user.service;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
-import grepp.NBE5_6_2_Team03.global.exception.DuplicatedException;
+import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
+import grepp.NBE5_6_2_Team03.global.exception.UserSignUpException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +49,7 @@ class UserServiceTest {
 
         //when //then
         assertThatThrownBy(() -> userService.signup(request))
-                .isInstanceOf(DuplicatedException.class)
+                .isInstanceOf(UserSignUpException.class)
                 .hasMessage("회원 이메일이 이미 사용중 입니다.");
     }
 
@@ -64,7 +65,7 @@ class UserServiceTest {
 
         //when //then
         assertThatThrownBy(() -> userService.signup(request))
-                .isInstanceOf(DuplicatedException.class)
+                .isInstanceOf(UserSignUpException.class)
                 .hasMessage("회원 이름이 이미 사용중 입니다.");
     }
 

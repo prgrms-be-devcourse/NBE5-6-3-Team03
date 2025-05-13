@@ -100,11 +100,14 @@
         <p id="nameCheckResult" class="check-result"></p>
 
         <div class="single-input">
-            <input type="password" name="password" placeholder="비밀번호" required>
+            <input type="password" name="password" id="password" placeholder="비밀번호" required>
         </div>
+        <p id="passwordRuleMessage" class="check-result" style="text-align: left; font-size: 0.85rem;"></p>
+
         <div class="single-input">
-            <input type="tel" name="phone" placeholder="휴대폰 번호" required>
+            <input type="tel" name="phoneNumber" id="phone" placeholder="휴대폰 번호" required>
         </div>
+        <p id="phoneCheckResult" class="check-result" style="text-align: left; font-size: 0.85rem;"></p>
 
         <button type="submit" class="btn">회원가입</button>
     </form>
@@ -115,6 +118,7 @@
 </footer>
 
 <script>
+    // 이메일 중복 확인
     document.getElementById('checkEmailBtn').addEventListener('click', async () => {
         const email = document.getElementById('email').value;
 
@@ -141,6 +145,7 @@
         }
     });
 
+    // 이름 중복 확인
     document.getElementById('checkNameBtn').addEventListener('click', async () => {
         const name = document.getElementById('name').value;
 
@@ -164,6 +169,66 @@
         } catch (error) {
             console.error('이름 확인 중 오류 발생:', error);
             alert('이름 확인에 실패했습니다.');
+        }
+    });
+
+    // 비밀번호 유효성 검사
+    document.getElementById('password').addEventListener('input', (e) => {
+        const value = e.target.value;
+        const message = document.getElementById('passwordRuleMessage');
+        const specialCharCount = (value.match(/[!@#$%^&*()]/g) || []).length;
+
+        if (value.length >= 8 && value.length <= 15 && specialCharCount >= 2) {
+            message.textContent = '사용 가능한 비밀번호입니다.';
+            message.style.color = 'green';
+        } else {
+            message.textContent = '최소 8자 ~ 15자이며 특수문자를 2개 이상 포함';
+            message.style.color = 'red';
+        }
+    });
+
+    // 이름 유효성 검사
+    document.getElementById('name').addEventListener('input', () => {
+        const value = document.getElementById('name').value;
+        const resultElement = document.getElementById('nameCheckResult');
+        const nameRegex = /^[A-Za-z가-힣0-9]{2,10}$/;
+
+        if (nameRegex.test(value)) {
+            resultElement.textContent = '올바른 이름 형식입니다.';
+            resultElement.style.color = 'green';
+        } else {
+            resultElement.textContent = '한영 숫자 2자~10자 가능 합니다.';
+            resultElement.style.color = 'red';
+        }
+    });
+
+    // 이메일 형식 유효성 검사
+    document.getElementById('email').addEventListener('input', () => {
+        const value = document.getElementById('email').value;
+        const resultElement = document.getElementById('emailCheckResult');
+        const emailRegex = /^[A-Za-z0-9]+@[A-Za-z0-9]+\.com$/;
+
+        if (emailRegex.test(value)) {
+            resultElement.textContent = '올바른 이메일 형식입니다.';
+            resultElement.style.color = 'green';
+        } else {
+            resultElement.textContent = '올바른 이메일 형식이 아닙니다.';
+            resultElement.style.color = 'red';
+        }
+    });
+
+    // 휴대폰 번호 유효성 검사
+    document.getElementById('phone').addEventListener('input', () => {
+        const value = document.getElementById('phone').value;
+        const resultElement = document.getElementById('phoneCheckResult');
+        const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
+
+        if (phoneRegex.test(value)) {
+            resultElement.textContent = '올바른 휴대폰 번호 형식입니다.';
+            resultElement.style.color = 'green';
+        } else {
+            resultElement.textContent = '형식: 010-1234-5678';
+            resultElement.style.color = 'red';
         }
     });
 </script>

@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.api.controller.user;
 
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
-import grepp.NBE5_6_2_Team03.api.controller.user.service.UserService;
+import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

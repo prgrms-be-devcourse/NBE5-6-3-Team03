@@ -2,7 +2,7 @@ package grepp.NBE5_6_2_Team03.api.controller.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
-import grepp.NBE5_6_2_Team03.api.controller.user.service.UserService;
+import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +59,7 @@ class UserControllerTest {
         return UserSignUpRequest.builder()
                 .email(email)
                 .name(name)
-                .password("tempPassword")
+                .password("tempPassword!@")
                 .phoneNumber("010-1234-5678")
                 .build();
     }
