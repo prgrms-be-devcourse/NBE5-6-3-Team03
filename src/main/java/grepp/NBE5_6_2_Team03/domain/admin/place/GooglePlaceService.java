@@ -21,7 +21,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class GooglePlaceService {
-
+    private static final int MAX_REQUEST = 3;
     private final PlaceRepository placeRepository;
 
     @Value("${google.maps.api.key}")
@@ -31,15 +31,14 @@ public class GooglePlaceService {
     private final List<String> fields = List.of("name", "geometry/location",
     "address_components", "formatted_address", "photos");
 
-    /**
-     * limit은 최대 3번까지 가능, next_page_token 이 있는 경우 한정
-     */
-    public List<String> searchPlaceIds(double lat, double lng, int radius, String type, int limit) {
+    public List<String> searchPlaceIds(double lat, double lng, int radius, String type, int maxPageRequests
+    ) {
         List<String> placeIds = new ArrayList<>();
         String nextPageToken = null;
         int attempt = 0;
+        int limit = Math.min(maxPageRequests, MAX_REQUEST);
 
-        while (nextPageToken != null && attempt < limit){
+         do {
             URI uri = getDetailsUriWithNextPageToken(lat, lng, radius, type, nextPageToken);
 
             JsonNode root = restTemplate.getForObject(uri, JsonNode.class);
@@ -52,31 +51,23 @@ public class GooglePlaceService {
 
             // next_page_token 를 포함한 요청은 2-5초후 요청해야 INVALID Request 가 안뜸
             if (nextPageToken != null) {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    break;
-                }
+                waitUntilToValidToken();
             }
-        }
+        } while ( hasNextPage(nextPageToken) && attempt < limit);
 
         return placeIds;
     }
 
-    private URI getDetailsUriWithNextPageToken(double lat, double lng, int radius, String type, String nextPageToken) {
-        URI uri = UriComponentsBuilder
-            .fromHttpUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/json")
-            .queryParam("location", lat + "," + lng)
-            .queryParam("radius", radius)
-            .queryParam("type", type)
-            .queryParam("key", apiKey)
-            .queryParamIfPresent("pagetoken", nextPageToken == null ? java.util.Optional.empty() : java.util.Optional.of(
-                nextPageToken))
-            .build()
-            .encode()
-            .toUri();
-        return uri;
+    private boolean hasNextPage(String nextPageToken) {
+        return nextPageToken != null;
+    }
+
+    private void waitUntilToValidToken() {
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
     }
 
     /**
@@ -122,15 +113,19 @@ public class GooglePlaceService {
         String country = null;
         String city = null;
 
+        // address_components 에서 원하는 속성만을 추출
         for (JsonNode component : result.path("address_components")) {
-            JsonNode types = component.path("types");
-            for (JsonNode type : types) {
-                String typeText = type.asText();
-                if (typeText.equals("country")) {
-                    country = component.path("long_name").asText();
-                } else if (typeText.equals("administrative_area_level_1")) {
-                    city = component.path("long_name").asText();
-                }
+            List<String> typeList = new ArrayList<>();
+            for (JsonNode typeNode : component.path("types")) {
+                typeList.add(typeNode.asText());
+            }
+
+            if (typeList.contains("country")) {
+                country = component.path("long_name").asText();
+            }
+
+            if (typeList.contains("administrative_area_level_1")) {
+                city = component.path("long_name").asText();
             }
         }
 
@@ -143,6 +138,21 @@ public class GooglePlaceService {
             .queryParam("place_id", placeId)
             .queryParam("language", "ko")
             .queryParam("key", apiKey)
+            .build()
+            .encode()
+            .toUri();
+        return uri;
+    }
+
+    private URI getDetailsUriWithNextPageToken(double lat, double lng, int radius, String type, String nextPageToken) {
+        URI uri = UriComponentsBuilder
+            .fromHttpUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/json")
+            .queryParam("location", lat + "," + lng)
+            .queryParam("radius", radius)
+            .queryParam("type", type)
+            .queryParam("key", apiKey)
+            .queryParamIfPresent("pagetoken", nextPageToken == null ? java.util.Optional.empty() : java.util.Optional.of(
+                nextPageToken))
             .build()
             .encode()
             .toUri();

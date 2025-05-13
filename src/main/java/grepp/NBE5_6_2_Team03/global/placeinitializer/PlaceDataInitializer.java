@@ -22,17 +22,18 @@ public class PlaceDataInitializer implements CommandLineRunner {
     private final CityService cityService;
     private final TranslationService translationService;
 
+
     @Value("${app.data-initialized}")
     private boolean dataInitialized;
 
     @Override
     public void run(String[] args) {
-        // 이미 DB에 데이터가 있는지 확인
+
         boolean isDataInitialized = googlePlaceService.isDataInitialized();
         if (isDataInitialized) {
             return;
         }
-        // 초기화되지 않았다면
+
         List<CityResponse> cities = cityService.getAllCities(); // 모든 도시 조회
 
         for (CityResponse cityResponse : cities) {
@@ -45,10 +46,8 @@ public class PlaceDataInitializer implements CommandLineRunner {
             // Place 객체에 placeId 설정 후 DB에 저장
             for (Place place : details.values()) {
                 // 번역된 도시 이름 설정
-//                String translatedCountryName = translationService.getTranslatedName(place.getCountry());
                 String translatedCityName = translationService.getTranslatedName(place.getCity());
                 place.setPlaceId(place.getPlaceId());
-//                place.setCountry(translatedCountryName);
                 place.setCity(translatedCityName);
                 String placeName = place.getPlaceName();
                 if (placeName != null && !placeName.isEmpty() && placeName.substring(0, 1).matches("[가-힣]")) {

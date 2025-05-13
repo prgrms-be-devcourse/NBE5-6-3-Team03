@@ -32,13 +32,6 @@ public class PlaceServiceTest {
         System.out.println(results);
     }
 
-//    @Test
-//    void getDetailsByPlaceIds() throws IOException {
-//        List<String> results = placeService.searchPlaceIds(34.6937,135.5023, 7000, "tourist_attraction", 1);
-//        Map<String, Place> detailsByPlaceIds = placeService.getDetailsByPlaceIds(results);
-//        System.out.println("wyatt: " + detailsByPlaceIds);
-//    }
-
     @Test
     void getDetailsByPlaceIds() throws IOException {
         List<String> results = placeService.searchPlaceIds(34.6937, 135.5023, 7000, "tourist_attraction", 1);

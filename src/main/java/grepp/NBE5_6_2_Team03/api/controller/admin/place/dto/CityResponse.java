@@ -28,9 +28,6 @@ public class CityResponse {
         );
     }
 
-    /**
-     * cities 를 받아 LIST<Response> 를 반환
-     */
     public static List<CityResponse> fromList(List<City> cities) {
         return cities.stream()
             .map(CityResponse::from)

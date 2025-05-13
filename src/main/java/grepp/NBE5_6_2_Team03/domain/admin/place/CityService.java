@@ -4,7 +4,6 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CityResponse;
 import grepp.NBE5_6_2_Team03.domain.admin.place.entity.City;
 import grepp.NBE5_6_2_Team03.domain.admin.place.repository.CityRepository;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,14 +17,9 @@ public class CityService {
             .orElseThrow(() -> new IllegalArgumentException("City not found"));
     }
 
-    public CityResponse toDto(String cityName) {
+    public CityResponse getCityResponse(String cityName) {
         City city = getCityEntity(cityName);
-        return new CityResponse(
-            city.getCityName(),
-            city.getLatitude(),
-            city.getLongitude(),
-            city.getCityRange()
-        );
+        return CityResponse.from(city);
     }
 
     public List<CityResponse> getAllCities() {

@@ -2,17 +2,13 @@ package grepp.NBE5_6_2_Team03.domain.admin.place.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "place")
-@Getter @Setter
+@Getter 
 @NoArgsConstructor
 public class Place {
 
@@ -31,6 +27,13 @@ public class Place {
         this.placeName = placeName;
         this.latitude = latitude;
         this.longitude = longitude;
+    }
+    
+    public void setPlaceId(String placeId) {
+        this.placeId = placeId;
+    }
+    public void setCity(String city) {
+        this.city = city;
     }
 
 }
