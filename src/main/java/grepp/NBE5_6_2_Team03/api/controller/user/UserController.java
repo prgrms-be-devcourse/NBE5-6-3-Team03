@@ -1,9 +1,11 @@
 package grepp.NBE5_6_2_Team03.api.controller.user;
 
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
+import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -33,6 +35,12 @@ public class UserController {
 
         userService.signup(request);
         return "redirect:/";
+    }
+
+    @GetMapping("/home")
+    public String userHome(@AuthenticationPrincipal CustomUserDetails user, Model model){
+        model.addAttribute("username", user.getUsername());
+        return "user/home";
     }
 
     @ResponseBody
