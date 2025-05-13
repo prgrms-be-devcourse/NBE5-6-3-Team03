@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.api.controller.llm;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import grepp.NBE5_6_2_Team03.api.controller.llm.dto.PlaceRecommendRequest;
 import grepp.NBE5_6_2_Team03.api.controller.llm.dto.PlaceRecommendResponse;
 import grepp.NBE5_6_2_Team03.domain.llm.service.TripAiService;
 import lombok.RequiredArgsConstructor;
