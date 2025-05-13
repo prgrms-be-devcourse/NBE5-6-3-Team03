@@ -22,25 +22,27 @@ public class Place {
     private String country;
     private String city;
     private String placeName;
-    private String address;
+    private Double latitude;
+    private Double longitude;
     private LocalDateTime createdAt = LocalDateTime.now();
     private LocalDateTime updatedAt = LocalDateTime.now();
 
 
-    public Place(String country, String city, String placeName, String address) {
+    public Place(String country, String city, String placeName, String address, Double latitude, Double longitude) {
         this.country = country;
         this.city = city;
         this.placeName = placeName;
-        this.address = address;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     @PrePersist
     public void prePersist() {
-        createdAt = LocalDateTime.now();  // 객체가 처음 저장될 때 생성 시간을 설정
+        createdAt = LocalDateTime.now();  // 객체가 처음 저장될 때 생성 시간설정
         updatedAt = LocalDateTime.now();  // 처음 저장될 때 업데이트 시간도 설정
     }
     @PreUpdate
     public void preUpdate() {
-        updatedAt = LocalDateTime.now();  // 업데이트 시 업데이트 시간을 설정
+        updatedAt = LocalDateTime.now();  // 업데이트 시 업데이트 시간설정
     }
 }

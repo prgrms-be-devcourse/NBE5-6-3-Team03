@@ -135,7 +135,7 @@ public class GooglePlaceService {
             }
         }
 
-        return new Place(country, city, name, address);
+        return new Place(country, city, name, address, lat, lng);
     }
 
     @Transactional
@@ -152,7 +152,4 @@ public class GooglePlaceService {
         return placeRepository.count() > 0;
     }
 
-    public void setDataInitialized(boolean b) {
-
-    }
 }
