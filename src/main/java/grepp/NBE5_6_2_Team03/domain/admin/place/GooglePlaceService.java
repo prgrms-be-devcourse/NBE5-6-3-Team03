@@ -106,6 +106,7 @@ public class GooglePlaceService {
         URI uri = UriComponentsBuilder
             .fromHttpUrl("https://maps.googleapis.com/maps/api/place/details/json")
             .queryParam("place_id", placeId)
+            .queryParam("language", "ko")
             .queryParam("key", apiKey)
             .build()
             .encode()
