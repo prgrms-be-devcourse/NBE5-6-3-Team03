@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>여행 계획 목록</title>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .travel-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 1rem;
+    }
+
+    .travel-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-title {
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      font-weight: bold;
+    }
+
+    body {
+      background-color: #f8f9fa;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold"> 내 여행 계획</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#planModal">+ 여행 계획 추가</button>
+  </div>
+
+  <!-- 카드 리스트 -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" th:each="plan : ${plans}">
+      <div class="card travel-card shadow-sm h-100 border-0">
+        <div class="card-body">
+          <h5 class="card-title text-primary fw-bold" th:text="${plan.name}">계획명</h5>
+          <h6 class="card-subtitle mb-2 text-muted" th:text="${plan.country}">국가</h6>
+          <p class="card-text small">
+            <strong>기간:</strong>
+            <span th:text="${plan.travelStartDate} + ' ~ ' + ${plan.travelEndDate}"></span><br/>
+            <strong>예산:</strong> <span th:text="${plan.publicMoney}"></span>원<br/>
+            <strong>인원수:</strong> <span th:text="${plan.count}"></span>명
+          </p>
+        </div>
+        <div class="card-footer bg-white border-0 d-flex justify-content-end gap-2">
+          <a class="btn btn-outline-primary btn-sm px-3" th:href="@{'/plans/edit/' + ${plan.travelPlanId}}">수정</a>
+          <a class="btn btn-outline-danger btn-sm px-3"
+             th:href="@{'/plans/delete/' + ${plan.travelPlanId}}"
+             onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ✅ 여행 계획 등록 모달 -->
+<div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="planForm">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary" id="planModalLabel">✈️ 여행 계획 등록</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="name" class="form-control mb-2" placeholder="계획 이름" required>
+          <input type="text" name="country" class="form-control mb-2" placeholder="국가" required>
+          <input type="number" name="publicMoney" class="form-control mb-2" placeholder="예산" required>
+          <input type="number" name="count" class="form-control mb-2" placeholder="인원 수" required>
+          <input type="date" name="travelStartDate" class="form-control mb-2" required>
+          <input type="date" name="travelEndDate" class="form-control mb-2" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ✅ 모달 등록 처리 JS -->
+<script>
+  document.getElementById('planForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('/plan/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error('등록 실패');
+      return res.text();
+    })
+    .then(() => {
+      alert('등록 완료!');
+      form.reset();
+      bootstrap.Modal.getInstance(document.getElementById('planModal')).hide();
+      location.reload(); // 또는 리스트만 갱신
+    })
+    .catch(err => alert(err));
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
