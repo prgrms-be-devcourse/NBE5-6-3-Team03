@@ -3,7 +3,7 @@ package grepp.NBE5_6_2_Team03.domain.user.service;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
-import grepp.NBE5_6_2_Team03.global.exception.UserSignUpException;
+import grepp.NBE5_6_2_Team03.domain.user.exception.UserSignUpException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
