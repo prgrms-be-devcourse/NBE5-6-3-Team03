@@ -39,17 +39,8 @@ public class GooglePlaceService {
         String nextPageToken = null;
         int attempt = 0;
 
-        do {
-            URI uri = UriComponentsBuilder
-                .fromHttpUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/json")
-                .queryParam("location", lat + "," + lng)
-                .queryParam("radius", radius)
-                .queryParam("type", type)
-                .queryParam("key", apiKey)
-                .queryParamIfPresent("pagetoken", nextPageToken == null ? java.util.Optional.empty() : java.util.Optional.of(nextPageToken))
-                .build()
-                .encode()
-                .toUri();
+        while (nextPageToken != null && attempt < limit){
+            URI uri = getDetailsUriWithNextPageToken(lat, lng, radius, type, nextPageToken);
 
             JsonNode root = restTemplate.getForObject(uri, JsonNode.class);
             JsonNode results = root.path("results");
@@ -68,9 +59,24 @@ public class GooglePlaceService {
                     break;
                 }
             }
-        } while (nextPageToken != null && attempt < limit);
+        }
 
         return placeIds;
+    }
+
+    private URI getDetailsUriWithNextPageToken(double lat, double lng, int radius, String type, String nextPageToken) {
+        URI uri = UriComponentsBuilder
+            .fromHttpUrl("https://maps.googleapis.com/maps/api/place/nearbysearch/json")
+            .queryParam("location", lat + "," + lng)
+            .queryParam("radius", radius)
+            .queryParam("type", type)
+            .queryParam("key", apiKey)
+            .queryParamIfPresent("pagetoken", nextPageToken == null ? java.util.Optional.empty() : java.util.Optional.of(
+                nextPageToken))
+            .build()
+            .encode()
+            .toUri();
+        return uri;
     }
 
     /**
@@ -103,14 +109,7 @@ public class GooglePlaceService {
     public Place getDetailsByPlaceId(String placeId) {
 
         String fieldsString = String.join(",", fields);
-        URI uri = UriComponentsBuilder
-            .fromHttpUrl("https://maps.googleapis.com/maps/api/place/details/json")
-            .queryParam("place_id", placeId)
-            .queryParam("language", "ko")
-            .queryParam("key", apiKey)
-            .build()
-            .encode()
-            .toUri();
+        URI uri = getDetailsUri(placeId);
 
         JsonNode root = restTemplate.getForObject(uri, JsonNode.class);
         JsonNode result = root.path("result");
@@ -136,6 +135,18 @@ public class GooglePlaceService {
         }
 
         return new Place(country, city, name, address, lat, lng);
+    }
+
+    private URI getDetailsUri(String placeId) {
+        URI uri = UriComponentsBuilder
+            .fromHttpUrl("https://maps.googleapis.com/maps/api/place/details/json")
+            .queryParam("place_id", placeId)
+            .queryParam("language", "ko")
+            .queryParam("key", apiKey)
+            .build()
+            .encode()
+            .toUri();
+        return uri;
     }
 
     @Transactional

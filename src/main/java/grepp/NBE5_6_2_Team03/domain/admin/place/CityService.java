@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.admin.place;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CityDto;
+import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CityResponse;
 import grepp.NBE5_6_2_Team03.domain.admin.place.entity.City;
 import grepp.NBE5_6_2_Team03.domain.admin.place.repository.CityRepository;
 import java.util.List;
@@ -18,9 +18,9 @@ public class CityService {
             .orElseThrow(() -> new IllegalArgumentException("City not found"));
     }
 
-    public CityDto toDto(String cityName) {
+    public CityResponse toDto(String cityName) {
         City city = getCityEntity(cityName);
-        return new CityDto(
+        return new CityResponse(
             city.getCityName(),
             city.getLatitude(),
             city.getLongitude(),
@@ -28,14 +28,10 @@ public class CityService {
         );
     }
 
-    public List<CityDto> getAllCities() {
-        return cityRepository.findAll().stream()
-            .map(city -> new CityDto(
-                city.getCityName(),
-                city.getLatitude(),
-                city.getLongitude(),
-                city.getCityRange()
-            ))
-            .collect(Collectors.toList());
+    public List<CityResponse> getAllCities() {
+        List<City> cities = cityRepository.findAll();
+        return CityResponse.fromList(cities);
     }
+
+
 }

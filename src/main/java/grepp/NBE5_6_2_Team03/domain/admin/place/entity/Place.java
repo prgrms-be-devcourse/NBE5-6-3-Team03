@@ -9,11 +9,10 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table(name = "place")
-@Getter @Setter @ToString
+@Getter @Setter
 @NoArgsConstructor
 public class Place {
 
@@ -24,8 +23,6 @@ public class Place {
     private String placeName;
     private Double latitude;
     private Double longitude;
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
 
 
     public Place(String country, String city, String placeName, String address, Double latitude, Double longitude) {
@@ -36,13 +33,4 @@ public class Place {
         this.longitude = longitude;
     }
 
-    @PrePersist
-    public void prePersist() {
-        createdAt = LocalDateTime.now();  // 객체가 처음 저장될 때 생성 시간설정
-        updatedAt = LocalDateTime.now();  // 처음 저장될 때 업데이트 시간도 설정
-    }
-    @PreUpdate
-    public void preUpdate() {
-        updatedAt = LocalDateTime.now();  // 업데이트 시 업데이트 시간설정
-    }
 }

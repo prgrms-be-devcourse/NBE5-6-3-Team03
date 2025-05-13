@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.global.placeinitializer;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CityDto;
+import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CityResponse;
 import grepp.NBE5_6_2_Team03.domain.admin.place.CityService;
 import grepp.NBE5_6_2_Team03.domain.admin.place.GooglePlaceService;
 import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
@@ -33,12 +33,12 @@ public class PlaceDataInitializer implements CommandLineRunner {
             return;
         }
         // 초기화되지 않았다면
-        List<CityDto> cities = cityService.getAllCities(); // 모든 도시 조회
+        List<CityResponse> cities = cityService.getAllCities(); // 모든 도시 조회
 
-        for (CityDto cityDto : cities) {
+        for (CityResponse cityResponse : cities) {
             Set<String> placeIds = new HashSet<>();
-            placeIds.addAll(googlePlaceService.searchPlaceIds(cityDto.getLatitude(), cityDto.getLongitude(), cityDto.getRadius(), "tourist_attraction", 3));
-            placeIds.addAll(googlePlaceService.searchPlaceIds(cityDto.getLatitude(), cityDto.getLongitude(), cityDto.getRadius(), "point_of_interest", 3));
+            placeIds.addAll(googlePlaceService.searchPlaceIds(cityResponse.getLatitude(), cityResponse.getLongitude(), cityResponse.getRadius(), "tourist_attraction", 3));
+            placeIds.addAll(googlePlaceService.searchPlaceIds(cityResponse.getLatitude(), cityResponse.getLongitude(), cityResponse.getRadius(), "point_of_interest", 3));
 
             Map<String, Place> details = googlePlaceService.getDetailsByPlaceIds(placeIds);
 
