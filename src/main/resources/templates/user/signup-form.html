@@ -76,6 +76,8 @@
         .check-result {
             margin-top: 5px;
             font-size: 0.9rem;
+            text-align: left;
+            padding-left: 2px;
         }
     </style>
 </head>
@@ -88,13 +90,13 @@
     <h1>회원가입</h1>
     <form action="/users/sign-up" method="POST">
         <div class="input-group">
-            <input type="email" id="email" name="email" placeholder="이메일" required>
+            <input type="email" id="email" name="email" placeholder="ex) test@example.com" required>
             <button type="button" id="checkEmailBtn">중복 확인</button>
         </div>
         <p id="emailCheckResult" class="check-result"></p>
 
         <div class="input-group">
-            <input type="text" id="name" name="name" placeholder="이름" required>
+            <input type="text" id="name" name="name" placeholder="ex) 홍길동" required>
             <button type="button" id="checkNameBtn">중복 확인</button>
         </div>
         <p id="nameCheckResult" class="check-result"></p>
@@ -105,7 +107,7 @@
         <p id="passwordRuleMessage" class="check-result" style="text-align: left; font-size: 0.85rem;"></p>
 
         <div class="single-input">
-            <input type="tel" name="phoneNumber" id="phone" placeholder="휴대폰 번호" required>
+            <input type="tel" name="phoneNumber" id="phone" placeholder="ex) 010-1234-5678" required>
         </div>
         <p id="phoneCheckResult" class="check-result" style="text-align: left; font-size: 0.85rem;"></p>
 
@@ -133,7 +135,7 @@
 
             const resultElement = document.getElementById('emailCheckResult');
             if (result.available) {
-                resultElement.textContent = '사용 가능한 이메일입니다.';
+                resultElement.textContent = '사용 가능 합니다. 이메일 형식을 체크해주세요';
                 resultElement.style.color = 'green';
             } else {
                 resultElement.textContent = '이미 사용 중인 이메일입니다.';
@@ -160,7 +162,7 @@
 
             const resultElement = document.getElementById('nameCheckResult');
             if (result.available) {
-                resultElement.textContent = '사용 가능한 이름입니다.';
+                resultElement.textContent = '사용 가능 합니다. 이름 형식을 체크해주세요.';
                 resultElement.style.color = 'green';
             } else {
                 resultElement.textContent = '이미 사용 중인 이름입니다.';
