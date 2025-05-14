@@ -11,6 +11,6 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public String dashboard(Model model) {
-        return "admin-dashboard";
+        return "admin/dashboard";
     }
 }
