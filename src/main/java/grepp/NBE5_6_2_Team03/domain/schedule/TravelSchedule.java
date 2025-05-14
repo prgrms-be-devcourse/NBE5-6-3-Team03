@@ -1,6 +1,5 @@
 package grepp.NBE5_6_2_Team03.domain.schedule;
 
-import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
 import grepp.NBE5_6_2_Team03.domain.plan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.schedule.code.Status;
 import jakarta.persistence.*;

@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,9 +28,10 @@ public class TravelScheduleService {
         TravelSchedule schedule = TravelSchedule.builder()
             .travelPlan(plan)
             .content(request.getContent())
+            .placeName(request.getPlaceName())
             .isFinished(Status.PLANNED)
+            .travelScheduleDate(request.getTravelScheduleDate())
             .createdDateTime(LocalDateTime.now())
-            .modifiedDateTime(LocalDateTime.now())
             .build();
 
         travelScheduleRepository.save(schedule);
@@ -41,6 +43,8 @@ public class TravelScheduleService {
             .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
 
         schedule.setContent(request.getContent());
+        schedule.setPlaceName(request.getPlaceName());
+        schedule.setTravelScheduleDate(request.getTravelScheduleDate());
         schedule.setModifiedDateTime(LocalDateTime.now());
 
         return schedule.getTravelPlan().getTravelPlanId();
@@ -61,11 +65,11 @@ public class TravelScheduleService {
 
         if (schedule.getIsFinished() == Status.COMPLETED) {
             schedule.setIsFinished(Status.PLANNED);
-            schedule.setModifiedDateTime(LocalDateTime.now());
         } else {
             schedule.setIsFinished(Status.COMPLETED);
-            schedule.setModifiedDateTime(LocalDateTime.now());
         }
+
+        schedule.setModifiedDateTime(LocalDateTime.now());
     }
 
     public List<TravelSchedule> getSchedulesByPlanId(Long travelPlanId) {

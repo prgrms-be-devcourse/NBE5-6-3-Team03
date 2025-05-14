@@ -36,8 +36,10 @@ public class TravelScheduleController {
                            @PathVariable Long travelScheduleId,
                            Model model) {
         TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
-        model.addAttribute("editSchedule", schedule);
+
         model.addAttribute("travelPlanId", travelPlanId);
+        model.addAttribute("travelScheduleId", travelScheduleId);
+        model.addAttribute("request", TravelScheduleRequest.fromEntity(schedule));
         return "schedule/schedule-form";
     }
 
