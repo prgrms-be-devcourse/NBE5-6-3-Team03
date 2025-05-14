@@ -1,13 +1,15 @@
 package grepp.NBE5_6_2_Team03.api.controller.user;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
-import grepp.NBE5_6_2_Team03.api.controller.user.service.UserService;
+import grepp.NBE5_6_2_Team03.domain.user.file.FileStore;
+import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
+import grepp.NBE5_6_2_Team03.global.config.security.SecurityContextUpdater;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,6 +17,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ActiveProfiles("test")
 @WithMockUser
 @WebMvcTest(UserController.class)
 class UserControllerTest {
@@ -23,10 +26,13 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @MockitoBean
+    private FileStore fileStore;
+
+    @MockitoBean
     private UserService userService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    @MockitoBean
+    private SecurityContextUpdater updater;
 
     @DisplayName("회원 가입 폼을 요청할 때 회원 가입 폼으로 이동 한다.")
     @Test
@@ -48,7 +54,10 @@ class UserControllerTest {
 
         mockMvc.perform(
                 post("/users/sign-up")
-                        .content(objectMapper.writeValueAsString(request))
+                        .param("email", request.getEmail())
+                        .param("password", request.getPassword())
+                        .param("name", request.getName())
+                        .param("phoneNumber", request.getPhoneNumber())
                         .with(csrf())
         )
                         .andExpect(status().is3xxRedirection())
@@ -59,7 +68,7 @@ class UserControllerTest {
         return UserSignUpRequest.builder()
                 .email(email)
                 .name(name)
-                .password("tempPassword")
+                .password("tempPassword!@")
                 .phoneNumber("010-1234-5678")
                 .build();
     }

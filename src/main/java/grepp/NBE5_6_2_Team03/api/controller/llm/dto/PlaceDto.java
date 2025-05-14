@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlaceDto {
     private String name;
-    private String imageUrl;
     private String address;
+    private String description;
 }

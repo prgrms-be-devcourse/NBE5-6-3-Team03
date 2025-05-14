@@ -1,8 +1,12 @@
-package grepp.NBE5_6_2_Team03.global.config;
+package grepp.NBE5_6_2_Team03.global.config.security;
 
+import grepp.NBE5_6_2_Team03.domain.user.service.CustomUserDetailsService;
+import grepp.NBE5_6_2_Team03.global.handler.CustomLoginSuccessHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -10,7 +14,18 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final CustomUserDetailsService userDetailsService;
+    private final CustomLoginSuccessHandler loginSuccessHandler;
+
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        return builder.build();
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -24,7 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers("/", "/users/**").permitAll()
-                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/recommend", "/plan/**").permitAll()
+                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat","/plan/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -35,7 +50,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/users/login-process")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/users")
+                        .successHandler(loginSuccessHandler)
                         .permitAll()
                 );
 
