@@ -22,7 +22,6 @@
       font-size: 0.85rem;
     }
   </style>
-
 </head>
 <body class="bg-light">
 
@@ -68,11 +67,11 @@
           <div class="mt-2">
             <a href="#" class="btn btn-sm btn-outline-primary me-1 edit-btn"
                th:attr="data-id=${place.placeId},
-              data-name=${place.placeName},
-              data-country=${place.country},
-              data-city=${place.city},
-              data-lat=${place.latitude},
-              data-lng=${place.longitude}">
+                        data-name=${place.placeName},
+                        data-country=${place.country},
+                        data-city=${place.city},
+                        data-lat=${place.latitude},
+                        data-lng=${place.longitude}">
               ✏️ 수정
             </a>
             <a th:href="@{/place/places/{id}/delete(id=${place.placeId})}"
@@ -85,6 +84,13 @@
   </div>
 </div>
 
+<!-- ✅ 페이지네이션 영역 -->
+<nav class="mt-4">
+  <ul class="pagination justify-content-center" id="pagination">
+    <!-- JavaScript로 페이지 번호 생성 -->
+  </ul>
+</nav>
+
 <!-- 수정 모달 -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -96,7 +102,6 @@
         </div>
         <div class="modal-body">
           <input type="hidden" name="placeId" id="editPlaceId">
-
           <div class="mb-3">
             <label for="editPlaceName" class="form-label">장소명</label>
             <input type="text" class="form-control" id="editPlaceName" name="placeName" required>
@@ -127,22 +132,25 @@
   </div>
 </div>
 
-
-<!-- ✅ 필터링 스크립트 -->
-<script th:inline="javascript">
-  let allPlaces = /*[[${places}]]*/ [];
-</script>
+<!-- ✅ 스크립트: 필터링 + 페이지네이션 연동 -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const countrySelect = document.getElementById('countryFilter');
     const citySelect = document.getElementById('cityFilter');
-    const cards = document.querySelectorAll('#placeList > .col-12');
+    const cards = Array.from(document.querySelectorAll('#placeList > .col-12'));
+    const pagination = document.getElementById('pagination');
+    const itemsPerPage = 20;
+
+    let filteredCards = cards.slice();
+    let currentPage = 1;
 
     function getCitiesByCountry(country) {
       const cities = new Set();
-      allPlaces.forEach(place => {
-        if (!country || place.country === country) {
-          cities.add(place.city);
+      cards.forEach(card => {
+        const c = card.getAttribute('data-country');
+        const city = card.getAttribute('data-city');
+        if (!country || c === country) {
+          cities.add(city);
         }
       });
       return Array.from(cities).sort();
@@ -163,13 +171,41 @@
       const selectedCountry = countrySelect.value;
       const selectedCity = citySelect.value;
 
-      cards.forEach(card => {
+      filteredCards = cards.filter(card => {
         const country = card.getAttribute('data-country');
         const city = card.getAttribute('data-city');
-        const show = (!selectedCountry || country === selectedCountry) &&
+        return (!selectedCountry || country === selectedCountry) &&
             (!selectedCity || city === selectedCity);
-        card.style.display = show ? 'block' : 'none';
       });
+
+      showPage(1);
+    }
+
+    function showPage(page) {
+      currentPage = page;
+      const start = (page - 1) * itemsPerPage;
+      const end = page * itemsPerPage;
+
+      cards.forEach(card => card.style.display = 'none');
+      filteredCards.slice(start, end).forEach(card => card.style.display = 'block');
+
+      renderPagination();
+    }
+
+    function renderPagination() {
+      pagination.innerHTML = '';
+      const totalPages = Math.ceil(filteredCards.length / itemsPerPage);
+
+      for (let i = 1; i <= totalPages; i++) {
+        const li = document.createElement('li');
+        li.className = 'page-item' + (i === currentPage ? ' active' : '');
+        li.innerHTML = `<a class="page-link" href="#">${i}</a>`;
+        li.addEventListener('click', function (e) {
+          e.preventDefault();
+          showPage(i);
+        });
+        pagination.appendChild(li);
+      }
     }
 
     countrySelect.addEventListener('change', function () {
@@ -179,10 +215,12 @@
 
     citySelect.addEventListener('change', filterCards);
 
-    // 초기 도시 옵션 전체 로딩
     updateCityOptions('');
+    filterCards(); // 초기 적용
   });
 </script>
+
+<!-- ✏️ 수정 모달 기능 -->
 <script>
   document.addEventListener('DOMContentLoaded', function () {
     const editButtons = document.querySelectorAll('.edit-btn');
@@ -191,27 +229,21 @@
 
     editButtons.forEach(btn => {
       btn.addEventListener('click', function (e) {
-        e.preventDefault(); // 기본 링크 방지
-
-        // 데이터 채우기
+        e.preventDefault();
         document.getElementById('editPlaceId').value = this.dataset.id;
         document.getElementById('editPlaceName').value = this.dataset.name;
         document.getElementById('editCountry').value = this.dataset.country;
         document.getElementById('editCity').value = this.dataset.city;
         document.getElementById('editLatitude').value = this.dataset.lat;
         document.getElementById('editLongitude').value = this.dataset.lng;
-
-        // 폼 action 설정
         form.action = `/place/places/${this.dataset.id}/edit`;
-
-        // 모달 띄우기
         modal.show();
       });
     });
   });
 </script>
 
-<!-- Bootstrap JS (필수) -->
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
