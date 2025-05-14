@@ -1,9 +1,9 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin.place;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.PlaceDto;
+import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.PlaceResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.PlaceRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.place.PlaceService;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,22 +21,24 @@ public class PlacesController {
 
     @GetMapping("/info")
     public String getPlaces(Model model) {
-        List<PlaceDto> places = placeService.findAll();
-        Set<String> countries = placeService.getCounties(places);
-        Set<String> cities = placeService.getCities(places);
+        List<PlaceResponse> places = placeService.findAll();
+        List<String> countries = placeService.getCountries();
+        List<String> cities = placeService.getCities();
         model.addAttribute("places", places);
         model.addAttribute("countries", countries);
         model.addAttribute("cities", cities);
         return "admin/place-info";
     }
+
     @GetMapping("/places/{id}/edit")
     public String editPlace(Model model, @PathVariable String id) {
-        PlaceDto place = placeService.findById(id);
+        PlaceResponse place = placeService.findById(id);
         model.addAttribute("place", place);
         return "place-edit";
     }
+
     @PostMapping("/places/{id}/edit")
-    public String editPlace(Model model, @PathVariable String id, PlaceDto place,
+    public String editPlace(Model model, @PathVariable String id, PlaceRequest place,
         RedirectAttributes redirectAttributes) {
         placeService.updatePlace(id, place);
 
@@ -44,18 +46,11 @@ public class PlacesController {
         return "redirect:/place/info";
     }
 
-    @GetMapping("/places/{id}/delete")
+    @PostMapping("/places/{id}/delete")
     public String deletePlace(@PathVariable String id, RedirectAttributes redirectAttributes) {
         placeService.deleteById(id);
         redirectAttributes.addFlashAttribute("message", "Place deleted successfully.");
         return "redirect:/place/info";
-    }
-
-
-
-    @GetMapping("test")
-    public String test() {
-        return "admin/test";
     }
 
 }
