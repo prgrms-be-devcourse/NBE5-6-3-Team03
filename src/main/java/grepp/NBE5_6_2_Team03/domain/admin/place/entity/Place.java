@@ -24,7 +24,7 @@ public class Place {
 
 
     @Builder
-    public Place(String country, String city, String placeName, String address, Double latitude, Double longitude) {
+    public Place(String country, String city, String placeName, Double latitude, Double longitude) {
         this.country = country;
         this.city = city;
         this.placeName = placeName;
