@@ -1,14 +1,27 @@
 package grepp.NBE5_6_2_Team03.api.controller.user;
 
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
-import grepp.NBE5_6_2_Team03.api.controller.user.service.UserService;
+import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.userEditRequest;
+import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
+import grepp.NBE5_6_2_Team03.domain.user.User;
+import grepp.NBE5_6_2_Team03.domain.user.command.UserCreateCommand;
+import grepp.NBE5_6_2_Team03.domain.user.command.UserEditCommand;
+import grepp.NBE5_6_2_Team03.domain.user.file.FileStore;
+import grepp.NBE5_6_2_Team03.domain.user.file.UploadFile;
+import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
+import grepp.NBE5_6_2_Team03.global.config.security.SecurityContextUpdater;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Collections;
 import java.util.Map;
 
@@ -18,6 +31,8 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final FileStore fileStore;
+    private final SecurityContextUpdater securityContextUpdater;
 
     @GetMapping("/sign-up")
     public String signUpForm(Model model){
@@ -31,8 +46,34 @@ public class UserController {
             return "/user/signup-form";
         }
 
-        userService.signup(request);
+        UserCreateCommand command = UserCreateCommand.from(request);
+        userService.signup(command);
         return "redirect:/";
+    }
+
+    @GetMapping("/home")
+    public String userHome(@AuthenticationPrincipal CustomUserDetails user, Model model){
+        model.addAttribute("username", user.getUsername());
+        return "user/home";
+    }
+
+    @GetMapping("/my-page")
+    public String myPage(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) throws MalformedURLException {
+        User user = userDetails.getUser();
+        model.addAttribute("user", user);
+        return "user/my-page";
+    }
+
+    @PostMapping("/edit")
+    public String editUser(@AuthenticationPrincipal CustomUserDetails userDetails,
+                           @ModelAttribute userEditRequest request) throws IOException {
+
+        UploadFile uploadFile = fileStore.storeFile(request.getProfileImage());
+        UserEditCommand userEditCommand = UserEditCommand.of(request, uploadFile);
+        User updatedUser = userService.editUser(userEditCommand, userDetails.getId());
+        securityContextUpdater.updateAuthentication(updatedUser, request.getRawPassword());
+
+        return "redirect:/users/my-page";
     }
 
     @ResponseBody
@@ -47,5 +88,11 @@ public class UserController {
     public Map<String, Boolean> checkName(@RequestParam String name){
         boolean exists = userService.findByName(name);
         return Collections.singletonMap("available", !exists);
+    }
+
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource showImage(@PathVariable("filename") String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFileDir() + filename);
     }
 }

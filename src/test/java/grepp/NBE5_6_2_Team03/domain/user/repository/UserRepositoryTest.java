@@ -2,17 +2,18 @@ package grepp.NBE5_6_2_Team03.domain.user.repository;
 
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import jakarta.persistence.EntityManager;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.*;
 
+@ActiveProfiles("test")
 @Transactional
 @SpringBootTest
 class UserRepositoryTest {

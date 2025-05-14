@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>정보 수정</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header, footer {
+            padding: 16px;
+            background-color: #fff;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .form-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 420px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .profile-image-container {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto 20px auto;
+            background-color: #e0e0e0;
+            cursor: pointer;
+        }
+
+        .profile-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .no-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .profile-image-container .overlay {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.5);
+            color: #fff;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-image-container:hover .overlay {
+            opacity: 1;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: #444;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        input[type="file"] {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        input[type="file"] {
+            font-size: 14px;
+            display: none;
+        }
+
+        button {
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #2d8cf0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #1976d2;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>정보 수정</h1>
+</header>
+
+<div class="form-container">
+    <form th:action="@{/users/edit}" method="post" th:object="${user}" enctype="multipart/form-data">
+        <!-- 프로필 이미지 -->
+        <div class="profile-image-container" onclick="document.getElementById('profileImage').click()">
+            <img id="preview"
+                 th:if="${user?.uploadFile != null}"
+                 th:src="@{'/users/images/' + ${user.uploadFile.storeFileName}}" alt="프로필 사진" />
+            <div th:if="${user?.uploadFile == null}" class="no-image">사진 없음</div>
+            <div class="overlay">이미지 변경</div>
+        </div>
+
+        <input type="file" id="profileImage" name="profileImage" accept="image/*" onchange="previewImage(event)" />
+
+        <!-- 이메일 -->
+        <label for="email">이메일</label>
+        <input type="email" id="email" th:field="*{email}" required>
+
+        <!-- 이름 -->
+        <label for="name">이름</label>
+        <input type="text" id="name" th:field="*{name}" required>
+
+        <!-- 휴대폰 번호 -->
+        <label for="phoneNumber">휴대폰 번호</label>
+        <input type="tel" id="phoneNumber" th:field="*{phoneNumber}" required>
+
+        <!-- 비밀번호 확인 -->
+        <label for="rawPassword">비밀번호 확인</label>
+        <input type="password" id="rawPassword" name="rawPassword" required placeholder="현재 비밀번호를 입력하세요">
+
+        <!-- 제출 -->
+        <button type="submit">수정 완료</button>
+    </form>
+</div>
+
+<footer>
+    <p>&copy; 2025 여행 일정 관리 서비스</p>
+</footer>
+
+<script>
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                let img = document.getElementById('preview');
+                if (!img) {
+                    img = document.createElement('img');
+                    img.id = 'preview';
+                    const container = document.querySelector('.profile-image-container');
+                    container.innerHTML = '';
+                    container.appendChild(img);
+                    const overlay = document.createElement('div');
+                    overlay.className = 'overlay';
+                    overlay.innerText = '이미지 변경';
+                    container.appendChild(overlay);
+                }
+                img.src = e.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    }
+</script>
+
+</body>
+</html>
