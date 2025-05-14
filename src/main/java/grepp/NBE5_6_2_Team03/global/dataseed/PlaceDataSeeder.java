@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.global.placeinitializer;
+package grepp.NBE5_6_2_Team03.global.dataseed;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CityResponse;
 import grepp.NBE5_6_2_Team03.domain.admin.place.CityService;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PlaceDataInitializer implements CommandLineRunner {
+public class PlaceDataSeeder implements CommandLineRunner {
 
     private final GooglePlaceService googlePlaceService;
     private final CityService cityService;
