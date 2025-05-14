@@ -82,7 +82,11 @@
         </div>
         <div class="modal-body">
           <input type="text" name="name" class="form-control mb-2" placeholder="계획 이름" required>
-          <input type="text" name="country" class="form-control mb-2" placeholder="국가" required>
+          <select name="country" class="form-control mb-2" required>
+            <option value="">국가 선택</option>
+            <option value="일본">일본</option>
+            <option value="베트남">베트남</option>
+          </select>
           <input type="number" name="publicMoney" class="form-control mb-2" placeholder="예산"
                  required>
           <input type="number" name="count" class="form-control mb-2" placeholder="인원 수" required>
@@ -110,7 +114,11 @@
         <div class="modal-body">
           <input type="hidden" id="editPlanId"/>
           <input type="text" id="editName" class="form-control mb-2" placeholder="계획 이름">
-          <input type="text" id="editCountry" class="form-control mb-2" placeholder="국가">
+          <select id="editCountry" class="form-control mb-2" required>
+            <option value="" disabled selected>국가 선택</option>
+            <option value="일본">일본</option>
+            <option value="베트남">베트남</option>
+          </select>
           <input type="number" id="editMoney" class="form-control mb-2" placeholder="예산">
           <input type="number" id="editCount" class="form-control mb-2" placeholder="인원 수">
           <input type="date" id="editStart" class="form-control mb-2">
