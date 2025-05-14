@@ -1,9 +1,9 @@
-package grepp.NBE5_6_2_Team03.api.controller.user.service;
+package grepp.NBE5_6_2_Team03.domain.user.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
-import grepp.NBE5_6_2_Team03.global.exception.DuplicatedException;
+import grepp.NBE5_6_2_Team03.global.exception.UserSignUpException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,7 +38,7 @@ public class UserService {
     private void duplicatedEmailCheck(User user) {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(findUser -> {
-                    throw new DuplicatedException(USER_EMAIL, USER_EMAIL_DUPLICATED);
+                    throw new UserSignUpException(USER_EMAIL, USER_EMAIL_DUPLICATED);
                 });
     }
 
@@ -46,7 +46,7 @@ public class UserService {
         userRepository.findByName(user.getName())
                 .ifPresent(
                         findUser -> {
-                            throw new DuplicatedException(USER_NAME, USER_NAME_DUPLICATED);
+                            throw new UserSignUpException(USER_NAME, USER_NAME_DUPLICATED);
                         }
                 );
     }

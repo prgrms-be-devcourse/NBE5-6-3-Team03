@@ -1,9 +1,9 @@
 package grepp.NBE5_6_2_Team03.global.exception;
 
-public class DuplicatedException extends BusinessException{
+public class UserSignUpException extends BusinessException {
     private final Reason reason;
 
-    public DuplicatedException(Reason reason, Message message) {
+    public UserSignUpException(Reason reason, Message message) {
         super(message.getDescription());
         this.reason = reason;
     }
