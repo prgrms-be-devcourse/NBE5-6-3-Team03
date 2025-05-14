@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.global.advice;
 
-import grepp.NBE5_6_2_Team03.global.exception.UserSignUpException;
+import grepp.NBE5_6_2_Team03.domain.user.exception.UserSignUpException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 

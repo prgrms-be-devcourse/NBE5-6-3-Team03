@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -69,8 +69,8 @@
 
 <div class="container">
     <h1>로그인</h1>
-    <form action="/users/login" method="POST">
-        <input type="text" name="username" placeholder="아이디" required>
+    <form th:action="@{/users/login-process}" method="post">
+        <input type="text" name="email" placeholder="아이디" required>
         <input type="password" name="password" placeholder="비밀번호" required>
         <button type="submit" class="btn">로그인</button>
     </form>

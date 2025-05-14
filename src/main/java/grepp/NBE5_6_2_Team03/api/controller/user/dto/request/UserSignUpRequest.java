@@ -4,10 +4,12 @@ import grepp.NBE5_6_2_Team03.domain.user.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Setter;
 
 import static grepp.NBE5_6_2_Team03.domain.user.Role.*;
 
+@Getter
 @Setter
 public class UserSignUpRequest {
 
@@ -69,11 +71,4 @@ public class UserSignUpRequest {
                 .build();
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
 }

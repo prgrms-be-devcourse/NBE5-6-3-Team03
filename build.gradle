@@ -48,6 +48,8 @@ dependencies {
 	implementation 'p6spy:p6spy:3.9.1'
 	implementation 'com.github.gavlyukovskiy:datasource-decorator-spring-boot-autoconfigure:1.9.0'
 
+	// 테스트 h2 데이터 베이스 추가
+	testImplementation 'com.h2database:h2'
 }
 
 tasks.named('test') {
