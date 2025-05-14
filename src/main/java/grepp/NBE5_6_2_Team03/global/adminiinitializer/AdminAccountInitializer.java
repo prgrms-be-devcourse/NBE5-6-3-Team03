@@ -19,15 +19,18 @@ public class AdminAccountInitializer {
     public void initAdminAccount() {
         String adminEmail = "admin@admin.com";
 
-        if (userRepository.findByEmail(adminEmail).isEmpty()) {
-            User admin = User.builder()
-                .email(adminEmail)
-                .password(bCryptPasswordEncoder.encode("admin1234"))
-                .name("관리자")
-                .role(Role.ROLE_ADMIN)
-                .build();
-
-            userRepository.save(admin);
+        if (userRepository.findByEmail(adminEmail).isPresent()) {
+            return;
         }
+
+        User admin = User.builder()
+            .email(adminEmail)
+            .password(bCryptPasswordEncoder.encode("admin1234"))
+            .name("관리자")
+            .role(Role.ROLE_ADMIN)
+            .build();
+
+        userRepository.save(admin);
+
     }
 }

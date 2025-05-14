@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     @GetMapping("/dashboard")
-    public String dashboard(Model model) {
+    public String dashboard() {
         return "admin/dashboard";
     }
 }
