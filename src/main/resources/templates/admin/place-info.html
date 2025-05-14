@@ -74,9 +74,12 @@
                         data-lng=${place.longitude}">
               ✏️ 수정
             </a>
-            <a th:href="@{/place/places/{id}/delete(id=${place.placeId})}"
-               onclick="return confirm('정말 삭제하시겠습니까?');"
-               class="btn btn-sm btn-outline-danger">🗑 삭제</a>
+            <form th:action="@{/place/places/{id}/delete(id=${place.placeId})}" method="post"
+                  th:onsubmit="return confirm('정말 삭제하시겠습니까?');"
+                  style="display:inline;">
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+              <button type="submit" class="btn btn-sm btn-outline-danger">🗑 삭제</button>
+            </form>
           </div>
         </div>
       </div>
