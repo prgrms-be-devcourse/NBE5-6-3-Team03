@@ -5,6 +5,7 @@ import grepp.NBE5_6_2_Team03.domain.schedule.code.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -22,10 +23,18 @@ public class TravelSchedule {
     @JoinColumn(name = "travelPlanId")
     private TravelPlan travelPlan;
 
+    @ManyToOne
+    @JoinColumn(name = "placeId")
+    private Place place;
+
     private String content;
-    private LocalDateTime createdDateTime;
-    private LocalDateTime modifiedDateTime;
+    private String placeName;
 
     @Enumerated(EnumType.STRING)
     private Status isFinished;
+
+    private Boolean recommend;
+    private LocalDate travelScheduleDate;
+    private LocalDateTime createdDateTime;
+    private LocalDateTime modifiedDateTime;
 }
