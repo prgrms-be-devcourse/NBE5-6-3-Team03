@@ -1,6 +1,7 @@
 package grepp.NBE5_6_2_Team03.global.config.security;
 
 import grepp.NBE5_6_2_Team03.domain.user.service.CustomUserDetailsService;
+import grepp.NBE5_6_2_Team03.global.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
+    private final CustomLoginSuccessHandler loginSuccessHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -48,7 +50,7 @@ public class SecurityConfig {
                         .loginProcessingUrl("/users/login-process")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                        .defaultSuccessUrl("/users/home", true)
+                        .successHandler(loginSuccessHandler)
                         .permitAll()
                 );
 
