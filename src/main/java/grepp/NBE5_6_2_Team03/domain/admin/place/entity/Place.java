@@ -5,10 +5,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 @Table(name = "place")
-@Getter 
+@Getter @Setter
 @NoArgsConstructor
 public class Place {
 
@@ -27,13 +29,6 @@ public class Place {
         this.placeName = placeName;
         this.latitude = latitude;
         this.longitude = longitude;
-    }
-    
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
-    }
-    public void setCity(String city) {
-        this.city = city;
     }
 
 }
