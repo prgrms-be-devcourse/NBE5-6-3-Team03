@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.global.dataseed;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CityResponse;
-import grepp.NBE5_6_2_Team03.domain.admin.place.CityService;
+import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CountryResponse;
+import grepp.NBE5_6_2_Team03.domain.admin.place.CountryService;
 import grepp.NBE5_6_2_Team03.domain.admin.place.GooglePlaceService;
 import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
 import grepp.NBE5_6_2_Team03.domain.admin.place.util.TranslationService;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 public class PlaceDataSeeder implements CommandLineRunner {
 
     private final GooglePlaceService googlePlaceService;
-    private final CityService cityService;
+    private final CountryService countryService;
     private final TranslationService translationService;
 
 
@@ -34,9 +34,9 @@ public class PlaceDataSeeder implements CommandLineRunner {
             return;
         }
 
-        List<CityResponse> cities = cityService.getAllCities(); // 모든 도시 조회
+        List<CountryResponse> cities = countryService.getAllCities(); // 모든 도시 조회
 
-        for (CityResponse cityResponse : cities) {
+        for (CountryResponse cityResponse : cities) {
             Set<String> placeIds = new HashSet<>();
             placeIds.addAll(googlePlaceService.searchPlaceIds(cityResponse.getLatitude(), cityResponse.getLongitude(), cityResponse.getRadius(), "tourist_attraction", 3));
             placeIds.addAll(googlePlaceService.searchPlaceIds(cityResponse.getLatitude(), cityResponse.getLongitude(), cityResponse.getRadius(), "point_of_interest", 3));
