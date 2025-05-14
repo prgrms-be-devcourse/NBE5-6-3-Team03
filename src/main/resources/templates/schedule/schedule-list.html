@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>여행 일정 목록</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        body {
+            background: #f7f9fc;
+            padding: 40px;
+        }
+
+        .add-btn {
+            display: block;
+            margin: 0 0 24px auto;
+            padding: 8px 16px;
+            background: #4a6fa5;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            text-align: center;
+            width: max-content;
+        }
+
+        .schedule-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .schedule-card {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+            font-size: 0.75rem;
+        }
+
+        .completed { background: #28a745; }
+        .ongoing { background: #ffc107; }
+
+        .btn-group {
+            display: flex;
+            gap: 6px;
+            margin-top: auto;
+            justify-content: flex-end;
+        }
+
+        .btn-group a,
+        .btn-group button {
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            border: 1px solid;
+            background: transparent;
+            text-align: center;
+            cursor: pointer;
+            white-space: nowrap;
+            width: auto;
+            text-decoration: none;
+        }
+
+        .btn-edit { color: #007bff; border-color: #007bff; }
+        .btn-delete { color: #dc3545; border-color: #dc3545; }
+        .btn-status { color: #6610f2; border-color: #6610f2; }
+    </style>
+</head>
+<body>
+
+<h2>여행 일정 목록</h2>
+
+<a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/add'}" class="add-btn">+ 일정 추가</a>
+
+<div class="schedule-container">
+    <div class="schedule-card" th:each="schedule : ${schedules}">
+        <h4 th:text="${schedule.content}">제목</h4>
+        <div th:if="${schedule.placeName != null and !#strings.isEmpty(schedule.placeName)}">
+            장소: <span th:text="${schedule.placeName}"></span>
+        </div>
+        <div>날짜: <span th:text="${schedule.travelScheduleDate}"></span></div>
+        <div>
+            <span th:if="${schedule.isFinished.name() == 'COMPLETED'}" class="status completed">완료</span>
+            <span th:if="${schedule.isFinished.name() != 'COMPLETED'}" class="status ongoing">진행중</span>
+        </div>
+
+        <div class="btn-group">
+            <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/edit'}" class="btn-edit">수정</a>
+            <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/delete'}" method="post">
+                <button type="submit" class="btn-delete">삭제</button>
+            </form>
+            <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/status'}" method="post">
+                <button type="submit" class="btn-status">상태변경</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
