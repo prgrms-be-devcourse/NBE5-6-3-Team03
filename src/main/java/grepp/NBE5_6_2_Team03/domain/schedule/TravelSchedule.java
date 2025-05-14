@@ -24,17 +24,12 @@ public class TravelSchedule {
     @JoinColumn(name = "travelPlanId")
     private TravelPlan travelPlan;
 
-    @ManyToOne
-    @JoinColumn(name = "placeId")
-    private Place place;
-
     private String content;
     private String placeName;
 
     @Enumerated(EnumType.STRING)
     private Status isFinished;
 
-    private Boolean recommend;
     private LocalDate travelScheduleDate;
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
