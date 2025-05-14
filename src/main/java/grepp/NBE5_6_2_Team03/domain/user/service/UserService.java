@@ -39,6 +39,11 @@ public class UserService {
         return user;
     }
 
+    public User findUserById(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("회원을 찾지 못했습니다."));
+    }
+
     public Boolean findByName(String name) {
         return userRepository.findByName(name).isPresent();
     }
@@ -56,10 +61,8 @@ public class UserService {
 
     private void duplicatedNameCheck(User user) {
         userRepository.findByName(user.getName())
-                .ifPresent(
-                        findUser -> {
+                .ifPresent(findUser -> {
                             throw new UserSignUpException(USER_NAME, USER_NAME_DUPLICATED);
-                        }
-                );
+                });
     }
 }

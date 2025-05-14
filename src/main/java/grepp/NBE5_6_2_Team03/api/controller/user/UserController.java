@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.api.controller.user;
 
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
-import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.userEditRequest;
+import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.command.UserCreateCommand;
@@ -58,15 +58,15 @@ public class UserController {
     }
 
     @GetMapping("/my-page")
-    public String myPage(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) throws MalformedURLException {
-        User user = userDetails.getUser();
+    public String myPage(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+        User user = userService.findUserById(userDetails.getId());
         model.addAttribute("user", user);
         return "user/my-page";
     }
 
     @PostMapping("/edit")
     public String editUser(@AuthenticationPrincipal CustomUserDetails userDetails,
-                           @ModelAttribute userEditRequest request) throws IOException {
+                           @ModelAttribute UserEditRequest request) throws IOException {
 
         UploadFile uploadFile = fileStore.storeFile(request.getProfileImage());
         UserEditCommand userEditCommand = UserEditCommand.of(request, uploadFile);

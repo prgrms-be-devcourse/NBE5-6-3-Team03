@@ -30,7 +30,9 @@ public class User {
     }
 
     @Builder
-    private User(String email, String password, String name, String phoneNumber, Role role) {
+    private User(Long id, String email, String password,
+                 String name, String phoneNumber, Role role) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
