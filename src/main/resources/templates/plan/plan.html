@@ -3,7 +3,8 @@
 <head>
   <title>여행 계획 목록</title>
   <link rel="stylesheet" href="/css/styles.css"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet">
   <style>
     .travel-card {
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -21,6 +22,8 @@
 
     .btn-primary {
       font-weight: bold;
+
+
     }
 
     body {
@@ -33,7 +36,8 @@
 
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="fw-bold"> 내 여행 계획</h2>
-    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#planModal">+ 여행 계획 추가</button>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#planModal">+ 여행 계획 추가
+    </button>
   </div>
 
   <!-- 카드 리스트 -->
@@ -52,11 +56,13 @@
         </div>
         <div class="card-footer bg-white border-0 d-flex justify-content-end gap-2">
           <button class="btn btn-sm btn-outline-primary"
-                 th:data-id="${plan.travelPlanId}"
-                  onclick="openEditModal(this)">수정</button>
-          <a class="btn btn-outline-danger btn-sm px-3"
-             th:href="@{'/plans/delete/' + ${plan.travelPlanId}}"
-             onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+                  th:data-id="${plan.travelPlanId}"
+                  onclick="openEditModal(this)">수정
+          </button>
+          <form th:action="@{'/plan/delete/' + ${plan.travelPlanId}}" method="post"
+                onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            <button type="submit" class="btn btn-outline-danger btn-sm">삭제</button>
+          </form>
         </div>
       </div>
     </div>
@@ -65,7 +71,8 @@
 </div>
 
 <!-- ✅ 여행 계획 등록 모달 -->
-<div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel" aria-hidden="true">
+<div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form id="planForm">
@@ -76,7 +83,8 @@
         <div class="modal-body">
           <input type="text" name="name" class="form-control mb-2" placeholder="계획 이름" required>
           <input type="text" name="country" class="form-control mb-2" placeholder="국가" required>
-          <input type="number" name="publicMoney" class="form-control mb-2" placeholder="예산" required>
+          <input type="number" name="publicMoney" class="form-control mb-2" placeholder="예산"
+                 required>
           <input type="number" name="count" class="form-control mb-2" placeholder="인원 수" required>
           <input type="date" name="travelStartDate" class="form-control mb-2" required>
           <input type="date" name="travelEndDate" class="form-control mb-2" required>
@@ -90,7 +98,8 @@
 </div>
 
 <!-- ✅여행 계획 수정 모달 -->
-<div class="modal fade" id="editPlanModal" tabindex="-1" aria-labelledby="editPlanModalLabel" aria-hidden="true">
+<div class="modal fade" id="editPlanModal" tabindex="-1" aria-labelledby="editPlanModalLabel"
+     aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <form id="editPlanForm">
@@ -99,7 +108,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
         </div>
         <div class="modal-body">
-          <input type="hidden" id="editPlanId" />
+          <input type="hidden" id="editPlanId"/>
           <input type="text" id="editName" class="form-control mb-2" placeholder="계획 이름">
           <input type="text" id="editCountry" class="form-control mb-2" placeholder="국가">
           <input type="number" id="editMoney" class="form-control mb-2" placeholder="예산">
@@ -116,10 +125,9 @@
 </div>
 
 
-
 <!-- ✅ 모달 등록 처리 JS -->
 <script>
-  document.getElementById('planForm').addEventListener('submit', function(e) {
+  document.getElementById('planForm').addEventListener('submit', function (e) {
     e.preventDefault();
 
     const form = e.target;
@@ -128,11 +136,13 @@
 
     fetch('/plan/create', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data)
     })
     .then(res => {
-      if (!res.ok) throw new Error('등록 실패');
+      if (!res.ok) {
+        throw new Error('등록 실패');
+      }
       return res.text();
     })
     .then(() => {
@@ -169,20 +179,40 @@
     const id = document.getElementById('editPlanId').value;
 
     const data = {};
-    if (document.getElementById('editName').value) data.name = document.getElementById('editName').value;
-    if (document.getElementById('editCountry').value) data.country = document.getElementById('editCountry').value;
-    if (document.getElementById('editMoney').value) data.publicMoney = document.getElementById('editMoney').value;
-    if (document.getElementById('editCount').value) data.count = document.getElementById('editCount').value;
-    if (document.getElementById('editStart').value) data.travelStartDate = document.getElementById('editStart').value;
-    if (document.getElementById('editEnd').value) data.travelEndDate = document.getElementById('editEnd').value;
+    if (document.getElementById('editName').value) {
+      data.name = document.getElementById(
+          'editName').value;
+    }
+    if (document.getElementById('editCountry').value) {
+      data.country = document.getElementById(
+          'editCountry').value;
+    }
+    if (document.getElementById('editMoney').value) {
+      data.publicMoney = document.getElementById(
+          'editMoney').value;
+    }
+    if (document.getElementById('editCount').value) {
+      data.count = document.getElementById(
+          'editCount').value;
+    }
+    if (document.getElementById('editStart').value) {
+      data.travelStartDate = document.getElementById(
+          'editStart').value;
+    }
+    if (document.getElementById('editEnd').value) {
+      data.travelEndDate = document.getElementById(
+          'editEnd').value;
+    }
 
     fetch(`/plan/update/${id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(data)
     })
     .then(res => {
-      if (!res.ok) throw new Error("수정 실패");
+      if (!res.ok) {
+        throw new Error("수정 실패");
+      }
       return res.text();
     })
     .then(() => {
@@ -192,6 +222,7 @@
     })
     .catch(err => alert(err));
   });
+
 
 </script>
 

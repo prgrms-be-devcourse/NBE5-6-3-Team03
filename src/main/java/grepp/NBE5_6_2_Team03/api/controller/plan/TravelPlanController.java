@@ -56,5 +56,10 @@ public class TravelPlanController {
         }
     }
 
+    @PostMapping("/delete/{id}")
+    public String deletePlan(@PathVariable Long id) {
+        travelPlanService.deletePlan(id);
+        return "redirect:/plan";
+    }
 
 }

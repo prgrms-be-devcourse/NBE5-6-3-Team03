@@ -76,5 +76,12 @@ public class TravelPlanService {
     }
 
 
+    @Transactional
+    public void deletePlan(Long id) {
+        TravelPlan plan = travelPlanRepository.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("해당 계획이 존재하지 않습니다."));
+
+        travelPlanRepository.delete(plan);
+    }
 }
 
