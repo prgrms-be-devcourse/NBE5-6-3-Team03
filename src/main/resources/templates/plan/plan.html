@@ -51,7 +51,9 @@
           </p>
         </div>
         <div class="card-footer bg-white border-0 d-flex justify-content-end gap-2">
-          <a class="btn btn-outline-primary btn-sm px-3" th:href="@{'/plans/edit/' + ${plan.travelPlanId}}">수정</a>
+          <button class="btn btn-sm btn-outline-primary"
+                 th:data-id="${plan.travelPlanId}"
+                  onclick="openEditModal(this)">수정</button>
           <a class="btn btn-outline-danger btn-sm px-3"
              th:href="@{'/plans/delete/' + ${plan.travelPlanId}}"
              onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
@@ -87,6 +89,34 @@
   </div>
 </div>
 
+<!-- ✅여행 계획 수정 모달 -->
+<div class="modal fade" id="editPlanModal" tabindex="-1" aria-labelledby="editPlanModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editPlanForm">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary" id="editPlanModalLabel">📝 여행 계획 수정</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editPlanId" />
+          <input type="text" id="editName" class="form-control mb-2" placeholder="계획 이름">
+          <input type="text" id="editCountry" class="form-control mb-2" placeholder="국가">
+          <input type="number" id="editMoney" class="form-control mb-2" placeholder="예산">
+          <input type="number" id="editCount" class="form-control mb-2" placeholder="인원 수">
+          <input type="date" id="editStart" class="form-control mb-2">
+          <input type="date" id="editEnd" class="form-control mb-2">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">수정 완료</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
 <!-- ✅ 모달 등록 처리 JS -->
 <script>
   document.getElementById('planForm').addEventListener('submit', function(e) {
@@ -113,6 +143,56 @@
     })
     .catch(err => alert(err));
   });
+
+  // 수정 모달 열기
+  function openEditModal(button) {
+    const id = button.getAttribute('data-id');
+
+    fetch(`/plan/api/${id}`)
+    .then(res => res.json())
+    .then(plan => {
+      document.getElementById('editPlanId').value = id;
+      document.getElementById('editName').value = plan.name;
+      document.getElementById('editCountry').value = plan.country;
+      document.getElementById('editMoney').value = plan.publicMoney;
+      document.getElementById('editCount').value = plan.count;
+      document.getElementById('editStart').value = plan.travelStartDate;
+      document.getElementById('editEnd').value = plan.travelEndDate;
+      new bootstrap.Modal(document.getElementById('editPlanModal')).show();
+    });
+  }
+
+  // 수정 폼 제출
+  document.getElementById('editPlanForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById('editPlanId').value;
+
+    const data = {};
+    if (document.getElementById('editName').value) data.name = document.getElementById('editName').value;
+    if (document.getElementById('editCountry').value) data.country = document.getElementById('editCountry').value;
+    if (document.getElementById('editMoney').value) data.publicMoney = document.getElementById('editMoney').value;
+    if (document.getElementById('editCount').value) data.count = document.getElementById('editCount').value;
+    if (document.getElementById('editStart').value) data.travelStartDate = document.getElementById('editStart').value;
+    if (document.getElementById('editEnd').value) data.travelEndDate = document.getElementById('editEnd').value;
+
+    fetch(`/plan/update/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    })
+    .then(res => {
+      if (!res.ok) throw new Error("수정 실패");
+      return res.text();
+    })
+    .then(() => {
+      alert("수정 완료!");
+      bootstrap.Modal.getInstance(document.getElementById('editPlanModal')).hide();
+      location.reload();
+    })
+    .catch(err => alert(err));
+  });
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
