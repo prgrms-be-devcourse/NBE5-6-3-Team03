@@ -28,7 +28,7 @@
   <h1 class="display-5 text-center text-primary mb-4">👤 등록된 유저 목록</h1>
 
   <div class="row g-3" id="userList">
-    <div class="col-12" th:each="user : ${userInfos}">
+    <div class="col-12" th:each="user : ${userPage.content}">
       <div class="card shadow-sm border-0 user-card">
         <div class="user-info">
           <h5 class="text-primary mb-1" th:text="${user.name}">유저 이름</h5>
@@ -43,6 +43,31 @@
     </div>
   </div>
 </div>
+
+<nav aria-label="Page navigation" class="mt-4">
+  <ul class="pagination justify-content-center">
+    <li class="page-item" th:classappend="${userPage.first} ? 'disabled'">
+      <a class="page-link"
+         th:href="@{/admin/user-info(page=${userPage.number > 0 ? userPage.number - 1 : 0}, size=${userPage.size})}">
+        이전
+      </a>
+    </li>
+    <li class="page-item"
+        th:each="i : ${#numbers.sequence(0, userPage.totalPages - 1)}"
+        th:classappend="${i == userPage.number} ? 'active'">
+      <a class="page-link"
+         th:href="@{/admin/user-info(page=${i}, size=${userPage.size})}"
+         th:text="${i + 1}">1</a>
+    </li>
+    <li class="page-item" th:classappend="${userPage.last} ? 'disabled'">
+      <a class="page-link"
+         th:href="@{/admin/user-info(page=${userPage.number + 1 >= userPage.totalPages ? userPage.number : userPage.number + 1}, size=${userPage.size})}">
+        다음
+      </a>
+    </li>
+  </ul>
+</nav>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
