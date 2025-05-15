@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.admin.userinfo;
 
+import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.domain.user.Role;
 import grepp.NBE5_6_2_Team03.domain.user.file.UploadFile;
 import jakarta.persistence.Embedded;
@@ -28,4 +29,9 @@ public class UserInfo {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public void update(UserInfoUpdateRequest request) {
+        this.email = request.getEmail();
+        this.name = request.getName();
+        this.phoneNumber = request.getPhoneNumber();
+    }
 }

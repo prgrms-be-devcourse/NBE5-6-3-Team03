@@ -1,16 +1,20 @@
 package grepp.NBE5_6_2_Team03.domain.admin.userinfo;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.userinfo.repository.UserInfoRepository;
+import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserInfoService {
 
     private final UserInfoRepository userInfoRepository;
@@ -19,12 +23,6 @@ public class UserInfoService {
         Page<UserInfo> userInfos = userInfoRepository.findAll(pageable);
         return userInfos.map(this::convertToResponse);
     }
-
-//    public List<UserInfoResponse> findAll() {
-//        List<UserInfo> userInfos = userInfoRepository.findAll();
-//        return userInfos.stream()
-//            .map(this::convertToResponse).collect(Collectors.toList());
-//    }
 
     public UserInfoResponse convertToResponse(UserInfo userInfo) {
         return new UserInfoResponse(
@@ -37,4 +35,11 @@ public class UserInfoService {
     }
 
 
+    @Transactional
+    public void updateUserInfo(Long id, UserInfoUpdateRequest request) {
+        UserInfo userInfo = userInfoRepository.findById(id).orElseThrow(
+            () -> new NotFoundException("회원을 찾지 못했습니다.")
+        );
+        userInfo.update(request);
+    }
 }
