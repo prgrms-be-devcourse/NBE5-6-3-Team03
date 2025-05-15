@@ -50,7 +50,8 @@ public class PlaceDataSeeder implements CommandLineRunner {
                 place.setPlaceId(place.getPlaceId());
                 place.setCity(translatedCityName);
                 String placeName = place.getPlaceName();
-                if (placeName != null && !placeName.isEmpty() && placeName.substring(0, 1).matches("[가-힣]")) {
+                String city = place.getCity();
+                if (city != null && placeName != null && !placeName.isEmpty() && placeName.substring(0, 1).matches("[가-힣]")) {
                     googlePlaceService.save(place);
                 }
             }
