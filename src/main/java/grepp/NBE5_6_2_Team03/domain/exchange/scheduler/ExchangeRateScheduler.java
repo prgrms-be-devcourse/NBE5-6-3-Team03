@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.exchange.scheduler;
 
 import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeDto;
-import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
 import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateRepository;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import java.time.LocalDate;
@@ -22,37 +21,28 @@ public class ExchangeRateScheduler {
 
     @Scheduled(initialDelay = 0, fixedRate=1000000)     // TODO 이거 한번 데이터 받은 이후에 주석처리 해야합니다.
     public void fetchExchangeRates() {
-        try{
+
+        try {
             log.info("Fetch exchange rates start");
 
             ExchangeDto[] rates = exchangeService.getCurrentExchanges();
 
-            if(rates == null || rates.length == 0) {
-                log.info("현재 환율 데이터가 없습니다.");
+            boolean isExistData = rates == null || rates.length == 0;
+
+            if (isExistData) {
+                log.info("Not Exist Exchange Rate Data Now");
                 return;
             }
 
             String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            Arrays.stream(rates).forEach(dto -> {
-            ExchangeRateEntity entity = ExchangeRateEntity.builder()
-                .curUnit(dto.getCurUnit())
-                .curName(dto.getCurName())
-                .baseRate(dto.getBaseRate())
-                .ttbRate(dto.getTtbRate())
-                .ttsRate(dto.getTtsRate())
-                .date(searchDate)
-                .build();
-
-            log.info("{}", entity);
-
-            exchangeRateRepository.save(entity);
-
-        });
+            Arrays.stream(rates)
+                .map(dto -> dto.toEntity(searchDate))
+                .forEach(exchangeRateRepository::save);
 
             log.info("Fetch exchange rates done");
 
-        }catch(Exception e){
+        } catch(Exception e){
             log.error("환율 수집 중 에러 발생", e);
         }
 

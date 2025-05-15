@@ -4,9 +4,11 @@ import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRateEntity, Long> {
 
-    Optional<ExchangeRateEntity> findTopByCurUnitOrderByDateDesc(String curUnit);
+    @Query("SELECT e FROM ExchangeRateEntity e WHERE e.curUnit = :curUnit ORDER BY e.date DESC")
+    Optional<ExchangeRateEntity> findLatestByCurUnit(@Param("curUnit") String curUnit);
 
 }
