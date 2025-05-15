@@ -7,11 +7,11 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface PlaceRepository extends JpaRepository<Place, String> {
 
-    public Place findByPlaceId(String placeId);
+    Place findByPlaceId(String placeId);
 
     @Query("select distinct p.country from Place p order by p.country")
-    public List<String> findDistinctCountries();
+    List<String> findDistinctCountries();
 
     @Query("select distinct p.city from Place p order by p.city")
-    public List<String> findDistinctCities();
+    List<String> findDistinctCities();
 }

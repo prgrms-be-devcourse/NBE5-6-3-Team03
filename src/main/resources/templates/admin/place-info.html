@@ -74,7 +74,7 @@
                         data-lng=${place.longitude}">
               ✏️ 수정
             </a>
-            <form th:action="@{/place/places/{id}/delete(id=${place.placeId})}" method="post"
+            <form th:action="@{/place/{id}/delete(id=${place.placeId})}" method="post"
                   th:onsubmit="return confirm('정말 삭제하시겠습니까?');"
                   style="display:inline;">
               <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
@@ -97,7 +97,7 @@
 <!-- 수정 모달 -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
-    <form id="editForm" method="post">
+    <form id="editForm" method="post" th:action="@{/place/places/{id}/edit(id=0)}">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="editModalLabel">장소 정보 수정</h5>
@@ -105,6 +105,9 @@
         </div>
         <div class="modal-body">
           <input type="hidden" name="placeId" id="editPlaceId">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+          <!-- ✅ 나머지 필드들 -->
           <div class="mb-3">
             <label for="editPlaceName" class="form-label">장소명</label>
             <input type="text" class="form-control" id="editPlaceName" name="placeName" required>
@@ -128,10 +131,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-          <form>
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            <button type="submit" class="btn btn-primary">저장</button>
-          </form>
+          <button type="submit" class="btn btn-primary">저장</button>
         </div>
       </div>
     </form>
@@ -242,7 +242,7 @@
         document.getElementById('editCity').value = this.dataset.city;
         document.getElementById('editLatitude').value = this.dataset.lat;
         document.getElementById('editLongitude').value = this.dataset.lng;
-        form.action = `/place/places/${this.dataset.id}/edit`;
+        form.action = `/place/${this.dataset.id}/edit`;
         modal.show();
       });
     });

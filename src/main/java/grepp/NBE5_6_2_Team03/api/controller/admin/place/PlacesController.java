@@ -30,14 +30,14 @@ public class PlacesController {
         return "admin/place-info";
     }
 
-    @GetMapping("/places/{id}/edit")
+    @GetMapping("/{id}/edit")
     public String editPlace(Model model, @PathVariable String id) {
         PlaceResponse place = placeService.findById(id);
         model.addAttribute("place", place);
         return "place-edit";
     }
 
-    @PostMapping("/places/{id}/edit")
+    @PostMapping("/{id}/edit")
     public String editPlace(Model model, @PathVariable String id, PlaceRequest place,
         RedirectAttributes redirectAttributes) {
         placeService.updatePlace(id, place);
@@ -46,7 +46,7 @@ public class PlacesController {
         return "redirect:/place/info";
     }
 
-    @PostMapping("/places/{id}/delete")
+    @PostMapping("/{id}/delete")
     public String deletePlace(@PathVariable String id, RedirectAttributes redirectAttributes) {
         placeService.deleteById(id);
         redirectAttributes.addFlashAttribute("message", "Place deleted successfully.");

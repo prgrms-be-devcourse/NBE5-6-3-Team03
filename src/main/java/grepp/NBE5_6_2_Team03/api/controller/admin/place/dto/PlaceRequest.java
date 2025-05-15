@@ -15,14 +15,4 @@ public class PlaceRequest {
     private Double latitude;
     private Double longitude;
 
-    public Place toEntity() {
-        return Place.builder()
-            .country(country)
-            .city(city)
-            .placeName(placeName)
-            .latitude(latitude)
-            .longitude(longitude)
-            .build();
-    }
-
 }
