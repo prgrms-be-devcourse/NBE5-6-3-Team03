@@ -18,15 +18,13 @@ public class TravelPlanService {
     private final TravelPlanRepository travelPlanRepository;
     private final UserRepository userRepository;
 
-
     public List<TravelPlan> getPlansByUser(Long userid) {
 
         List<TravelPlan> plans = travelPlanRepository.findByUserId(userid);
         return plans;
     }
 
-
-    public void createPlan(Long userid,TravelPlanDto planDto) {
+    public void createPlan(Long userid, TravelPlanDto planDto) {
 
         User user = userRepository.findById(userid)
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
@@ -44,7 +42,6 @@ public class TravelPlanService {
             .build();
 
         travelPlanRepository.save(plan);
-
     }
 
     public TravelPlanDto getPlan(Long id) {
@@ -76,7 +73,6 @@ public class TravelPlanService {
 
         travelPlanRepository.save(existingPlan);
     }
-
 
     @Transactional
     public void deletePlan(Long id) {

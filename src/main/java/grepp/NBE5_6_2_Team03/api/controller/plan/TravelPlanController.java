@@ -25,7 +25,6 @@ public class TravelPlanController {
 
     private final TravelPlanService travelPlanService;
 
-
     @GetMapping
     public String listPlans(@AuthenticationPrincipal CustomUserDetails customUser, Model model) {
         List<TravelPlan> plans = travelPlanService.getPlansByUser(customUser.getId());
@@ -34,13 +33,11 @@ public class TravelPlanController {
         return "plan/plan";
     }
 
-
     @PostMapping("/create")
     public String createPlan(@AuthenticationPrincipal CustomUserDetails customUser,@RequestBody TravelPlanDto planDto) {
         travelPlanService.createPlan(customUser.getId(),planDto);
         return "redirect:/plan";
     }
-
 
     @GetMapping("/api/{id}")
     @ResponseBody
