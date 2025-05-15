@@ -1,68 +1,104 @@
 package grepp.NBE5_6_2_Team03.domain.user.service;
 
+import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
+import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
+import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.UserMyPageResponse;
 import grepp.NBE5_6_2_Team03.domain.user.User;
-import grepp.NBE5_6_2_Team03.domain.user.command.UserCreateCommand;
-import grepp.NBE5_6_2_Team03.domain.user.command.UserEditCommand;
+import grepp.NBE5_6_2_Team03.domain.user.exception.InvalidPasswordException;
+import grepp.NBE5_6_2_Team03.domain.user.file.FileStore;
+import grepp.NBE5_6_2_Team03.domain.user.file.UploadFile;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import grepp.NBE5_6_2_Team03.domain.user.exception.UserSignUpException;
+import grepp.NBE5_6_2_Team03.global.config.security.SecurityContextUpdater;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+
 import static grepp.NBE5_6_2_Team03.global.exception.Message.*;
 import static grepp.NBE5_6_2_Team03.global.exception.Reason.*;
 
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final FileStore fileStore;
+    private final SecurityContextUpdater securityContextUpdater;
 
-    public Long signup(UserCreateCommand command) {
-        String encodedPassword = passwordEncoder.encode(command.getPassword());
-        User user = User.register(command, encodedPassword);
-        duplicatedEmailCheck(user);
-        duplicatedNameCheck(user);
+    @Transactional
+    public Long signup(UserSignUpRequest request) {
+        if(isDuplicateUserInfo(request.getEmail(), request.getName())){
+            throw new UserSignUpException(SIGN_UP, SIGNUP_DUPLICATE_ERROR);
+        }
 
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+        User user = request.toEntity(encodedPassword);
         return userRepository.save(user).getId();
     }
 
-    public User editUser(UserEditCommand editCommand, Long userId) {
+    @Transactional
+    public UserMyPageResponse updateProfile(UserEditRequest request, Long userId) throws IOException {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("회원을 찾지 못했습니다."));
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
-        user.edit(editCommand);
-        return user;
+        if(isNotMatchPassword(user.getPassword(), request.getRawPassword())){
+            throw new InvalidPasswordException(USER_NOT_MATCH_PASSWORD);
+        }
+
+        UploadFile uploadFile = fileStore.storeFile(request.getProfileImage());
+        modifyProfile(request, user, uploadFile);
+        securityContextUpdater.updateAuthentication(user, request.getRawPassword());
+
+        return UserMyPageResponse.from(user);
     }
 
-    public User findUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException("회원을 찾지 못했습니다."));
+    public UserMyPageResponse getMyProfile(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
+
+        return UserMyPageResponse.from(user);
     }
 
-    public Boolean findByName(String name) {
+    public boolean isNotDuplicatedName(String name) {
+        return !isDuplicatedName(name);
+    }
+
+    public boolean isNotDuplicatedEmail(String email) {
+        return !isDuplicatedEmail(email);
+    }
+
+    public String getFileDir() {
+        return fileStore.getFileDir();
+    }
+
+    private void modifyProfile(UserEditRequest request, User user, UploadFile uploadFile) {
+        user.updateProfile(
+                request.getEmail(),
+                request.getName(),
+                request.getPhoneNumber(),
+                uploadFile
+        );
+    }
+
+    private boolean isDuplicateUserInfo(String email, String name){
+        return isDuplicatedEmail(email) || isDuplicatedName(name);
+    }
+
+    private boolean isDuplicatedName(String name) {
         return userRepository.findByName(name).isPresent();
     }
 
-    public Boolean findByEmail(String email) {
+    private boolean isDuplicatedEmail(String email) {
         return userRepository.findByEmail(email).isPresent();
     }
 
-    private void duplicatedEmailCheck(User user) {
-        userRepository.findByEmail(user.getEmail())
-                .ifPresent(findUser -> {
-                    throw new UserSignUpException(USER_EMAIL, USER_EMAIL_DUPLICATED);
-                });
-    }
-
-    private void duplicatedNameCheck(User user) {
-        userRepository.findByName(user.getName())
-                .ifPresent(findUser -> {
-                            throw new UserSignUpException(USER_NAME, USER_NAME_DUPLICATED);
-                });
+    private boolean isNotMatchPassword(String encodedPassword, String rawPassword) {
+        return !passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }
