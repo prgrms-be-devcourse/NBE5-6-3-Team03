@@ -65,7 +65,7 @@ public class TravelScheduleService {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
 
-        schedule.updateStatus();
+        schedule.toggleScheduleStatus();
     }
 
     public List<TravelSchedule> getSchedulesByPlanId(Long travelPlanId) {

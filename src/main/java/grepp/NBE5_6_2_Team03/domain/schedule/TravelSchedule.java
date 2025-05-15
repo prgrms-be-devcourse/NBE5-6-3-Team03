@@ -1,11 +1,9 @@
 package grepp.NBE5_6_2_Team03.domain.schedule;
 
-import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.domain.plan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -42,7 +40,7 @@ public class TravelSchedule {
         this.modifiedDateTime = LocalDateTime.now();
     }
 
-    public void updateStatus() {
+    public void toggleScheduleStatus() {
         if (this.scheduleStatus == ScheduleStatus.COMPLETED) {
             this.scheduleStatus = ScheduleStatus.PLANNED;
         } else {
