@@ -5,6 +5,7 @@ import grepp.NBE5_6_2_Team03.domain.plan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -34,10 +35,10 @@ public class TravelSchedule {
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
 
-    public void edit(TravelScheduleRequest request) {
-        this.content = request.getContent();
-        this.placeName = request.getPlaceName();
-        this.travelScheduleDate = request.getTravelScheduleDate();
+    public void edit(String content, String placeName, LocalDate travelScheduleDate) {
+        this.content = content;
+        this.placeName = placeName;
+        this.travelScheduleDate = travelScheduleDate;
         this.modifiedDateTime = LocalDateTime.now();
     }
 
