@@ -40,8 +40,12 @@ public class TravelSchedule {
         this.modifiedDateTime = LocalDateTime.now();
     }
 
-    public void toggleScheduleStatus() {
-        if (this.scheduleStatus == ScheduleStatus.COMPLETED) {
+    public boolean isCompleted() {
+        return this.scheduleStatus == ScheduleStatus.COMPLETED;
+    }
+
+    public void toggleStatus() {
+        if (isCompleted()) {
             this.scheduleStatus = ScheduleStatus.PLANNED;
         } else {
             this.scheduleStatus = ScheduleStatus.COMPLETED;
