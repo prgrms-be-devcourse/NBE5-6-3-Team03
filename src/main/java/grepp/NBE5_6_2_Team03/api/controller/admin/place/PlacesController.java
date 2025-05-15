@@ -31,14 +31,14 @@ public class PlacesController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editPlace(Model model, @PathVariable String id) {
+    public String editPlace(Model model, @PathVariable("id") String id) {
         PlaceResponse place = placeService.findById(id);
         model.addAttribute("place", place);
         return "place-edit";
     }
 
     @PostMapping("/{id}/edit")
-    public String editPlace(Model model, @PathVariable String id, PlaceRequest place,
+    public String editPlace(Model model, @PathVariable("id") String id, PlaceRequest place,
         RedirectAttributes redirectAttributes) {
         placeService.updatePlace(id, place);
 
@@ -47,7 +47,7 @@ public class PlacesController {
     }
 
     @PostMapping("/{id}/delete")
-    public String deletePlace(@PathVariable String id, RedirectAttributes redirectAttributes) {
+    public String deletePlace(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         placeService.deleteById(id);
         redirectAttributes.addFlashAttribute("message", "Place deleted successfully.");
         return "redirect:/place/info";
