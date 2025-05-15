@@ -4,6 +4,8 @@ import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeDto;
 import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
 import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateRepository;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,15 +30,18 @@ public class ExchangeRateScheduler {
             if(rates == null || rates.length == 0) {
                 log.info("현재 환율 데이터가 없습니다.");
                 return;
-        }
+            }
 
-        Arrays.stream(rates).forEach(dto -> {
+            String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            Arrays.stream(rates).forEach(dto -> {
             ExchangeRateEntity entity = ExchangeRateEntity.builder()
                 .curUnit(dto.getCurUnit())
                 .curName(dto.getCurName())
                 .baseRate(dto.getBaseRate())
                 .ttbRate(dto.getTtbRate())
                 .ttsRate(dto.getTtsRate())
+                .date(searchDate)
                 .build();
 
             log.info("{}", entity);

@@ -29,5 +29,6 @@ public class ExchangeRateEntity {
     private String baseRate;
     private String ttbRate;
     private String ttsRate;
+    private String date;
 
 }
