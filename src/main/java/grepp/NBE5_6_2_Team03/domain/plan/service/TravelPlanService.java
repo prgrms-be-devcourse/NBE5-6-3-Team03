@@ -19,15 +19,16 @@ public class TravelPlanService {
     private final UserRepository userRepository;
 
 
-    public List<TravelPlan> getPlansByUser() {
+    public List<TravelPlan> getPlansByUser(Long userid) {
 
-        List<TravelPlan> plans = travelPlanRepository.findByUserId(1L);
+        List<TravelPlan> plans = travelPlanRepository.findByUserId(userid);
         return plans;
     }
 
-    public void createPlan(TravelPlanDto planDto) {
+
+    public void createPlan(Long userid,TravelPlanDto planDto) {
         TravelPlan plan = new TravelPlan();
-        User user = userRepository.findById(1L)
+        User user = userRepository.findById(userid)
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
         plan.setUser(user);

@@ -3,9 +3,11 @@ package grepp.NBE5_6_2_Team03.api.controller.plan;
 import grepp.NBE5_6_2_Team03.api.controller.plan.dto.TravelPlanDto;
 import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.plan.service.TravelPlanService;
+import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,16 +27,17 @@ public class TravelPlanController {
 
 
     @GetMapping
-    public String listPlans(Model model) {
-        List<TravelPlan> plans = travelPlanService.getPlansByUser();
+    public String listPlans(@AuthenticationPrincipal CustomUserDetails customUser, Model model) {
+        List<TravelPlan> plans = travelPlanService.getPlansByUser(customUser.getId());
         model.addAttribute("plans", plans);
+        model.addAttribute("user", customUser);
         return "plan/plan";
     }
 
 
     @PostMapping("/create")
-    public String createPlan(@RequestBody TravelPlanDto planDto) {
-        travelPlanService.createPlan(planDto);
+    public String createPlan(@AuthenticationPrincipal CustomUserDetails customUser,@RequestBody TravelPlanDto planDto) {
+        travelPlanService.createPlan(customUser.getId(),planDto);
         return "redirect:/plan";
     }
 

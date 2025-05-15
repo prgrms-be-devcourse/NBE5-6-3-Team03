@@ -39,7 +39,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers("/", "/users/**").permitAll()
-                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat","/plan/**").permitAll()
+                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
                                 .anyRequest().authenticated()
                 );
 
