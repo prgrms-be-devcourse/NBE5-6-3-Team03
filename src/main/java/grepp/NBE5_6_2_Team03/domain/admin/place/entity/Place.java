@@ -3,12 +3,14 @@ package grepp.NBE5_6_2_Team03.domain.admin.place.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "place")
-@Getter 
+@Getter @Setter
 @NoArgsConstructor
 public class Place {
 
@@ -21,19 +23,21 @@ public class Place {
     private Double longitude;
 
 
-    public Place(String country, String city, String placeName, String address, Double latitude, Double longitude) {
+    @Builder
+    public Place(String country, String city, String placeName, Double latitude, Double longitude) {
         this.country = country;
         this.city = city;
         this.placeName = placeName;
         this.latitude = latitude;
         this.longitude = longitude;
     }
-    
-    public void setPlaceId(String placeId) {
-        this.placeId = placeId;
-    }
-    public void setCity(String city) {
+
+    public void update(String city, String country, String placeName, double latitude, double longitude) {
         this.city = city;
+        this.country = country;
+        this.placeName = placeName;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
 }
