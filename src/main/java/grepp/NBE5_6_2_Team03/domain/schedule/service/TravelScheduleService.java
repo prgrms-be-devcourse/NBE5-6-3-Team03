@@ -37,7 +37,7 @@ public class TravelScheduleService {
     }
 
     @Transactional
-    public Long updateSchedule(Long travelScheduleId, TravelScheduleRequest request) {
+    public Long editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
 

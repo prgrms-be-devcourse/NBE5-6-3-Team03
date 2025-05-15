@@ -44,10 +44,10 @@ public class TravelScheduleController {
     }
 
     @PostMapping("/{travelScheduleId}/edit")
-    public String updateSchedule(@PathVariable Long travelPlanId,
+    public String editSchedule(@PathVariable Long travelPlanId,
                                  @PathVariable Long travelScheduleId,
                                  @ModelAttribute TravelScheduleRequest request) {
-        travelScheduleService.updateSchedule(travelScheduleId, request);
+        travelScheduleService.editSchedule(travelScheduleId, request);
         return "redirect:/plan/" + travelPlanId + "/schedule/list";
     }
 
