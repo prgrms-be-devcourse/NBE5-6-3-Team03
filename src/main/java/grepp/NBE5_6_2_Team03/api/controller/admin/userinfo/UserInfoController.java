@@ -2,9 +2,7 @@ package grepp.NBE5_6_2_Team03.api.controller.admin.userinfo;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoUpdateRequest;
-import grepp.NBE5_6_2_Team03.domain.admin.userinfo.UserInfo;
 import grepp.NBE5_6_2_Team03.domain.admin.userinfo.UserInfoService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,7 +40,17 @@ public class UserInfoController {
         RedirectAttributes redirectAttributes) {
 
         userInfoService.updateUserInfo(id, request);
-        redirectAttributes.addFlashAttribute("message", "Place updated successfully.");
+        redirectAttributes.addFlashAttribute("message", "UserInfo updated successfully.");
+        return "redirect:/admin/user-info";
+    }
+
+    @PostMapping("/user-info/{id}/delete")
+    public String deleteUserInfo(
+        @PathVariable("id") Long id,
+        RedirectAttributes redirectAttributes
+    ) {
+        userInfoService.deleteById(id);
+        redirectAttributes.addFlashAttribute("message", "UserInfo deleted successfully.");
         return "redirect:/admin/user-info";
     }
 

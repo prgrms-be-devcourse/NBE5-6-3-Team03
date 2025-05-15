@@ -4,8 +4,6 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.userinfo.repository.UserInfoRepository;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,5 +39,13 @@ public class UserInfoService {
             () -> new NotFoundException("회원을 찾지 못했습니다.")
         );
         userInfo.update(request);
+    }
+
+    @Transactional
+    public void deleteById(Long id) {
+        UserInfo userInfo = userInfoRepository.findById(id).orElseThrow(
+            () -> new NotFoundException("회원을 찾지 못했습니다.")
+        );
+        userInfoRepository.deleteById(id);
     }
 }
