@@ -129,7 +129,7 @@ public class GooglePlaceService {
             }
         }
 
-        return new Place(country, city, name, address, lat, lng);
+        return new Place(country, city, name, lat, lng);
     }
 
     private URI getDetailsUri(String placeId) {
