@@ -4,13 +4,12 @@ import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleR
 import grepp.NBE5_6_2_Team03.domain.plan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
-import grepp.NBE5_6_2_Team03.domain.schedule.code.Status;
+import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.schedule.repository.TravelScheduleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -29,7 +28,7 @@ public class TravelScheduleService {
             .travelPlan(plan)
             .content(request.getContent())
             .placeName(request.getPlaceName())
-            .isFinished(Status.PLANNED)
+            .scheduleStatus(ScheduleStatus.PLANNED)
             .travelScheduleDate(request.getTravelScheduleDate())
             .createdDateTime(LocalDateTime.now())
             .build();
@@ -63,13 +62,7 @@ public class TravelScheduleService {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
 
-        if (schedule.getIsFinished() == Status.COMPLETED) {
-            schedule.setIsFinished(Status.PLANNED);
-        } else {
-            schedule.setIsFinished(Status.COMPLETED);
-        }
-
-        schedule.setModifiedDateTime(LocalDateTime.now());
+        schedule.updateStatus();
     }
 
     public List<TravelSchedule> getSchedulesByPlanId(Long travelPlanId) {

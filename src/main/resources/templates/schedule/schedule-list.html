@@ -87,7 +87,7 @@
         <div>날짜: <span th:text="${schedule.travelScheduleDate}"></span></div>
         <div>
             <span th:if="${schedule.isFinished.name() == 'COMPLETED'}" class="status completed">완료</span>
-            <span th:if="${schedule.isFinished.name() != 'COMPLETED'}" class="status ongoing">진행중</span>
+            <span th:if="${schedule.isFinished.name() != 'COMPLETED'}" class="status ongoing">계획</span>
         </div>
 
         <div class="btn-group">
