@@ -23,7 +23,7 @@ public class ExchangeController {
 
     @GetMapping("/latest")
     public ExchangeDto getLatest(@RequestParam String code){
-        ExchangeRateEntity entity = exchangeRateRepository.findLatestByCurUnit(code)
+        ExchangeRateEntity entity = exchangeRateRepository.findTopByCurUnitOrderByDateDesc(code)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         log.info("{}", entity);
