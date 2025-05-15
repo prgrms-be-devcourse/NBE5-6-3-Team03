@@ -12,9 +12,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final String ADMIN_REDIRECT_URL = "/admin/dashboard";
-    private final String USER_REDIRECT_URL = "/users/home";
-    private final String DEFAULT_REDIRECT_URL = "/";
+    private static final String ADMIN_REDIRECT_URL = "/admin/dashboard";
+    private static final String USER_REDIRECT_URL = "/users/home";
+    private static final String DEFAULT_REDIRECT_URL = "/";
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
