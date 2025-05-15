@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.schedule;
 
+import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.domain.plan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
 import jakarta.persistence.*;
@@ -32,6 +33,17 @@ public class TravelSchedule {
     private LocalDate travelScheduleDate;
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
+
+    public static TravelSchedule create(TravelPlan plan, TravelScheduleRequest request) {
+        return builder()
+            .travelPlan(plan)
+            .content(request.getContent())
+            .placeName(request.getPlaceName())
+            .scheduleStatus(ScheduleStatus.PLANNED)
+            .travelScheduleDate(request.getTravelScheduleDate())
+            .createdDateTime(LocalDateTime.now())
+            .build();
+    }
 
     public void edit(String content, String placeName, LocalDate travelScheduleDate) {
         this.content = content;

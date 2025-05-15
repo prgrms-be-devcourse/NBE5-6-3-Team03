@@ -26,15 +26,7 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND.getDescription()));
 
-        TravelSchedule schedule = TravelSchedule.builder()
-            .travelPlan(plan)
-            .content(request.getContent())
-            .placeName(request.getPlaceName())
-            .scheduleStatus(ScheduleStatus.PLANNED)
-            .travelScheduleDate(request.getTravelScheduleDate())
-            .createdDateTime(LocalDateTime.now())
-            .build();
-
+        TravelSchedule schedule = TravelSchedule.create(plan, request);
         travelScheduleRepository.save(schedule);
     }
 
