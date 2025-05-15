@@ -41,10 +41,7 @@ public class TravelScheduleService {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
 
-        schedule.setContent(request.getContent());
-        schedule.setPlaceName(request.getPlaceName());
-        schedule.setTravelScheduleDate(request.getTravelScheduleDate());
-        schedule.setModifiedDateTime(LocalDateTime.now());
+        schedule.edit(request);
 
         return schedule.getTravelPlan().getTravelPlanId();
     }
