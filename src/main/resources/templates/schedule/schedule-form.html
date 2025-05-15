@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>일정 등록/수정</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        body {
+            background-color: #f7f9fc;
+            font-family: sans-serif;
+            padding: 40px;
+        }
+
+        .form-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        label {
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        input[type="text"],
+        input[type="date"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background-color: #4a6fa5;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-wrapper">
+
+    <h2 th:text="${request.travelScheduleDate == null ? '일정 등록' : '일정 수정'}">일정 등록</h2>
+
+    <form th:object="${request}"
+          th:action="@{${request.travelScheduleDate == null ?
+            '/plan/' + travelPlanId + '/schedule/add' :
+            '/plan/' + travelPlanId + '/schedule/' + travelScheduleId + '/edit'}}"
+          method="post">
+
+        <label for="content">내용</label>
+        <input type="text" id="content" th:field="*{content}" required>
+
+        <label for="placeName">장소</label>
+        <input type="text" id="placeName" th:field="*{placeName}">
+
+        <label for="travelScheduleDate">날짜</label>
+        <input type="date" id="travelScheduleDate" th:field="*{travelScheduleDate}" required>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">저장</button>
+            <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/list'}" class="btn btn-secondary">취소</a>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>
