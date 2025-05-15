@@ -2,9 +2,12 @@ package grepp.NBE5_6_2_Team03.api.controller.exchange.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+@Getter @Setter
+@NoArgsConstructor
 public class ExchangeDto {
 
     @JsonProperty("cur_unit")
