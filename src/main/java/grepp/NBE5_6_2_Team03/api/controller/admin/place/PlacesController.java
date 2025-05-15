@@ -33,7 +33,11 @@ public class PlacesController {
     @GetMapping("/{id}/edit")
     public String editPlace(Model model, @PathVariable("id") String id) {
         PlaceResponse place = placeService.findById(id);
+        List<String> countries = placeService.getCountries();
+        List<String> cities = placeService.getCities();
         model.addAttribute("place", place);
+        model.addAttribute("countries", countries);
+        model.addAttribute("cities", cities);
         return "place-edit";
     }
 
