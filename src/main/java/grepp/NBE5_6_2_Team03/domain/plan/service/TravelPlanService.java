@@ -27,19 +27,21 @@ public class TravelPlanService {
 
 
     public void createPlan(Long userid,TravelPlanDto planDto) {
-        TravelPlan plan = new TravelPlan();
+
         User user = userRepository.findById(userid)
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
-        plan.setUser(user);
-        plan.setName(planDto.getName());
-        plan.setCountry(planDto.getCountry());
-        plan.setPublicMoney(planDto.getPublicMoney());
-        plan.setCount(planDto.getCount());
-        plan.setTravelStartDate(planDto.getTravelStartDate());
-        plan.setTravelEndDate(planDto.getTravelEndDate());
-        plan.setCreatedDateTime(LocalDateTime.now());
-        plan.setModifyDateTime(LocalDateTime.now());
+        TravelPlan plan = TravelPlan.builder()
+            .user(user)
+            .name(planDto.getName())
+            .country(planDto.getCountry())
+            .publicMoney(planDto.getPublicMoney())
+            .count(planDto.getCount())
+            .travelStartDate(planDto.getTravelStartDate())
+            .travelEndDate(planDto.getTravelEndDate())
+            .createdDateTime(LocalDateTime.now())
+            .modifyDateTime(LocalDateTime.now())
+            .build();
 
         travelPlanRepository.save(plan);
 
@@ -49,15 +51,14 @@ public class TravelPlanService {
         TravelPlan plan = travelPlanRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계획입니다."));
 
-        TravelPlanDto dto = new TravelPlanDto();
-        dto.setName(plan.getName());
-        dto.setCountry(plan.getCountry());
-        dto.setPublicMoney(plan.getPublicMoney());
-        dto.setCount(plan.getCount());
-        dto.setTravelStartDate(plan.getTravelStartDate());
-        dto.setTravelEndDate(plan.getTravelEndDate());
-
-        return dto;
+        return TravelPlanDto.builder()
+            .name(plan.getName())
+            .country(plan.getCountry())
+            .publicMoney(plan.getPublicMoney())
+            .count(plan.getCount())
+            .travelStartDate(plan.getTravelStartDate())
+            .travelEndDate(plan.getTravelEndDate())
+            .build();
     }
 
     @Transactional

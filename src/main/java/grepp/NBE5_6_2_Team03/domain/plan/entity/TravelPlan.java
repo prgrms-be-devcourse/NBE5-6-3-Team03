@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,6 +20,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "travel_plan")
+@Builder @AllArgsConstructor
 public class TravelPlan {
 
     @Id
@@ -38,5 +41,9 @@ public class TravelPlan {
 
     private LocalDateTime createdDateTime;
     private LocalDateTime modifyDateTime;
+
+    public TravelPlan() {
+
+    }
 }
 
