@@ -6,6 +6,8 @@ import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.schedule.repository.TravelScheduleRepository;
+import grepp.NBE5_6_2_Team03.global.exception.Message;
+import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ public class TravelScheduleService {
 
     public void addSchedule(Long travelPlanId, TravelScheduleRequest request) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 여행 계획이 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND.getDescription()));
 
         TravelSchedule schedule = TravelSchedule.builder()
             .travelPlan(plan)
@@ -39,7 +41,7 @@ public class TravelScheduleService {
     @Transactional
     public Long editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
 
         schedule.edit(
             request.getContent(),
@@ -53,7 +55,7 @@ public class TravelScheduleService {
     @Transactional
     public void deleteSchedule(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
 
         travelScheduleRepository.delete(schedule);
     }
@@ -61,20 +63,20 @@ public class TravelScheduleService {
     @Transactional
     public void scheduleStatus(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
 
         schedule.updateStatus();
     }
 
     public List<TravelSchedule> getSchedulesByPlanId(Long travelPlanId) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 여행 계획이 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND.getDescription()));
 
         return travelScheduleRepository.findByTravelPlan(plan);
     }
 
     public TravelSchedule findById(Long travelScheduleId) {
         return travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 일정이 존재하지 않습니다."));
+            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
     }
 }
