@@ -18,11 +18,17 @@ public class ExchangeRateScheduler {
     private final ExchangeService exchangeService;
     private final ExchangeRateRepository exchangeRateRepository;
 
-    @Scheduled(cron = "0 1 11 * * *")
+    @Scheduled(initialDelay = 0, fixedRate=1000000)     // TODO 이거 한번 데이터 받은 이후에 주석처리 해야합니다.
     public void fetchExchangeRates() {
-        log.info("Fetch exchange rates start");
+        try{
+            log.info("Fetch exchange rates start");
 
-        ExchangeDto[] rates = exchangeService.getCurrentExchanges();
+            ExchangeDto[] rates = exchangeService.getCurrentExchanges();
+
+            if(rates == null || rates.length == 0) {
+                log.info("현재 환율 데이터가 없습니다.");
+                return;
+        }
 
         Arrays.stream(rates).forEach(dto -> {
             ExchangeRateEntity entity = ExchangeRateEntity.builder()
@@ -31,13 +37,20 @@ public class ExchangeRateScheduler {
                 .baseRate(dto.getBaseRate())
                 .ttbRate(dto.getTtbRate())
                 .ttsRate(dto.getTtsRate())
-                .date(dto.getDate())
                 .build();
 
+            log.info("{}", entity);
+
             exchangeRateRepository.save(entity);
+
         });
 
-        log.info("Fetch exchange rates done");
+            log.info("Fetch exchange rates done");
+
+        }catch(Exception e){
+            log.error("환율 수집 중 에러 발생", e);
+        }
+
     }
 
 }

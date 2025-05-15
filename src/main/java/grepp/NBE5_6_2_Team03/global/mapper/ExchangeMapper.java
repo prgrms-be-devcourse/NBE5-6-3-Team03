@@ -12,7 +12,6 @@ public class ExchangeMapper {
             .baseRate(dto.getBaseRate())
             .ttbRate(dto.getTtbRate())
             .ttsRate(dto.getTtsRate())
-            .date(dto.getDate())
             .build();
     }
 
@@ -23,7 +22,6 @@ public class ExchangeMapper {
         dto.setBaseRate(entity.getBaseRate());
         dto.setTtbRate(entity.getTtbRate());
         dto.setTtsRate(entity.getTtsRate());
-        dto.setDate(entity.getDate());
         return dto;
     }
 

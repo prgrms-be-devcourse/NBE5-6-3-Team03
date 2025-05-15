@@ -21,5 +21,4 @@ public class ExchangeDto {
     @JsonProperty("tts")
     private String ttsRate;     // 원화 -> 외화
 
-    private String date;
 }
