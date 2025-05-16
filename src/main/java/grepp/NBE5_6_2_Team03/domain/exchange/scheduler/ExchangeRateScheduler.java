@@ -1,14 +1,9 @@
 package grepp.NBE5_6_2_Team03.domain.exchange.scheduler;
 
 import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeDto;
-import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
-import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateRepository;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class ExchangeRateScheduler {
 
     private final ExchangeService exchangeService;
-    private final ExchangeRateRepository exchangeRateRepository;
 
     private boolean isExistExchange(ExchangeDto[] rates){
         return rates == null || rates.length == 0;

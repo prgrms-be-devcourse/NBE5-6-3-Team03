@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.api.controller.exchange;
 
 import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeDto;
-import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateRepository;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
