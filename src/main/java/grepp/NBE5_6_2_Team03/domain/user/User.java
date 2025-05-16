@@ -17,6 +17,7 @@ public class User {
     private String password;
     private String name;
     private String phoneNumber;
+    private boolean isLocked;
 
     @Embedded
     private UploadFile uploadFile;
@@ -46,5 +47,9 @@ public class User {
         if(uploadFile != null) {
             this.uploadFile = uploadFile;
         }
+    }
+
+    public void updateIsLocked(boolean isLocked) {
+        this.isLocked = isLocked;
     }
 }
