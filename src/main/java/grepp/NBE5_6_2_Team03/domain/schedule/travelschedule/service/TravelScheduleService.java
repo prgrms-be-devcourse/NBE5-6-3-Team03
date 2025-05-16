@@ -1,11 +1,11 @@
-package grepp.NBE5_6_2_Team03.domain.schedule.service;
+package grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.service;
 
-import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleRequest;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
-import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
-import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
-import grepp.NBE5_6_2_Team03.domain.schedule.repository.TravelScheduleRepository;
+import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.code.ScheduleStatus;
+import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.repository.TravelScheduleRepository;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import jakarta.transaction.Transactional;

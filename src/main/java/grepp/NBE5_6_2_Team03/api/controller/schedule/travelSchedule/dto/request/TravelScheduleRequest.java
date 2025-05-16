@@ -1,6 +1,6 @@
-package grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request;
+package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request;
 
-import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.TravelSchedule;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
