@@ -9,10 +9,9 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Table(name = "exchange_rate")
-@Getter @Entity
-@Builder
+@Getter
+@Entity
 public class ExchangeRateEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,14 +23,13 @@ public class ExchangeRateEntity {
     private String ttsRate;
     private String date;
 
-    public ExchangeRateEntity() {
-
+    protected ExchangeRateEntity() {
     }
 
-    public ExchangeRateEntity(Long id, String curUnit, String curName, String baseRate,
+    @Builder
+    private ExchangeRateEntity(String curUnit, String curName, String baseRate,
         String ttbRate,
         String ttsRate, String date) {
-        this.id = id;
         this.curUnit = curUnit;
         this.curName = curName;
         this.baseRate = baseRate;
@@ -39,5 +37,4 @@ public class ExchangeRateEntity {
         this.ttsRate = ttsRate;
         this.date = date;
     }
-
 }

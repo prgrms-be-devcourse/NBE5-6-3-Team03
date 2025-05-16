@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.global.config.security;
 
 import grepp.NBE5_6_2_Team03.domain.user.service.CustomUserDetailsService;
-import grepp.NBE5_6_2_Team03.global.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
