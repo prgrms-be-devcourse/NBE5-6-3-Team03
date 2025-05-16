@@ -21,6 +21,9 @@ public class TravelScheduleRequest {
     @NotBlank
     private String content;
     private String placeName;
+    private String departure;
+    private String destination;
+    private String transportation;
     @NotBlank
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate travelScheduleDate;
@@ -30,6 +33,9 @@ public class TravelScheduleRequest {
             .travelPlan(plan)
             .content(this.content)
             .placeName(this.placeName)
+            .departure(this.departure)
+            .destination(this.destination)
+            .transportation(this.transportation)
             .scheduleStatus(ScheduleStatus.PLANNED)
             .travelScheduleDate(this.travelScheduleDate)
             .createdDateTime(LocalDateTime.now())
@@ -40,6 +46,9 @@ public class TravelScheduleRequest {
         return new TravelScheduleRequest(
             schedule.getContent(),
             schedule.getPlaceName(),
+            schedule.getDeparture(),
+            schedule.getDestination(),
+            schedule.getTransportation(),
             schedule.getTravelScheduleDate()
         );
     }

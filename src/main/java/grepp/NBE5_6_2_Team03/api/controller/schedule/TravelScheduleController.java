@@ -29,8 +29,18 @@ public class TravelScheduleController {
 
     @PostMapping("/add")
     public String addSchedule(@PathVariable Long travelPlanId,
-                              @ModelAttribute TravelScheduleRequest request) {
-        travelScheduleService.addSchedule(travelPlanId, request);
+                              @ModelAttribute TravelScheduleRequest request,
+                              Model model) {
+        model.addAttribute("travelPlanId", travelPlanId);
+
+        try {
+            travelScheduleService.addSchedule(travelPlanId, request);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("request", request);
+            return "schedule/schedule-form";
+        }
+
         return "redirect:/plan/" + travelPlanId + "/schedule/list";
     }
 

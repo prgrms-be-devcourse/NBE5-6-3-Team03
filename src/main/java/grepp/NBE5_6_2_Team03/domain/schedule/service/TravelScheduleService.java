@@ -30,8 +30,20 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
+        validateLocationFields(request.getDeparture(), request.getDestination(), request.getTransportation());
+
         TravelSchedule schedule = request.toEntity(plan);
         travelScheduleRepository.save(schedule);
+    }
+
+    public void validateLocationFields(String departure, String destination, String transportation) {
+        boolean departureExists = departure != null && !departure.isBlank();
+        boolean destinationExists = destination != null && !destination.isBlank();
+        boolean transportationExists = transportation != null && !transportation.isBlank();
+
+        if (!(departureExists == destinationExists && destinationExists == transportationExists)) {
+            throw new IllegalArgumentException("출발지, 도착지, 이동수단은 모두 입력하거나 모두 비워야 합니다.");
+        }
     }
 
     @Transactional
@@ -42,6 +54,9 @@ public class TravelScheduleService {
         schedule.edit(
             request.getContent(),
             request.getPlaceName(),
+            request.getDeparture(),
+            request.getDestination(),
+            request.getTransportation(),
             request.getTravelScheduleDate()
         );
 

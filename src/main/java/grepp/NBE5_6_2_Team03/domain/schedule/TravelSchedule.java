@@ -25,6 +25,9 @@ public class TravelSchedule {
 
     private String content;
     private String placeName;
+    private String departure;
+    private String destination;
+    private String transportation;
 
     @Enumerated(EnumType.STRING)
     private ScheduleStatus scheduleStatus;
@@ -33,9 +36,12 @@ public class TravelSchedule {
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
 
-    public void edit(String content, String placeName, LocalDate travelScheduleDate) {
+    public void edit(String content, String placeName, String departure, String destination, String transportation, LocalDate travelScheduleDate) {
         this.content = content;
         this.placeName = placeName;
+        this.departure = departure;
+        this.transportation = transportation;
+        this.destination = destination;
         this.travelScheduleDate = travelScheduleDate;
         this.modifiedDateTime = LocalDateTime.now();
     }
