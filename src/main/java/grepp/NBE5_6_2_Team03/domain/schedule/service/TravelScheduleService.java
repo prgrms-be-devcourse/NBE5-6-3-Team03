@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.schedule.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleRequest;
-import grepp.NBE5_6_2_Team03.domain.plan.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
@@ -24,7 +24,7 @@ public class TravelScheduleService {
 
     public void addSchedule(Long travelPlanId, TravelScheduleRequest request) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
-            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND.getDescription()));
+            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
         TravelSchedule schedule = TravelSchedule.create(plan, request);
         travelScheduleRepository.save(schedule);
@@ -33,7 +33,7 @@ public class TravelScheduleService {
     @Transactional
     public Long editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
+            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
         schedule.edit(
             request.getContent(),
@@ -47,7 +47,7 @@ public class TravelScheduleService {
     @Transactional
     public void deleteSchedule(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
+            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
         travelScheduleRepository.delete(schedule);
     }
@@ -55,20 +55,20 @@ public class TravelScheduleService {
     @Transactional
     public void scheduleStatus(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
+            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
         schedule.toggleStatus();
     }
 
     public List<TravelSchedule> getSchedulesByPlanId(Long travelPlanId) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
-            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND.getDescription()));
+            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
         return travelScheduleRepository.findSortedSchedules(plan);
     }
 
     public TravelSchedule findById(Long travelScheduleId) {
         return travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND.getDescription()));
+            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
     }
 }
