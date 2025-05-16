@@ -1,7 +1,5 @@
 package grepp.NBE5_6_2_Team03.domain.user;
 
-import grepp.NBE5_6_2_Team03.domain.user.command.UserCreateCommand;
-import grepp.NBE5_6_2_Team03.domain.user.command.UserEditCommand;
 import grepp.NBE5_6_2_Team03.domain.user.file.UploadFile;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -30,7 +28,9 @@ public class User {
     }
 
     @Builder
-    private User(String email, String password, String name, String phoneNumber, Role role) {
+    private User(Long id, String email, String password,
+                 String name, String phoneNumber, Role role) {
+        this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
@@ -38,20 +38,13 @@ public class User {
         this.role = role;
     }
 
-    public static User register(UserCreateCommand command, String encodedPassword) {
-        return User.builder()
-                .email(command.getEmail())
-                .password(encodedPassword)
-                .name(command.getName())
-                .phoneNumber(command.getPhoneNumber())
-                .role(Role.ROLE_USER)
-                .build();
-    }
+    public void updateProfile(String email, String name, String phoneNumber, UploadFile uploadFile) {
+        this.email = email;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
 
-    public void edit(UserEditCommand editCommand) {
-        this.email = editCommand.getEmail();
-        this.name = editCommand.getName();
-        this.phoneNumber = editCommand.getPhoneNumber();
-        this.uploadFile = editCommand.getUploadFile();
+        if(uploadFile != null) {
+            this.uploadFile = uploadFile;
+        }
     }
 }

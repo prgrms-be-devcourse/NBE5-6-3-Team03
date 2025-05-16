@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>여행 계획 목록</title>
+  <link rel="stylesheet" href="/css/styles.css"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+  <style>
+    .travel-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 1rem;
+    }
+
+    .travel-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-title {
+      font-weight: bold;
+    }
+
+    .btn-primary {
+      font-weight: bold;
+    }
+
+    body {
+      background-color: #f8f9fa;
+    }
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold" th:text="|${user.username}님의 여행 계획|"> 내 여행 계획</h2>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#planModal">+ 여행 계획 추가
+    </button>
+  </div>
+
+  <!-- 카드 리스트 -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    <div class="col" th:each="plan : ${plans}">
+      <div class="card travel-card shadow-sm h-100 border-0">
+        <div class="card-body">
+          <a th:href="@{'/plan/' + ${plan.travelPlanId} + '/schedule'}"
+             class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2">
+            일정보기
+          </a>
+
+          <h5 class="card-title text-primary fw-bold" th:text="${plan.name}">계획명</h5>
+          <h6 class="card-subtitle mb-2 text-muted" th:text="${plan.country}">국가</h6>
+          <p class="card-text small">
+            <strong>기간:</strong>
+            <span th:text="${plan.travelStartDate} + ' ~ ' + ${plan.travelEndDate}"></span><br/>
+            <strong>예산:</strong> <span th:text="${plan.publicMoney}"></span>원<br/>
+            <strong>인원수:</strong> <span th:text="${plan.count}"></span>명
+          </p>
+        </div>
+        <div class="card-footer bg-white border-0 d-flex justify-content-end gap-2">
+          <button class="btn btn-sm btn-outline-primary"
+                  th:data-id="${plan.travelPlanId}"
+                  onclick="openEditModal(this)">수정
+          </button>
+          <form th:action="@{'/plan/delete/' + ${plan.travelPlanId}}" method="post"
+                onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            <button type="submit" class="btn btn-outline-danger btn-sm">삭제</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ✅ 여행 계획 등록 모달 -->
+<div class="modal fade" id="planModal" tabindex="-1" aria-labelledby="planModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="planForm">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary" id="planModalLabel">✈️ 여행 계획 등록</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        </div>
+        <div class="modal-body">
+          <input type="text" name="name" class="form-control mb-2" placeholder="계획 이름" required>
+          <select name="country" class="form-control mb-2" required>
+            <option value="">국가 선택</option>
+            <option value="일본">일본</option>
+            <option value="베트남">베트남</option>
+          </select>
+          <input type="number" name="publicMoney" class="form-control mb-2" placeholder="예산"
+                 required>
+          <input type="number" name="count" class="form-control mb-2" placeholder="인원 수" required>
+          <input type="date" name="travelStartDate" class="form-control mb-2" required>
+          <input type="date" name="travelEndDate" class="form-control mb-2" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">등록</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ✅여행 계획 수정 모달 -->
+<div class="modal fade" id="editPlanModal" tabindex="-1" aria-labelledby="editPlanModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editPlanForm">
+        <div class="modal-header">
+          <h5 class="modal-title text-primary" id="editPlanModalLabel">📝 여행 계획 수정</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" id="editPlanId"/>
+          <input type="text" id="editName" class="form-control mb-2" placeholder="계획 이름">
+          <select id="editCountry" class="form-control mb-2" required>
+            <option value="" disabled selected>국가 선택</option>
+            <option value="일본">일본</option>
+            <option value="베트남">베트남</option>
+          </select>
+          <input type="number" id="editMoney" class="form-control mb-2" placeholder="예산">
+          <input type="number" id="editCount" class="form-control mb-2" placeholder="인원 수">
+          <input type="date" id="editStart" class="form-control mb-2">
+          <input type="date" id="editEnd" class="form-control mb-2">
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">수정 완료</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<!-- ✅ 모달 등록 처리 JS -->
+<script>
+  document.getElementById('planForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    fetch('/plan/create', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error('등록 실패');
+      }
+      return res.text();
+    })
+    .then(() => {
+      alert('등록 완료!');
+      form.reset();
+      bootstrap.Modal.getInstance(document.getElementById('planModal')).hide();
+      location.reload(); // 또는 리스트만 갱신
+    })
+    .catch(err => alert(err));
+  });
+
+  // 수정 모달 열기
+  function openEditModal(button) {
+    const id = button.getAttribute('data-id');
+
+    fetch(`/plan/api/${id}`)
+    .then(res => res.json())
+    .then(plan => {
+      document.getElementById('editPlanId').value = id;
+      document.getElementById('editName').value = plan.name;
+      document.getElementById('editCountry').value = plan.country;
+      document.getElementById('editMoney').value = plan.publicMoney;
+      document.getElementById('editCount').value = plan.count;
+      document.getElementById('editStart').value = plan.travelStartDate;
+      document.getElementById('editEnd').value = plan.travelEndDate;
+      new bootstrap.Modal(document.getElementById('editPlanModal')).show();
+    });
+  }
+
+  // 수정 폼 제출
+  document.getElementById('editPlanForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+
+    const id = document.getElementById('editPlanId').value;
+
+    const data = {};
+    if (document.getElementById('editName').value) {
+      data.name = document.getElementById(
+          'editName').value;
+    }
+    if (document.getElementById('editCountry').value) {
+      data.country = document.getElementById(
+          'editCountry').value;
+    }
+    if (document.getElementById('editMoney').value) {
+      data.publicMoney = document.getElementById(
+          'editMoney').value;
+    }
+    if (document.getElementById('editCount').value) {
+      data.count = document.getElementById(
+          'editCount').value;
+    }
+    if (document.getElementById('editStart').value) {
+      data.travelStartDate = document.getElementById(
+          'editStart').value;
+    }
+    if (document.getElementById('editEnd').value) {
+      data.travelEndDate = document.getElementById(
+          'editEnd').value;
+    }
+
+    fetch(`/plan/update/${id}`, {
+      method: 'PATCH',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(data)
+    })
+    .then(res => {
+      if (!res.ok) {
+        throw new Error("수정 실패");
+      }
+      return res.text();
+    })
+    .then(() => {
+      alert("수정 완료!");
+      bootstrap.Modal.getInstance(document.getElementById('editPlanModal')).hide();
+      location.reload();
+    })
+    .catch(err => alert(err));
+  });
+
+
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

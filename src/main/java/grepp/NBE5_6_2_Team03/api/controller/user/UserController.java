@@ -1,15 +1,10 @@
 package grepp.NBE5_6_2_Team03.api.controller.user;
 
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
-import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.userEditRequest;
+import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
+import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.UserMyPageResponse;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
-import grepp.NBE5_6_2_Team03.domain.user.User;
-import grepp.NBE5_6_2_Team03.domain.user.command.UserCreateCommand;
-import grepp.NBE5_6_2_Team03.domain.user.command.UserEditCommand;
-import grepp.NBE5_6_2_Team03.domain.user.file.FileStore;
-import grepp.NBE5_6_2_Team03.domain.user.file.UploadFile;
 import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
-import grepp.NBE5_6_2_Team03.global.config.security.SecurityContextUpdater;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -19,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -31,8 +27,6 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
-    private final FileStore fileStore;
-    private final SecurityContextUpdater securityContextUpdater;
 
     @GetMapping("/sign-up")
     public String signUpForm(Model model){
@@ -46,53 +40,56 @@ public class UserController {
             return "/user/signup-form";
         }
 
-        UserCreateCommand command = UserCreateCommand.from(request);
-        userService.signup(command);
+        userService.signup(request);
         return "redirect:/";
     }
 
     @GetMapping("/home")
-    public String userHome(@AuthenticationPrincipal CustomUserDetails user, Model model){
+    public String userHomeForm(@AuthenticationPrincipal CustomUserDetails user, Model model){
         model.addAttribute("username", user.getUsername());
         return "user/home";
     }
 
     @GetMapping("/my-page")
-    public String myPage(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) throws MalformedURLException {
-        User user = userDetails.getUser();
-        model.addAttribute("user", user);
+    public String myPageForm(@AuthenticationPrincipal CustomUserDetails userDetails, Model model) {
+        UserMyPageResponse userMyPageResponse = userService.getMyProfile(userDetails.getId());
+        model.addAttribute("userMyPageResponse", userMyPageResponse);
         return "user/my-page";
     }
 
     @PostMapping("/edit")
-    public String editUser(@AuthenticationPrincipal CustomUserDetails userDetails,
-                           @ModelAttribute userEditRequest request) throws IOException {
+    public String modifyProfile(@ModelAttribute @Valid UserEditRequest request, BindingResult bindingResult,
+                                @AuthenticationPrincipal CustomUserDetails userDetails, RedirectAttributes redirectAttributes) throws IOException {
 
-        UploadFile uploadFile = fileStore.storeFile(request.getProfileImage());
-        UserEditCommand userEditCommand = UserEditCommand.of(request, uploadFile);
-        User updatedUser = userService.editUser(userEditCommand, userDetails.getId());
-        securityContextUpdater.updateAuthentication(updatedUser, request.getRawPassword());
+        if(bindingResult.hasErrors()){
+            UserMyPageResponse userMyPageResponse = userService.getMyProfile(userDetails.getId());
+            redirectAttributes.addFlashAttribute("userMyPageResponse", userMyPageResponse);
+            return "redirect:/users/my-page";
+        }
 
+        UserMyPageResponse userMyPageResponse = userService.updateProfile(request, userDetails.getId());
+        redirectAttributes.addFlashAttribute("userMyPageResponse", userMyPageResponse);
         return "redirect:/users/my-page";
     }
 
     @ResponseBody
     @GetMapping("/check-email")
-    public Map<String, Boolean> checkEmail(@RequestParam String email){
-        boolean exists = userService.findByEmail(email);
-        return Collections.singletonMap("available", !exists);
+    public Map<String, Boolean> checkEmail(@RequestParam("email") String email){
+        boolean available = userService.isNotDuplicatedEmail(email);
+        return Collections.singletonMap("available", available);
     }
 
     @ResponseBody
     @GetMapping("/check-name")
-    public Map<String, Boolean> checkName(@RequestParam String name){
-        boolean exists = userService.findByName(name);
-        return Collections.singletonMap("available", !exists);
+    public Map<String, Boolean> checkName(@RequestParam("name") String name){
+        boolean available = userService.isNotDuplicatedName(name);
+        return Collections.singletonMap("available", available);
     }
 
     @ResponseBody
     @GetMapping("/images/{filename}")
     public Resource showImage(@PathVariable("filename") String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFileDir() + filename);
+        String fileDir = userService.getFileDir();
+        return new UrlResource("file:" + fileDir + filename);
     }
 }
