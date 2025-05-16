@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.domain.admin.userinfo;
+package grepp.NBE5_6_2_Team03.domain.admin;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;

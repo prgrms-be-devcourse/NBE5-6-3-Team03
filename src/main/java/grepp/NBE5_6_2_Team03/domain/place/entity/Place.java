@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.domain.admin.place.entity;
+package grepp.NBE5_6_2_Team03.domain.place.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

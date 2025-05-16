@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin.dto.place;
 
-import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Country;
+import grepp.NBE5_6_2_Team03.domain.place.entity.Country;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;

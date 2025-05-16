@@ -1,8 +1,8 @@
-package grepp.NBE5_6_2_Team03.domain.admin.place;
+package grepp.NBE5_6_2_Team03.domain.place;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.CountryResponse;
-import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Country;
-import grepp.NBE5_6_2_Team03.domain.admin.place.repository.CountryRepository;
+import grepp.NBE5_6_2_Team03.domain.place.entity.Country;
+import grepp.NBE5_6_2_Team03.domain.place.repository.CountryRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

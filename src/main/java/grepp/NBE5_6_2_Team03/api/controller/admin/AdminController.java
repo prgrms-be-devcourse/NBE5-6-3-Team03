@@ -2,7 +2,7 @@ package grepp.NBE5_6_2_Team03.api.controller.admin;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
-import grepp.NBE5_6_2_Team03.domain.admin.userinfo.AdminService;
+import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
