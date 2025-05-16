@@ -12,7 +12,6 @@ import lombok.Getter;
 @Getter
 @Entity
 public class ExchangeRateEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,7 +24,6 @@ public class ExchangeRateEntity {
     private String date;
 
     protected ExchangeRateEntity() {
-
     }
 
     @Builder
@@ -39,5 +37,4 @@ public class ExchangeRateEntity {
         this.ttsRate = ttsRate;
         this.date = date;
     }
-
 }
