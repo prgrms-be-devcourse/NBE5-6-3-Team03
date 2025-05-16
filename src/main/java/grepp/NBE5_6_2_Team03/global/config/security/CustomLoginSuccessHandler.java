@@ -1,10 +1,12 @@
-package grepp.NBE5_6_2_Team03.global.handler;
+package grepp.NBE5_6_2_Team03.global.config.security;
 
 import grepp.NBE5_6_2_Team03.domain.user.Role;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
