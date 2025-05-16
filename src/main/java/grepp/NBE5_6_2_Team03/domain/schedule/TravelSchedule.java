@@ -33,17 +33,6 @@ public class TravelSchedule {
     private LocalDateTime createdDateTime;
     private LocalDateTime modifiedDateTime;
 
-    public static TravelSchedule create(TravelPlan plan, TravelScheduleRequest request) {
-        return builder()
-            .travelPlan(plan)
-            .content(request.getContent())
-            .placeName(request.getPlaceName())
-            .scheduleStatus(ScheduleStatus.PLANNED)
-            .travelScheduleDate(request.getTravelScheduleDate())
-            .createdDateTime(LocalDateTime.now())
-            .build();
-    }
-
     public void edit(String content, String placeName, LocalDate travelScheduleDate) {
         this.content = content;
         this.placeName = placeName;

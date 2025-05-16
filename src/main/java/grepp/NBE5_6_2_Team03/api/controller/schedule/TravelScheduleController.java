@@ -48,8 +48,8 @@ public class TravelScheduleController {
 
     @PostMapping("/{travelScheduleId}/edit")
     public String editSchedule(@PathVariable Long travelPlanId,
-                                 @PathVariable Long travelScheduleId,
-                                 @ModelAttribute TravelScheduleRequest request) {
+                               @PathVariable Long travelScheduleId,
+                               @ModelAttribute TravelScheduleRequest request) {
         travelScheduleService.editSchedule(travelScheduleId, request);
         return "redirect:/plan/" + travelPlanId + "/schedule/list";
     }
@@ -71,7 +71,7 @@ public class TravelScheduleController {
 
     @PostMapping("/{travelScheduleId}/status")
     public String scheduleStatus(@PathVariable Long travelPlanId,
-                                    @PathVariable Long travelScheduleId) {
+                                 @PathVariable Long travelScheduleId) {
         travelScheduleService.scheduleStatus(travelScheduleId);
         return "redirect:/plan/" + travelPlanId + "/schedule/list";
     }

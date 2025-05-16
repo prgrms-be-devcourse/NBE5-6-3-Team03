@@ -30,7 +30,7 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
-        TravelSchedule schedule = TravelSchedule.create(plan, request);
+        TravelSchedule schedule = request.toEntity(plan);
         travelScheduleRepository.save(schedule);
     }
 
