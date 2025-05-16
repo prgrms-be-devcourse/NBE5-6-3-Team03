@@ -5,7 +5,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(value = HttpStatus.BAD_REQUEST)
 public class NotFoundException extends RuntimeException{
-    public NotFoundException(String message) {
-        super(message);
+
+    private final Message message;
+
+    public NotFoundException(Message message) {
+        super(message.getDescription());
+        this.message = message;
     }
 }

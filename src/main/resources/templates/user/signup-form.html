@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -88,28 +88,28 @@
 
 <div class="container">
     <h1>회원가입</h1>
-    <form action="/users/sign-up" method="POST">
+    <form th:action="@{/users/sign-up}" method="post" th:object="${userSignUpRequest}">
         <div class="input-group">
-            <input type="email" id="email" name="email" placeholder="ex) test@example.com" required>
+            <input type="email" id="email" th:field="*{email}" placeholder="ex) test@example.com" required>
             <button type="button" id="checkEmailBtn">중복 확인</button>
         </div>
         <p id="emailCheckResult" class="check-result"></p>
 
         <div class="input-group">
-            <input type="text" id="name" name="name" placeholder="ex) 홍길동" required>
+            <input type="text" id="name" th:field="*{name}" placeholder="ex) 홍길동" required>
             <button type="button" id="checkNameBtn">중복 확인</button>
         </div>
         <p id="nameCheckResult" class="check-result"></p>
 
         <div class="single-input">
-            <input type="password" name="password" id="password" placeholder="비밀번호" required>
+            <input type="password" id="password" th:field="*{password}" placeholder="비밀번호" required>
         </div>
-        <p id="passwordRuleMessage" class="check-result" style="text-align: left; font-size: 0.85rem;"></p>
+        <p id="passwordRuleMessage" class="check-result"></p>
 
         <div class="single-input">
-            <input type="tel" name="phoneNumber" id="phone" placeholder="ex) 010-1234-5678" required>
+            <input type="tel" id="phoneNumber" th:field="*{phoneNumber}" placeholder="ex) 010-1234-5678" required>
         </div>
-        <p id="phoneCheckResult" class="check-result" style="text-align: left; font-size: 0.85rem;"></p>
+        <p id="phoneCheckResult" class="check-result"></p>
 
         <button type="submit" class="btn">회원가입</button>
     </form>
@@ -220,8 +220,8 @@
     });
 
     // 휴대폰 번호 유효성 검사
-    document.getElementById('phone').addEventListener('input', () => {
-        const value = document.getElementById('phone').value;
+    document.getElementById('phoneNumber').addEventListener('input', () => {
+        const value = document.getElementById('phoneNumber').value;
         const resultElement = document.getElementById('phoneCheckResult');
         const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
 
