@@ -65,12 +65,6 @@
             <button type="submit" class="btn btn-outline-danger btn-sm"
                     onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
           </form>
-
-          <!-- 계획 폼 -->
-          <form th:action="@{'/admin/user-info/plan/' + ${user.id}}" method="get">
-            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            <button type="submit" class="btn btn-outline-success btn-sm">계획</button>
-          </form>
         </div>
       </div>
     </div>

@@ -39,11 +39,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers("/", "/users/**").permitAll()
+                                .requestMatchers("/admin/**", "/place/**").permitAll()
                                 .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/recommend").permitAll()
                                 .anyRequest().authenticated()
                 );
 
-        http.csrf((auth) -> auth.disable());
+//        http.csrf((auth) -> auth.disable());
 
         http
                 .formLogin(auth -> auth
