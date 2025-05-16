@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>여행지 지도</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+      .container {
+        display: flex;
+        height: 100vh;
+        font-family: var(--bs-body-font-family);
+      }
+      .sidebar {
+        width: 30%;
+        background-color: var(--bs-light);
+        padding: 2rem;
+        overflow-y: auto;
+        box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+      }
+      .map {
+        width: 70%;
+        height: 100%;
+      }
+      .form-group {
+        margin-bottom: 1rem;
+      }
+      .form-select {
+        width: 100%;
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 1px solid var(--bs-border-color);
+        border-radius: var(--bs-border-radius);
+      }
+      .btn-primary {
+        background-color: var(--bs-primary);
+        border: none;
+        color: #fff;
+        padding: 0.5rem 1rem;
+        border-radius: var(--bs-border-radius);
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      .btn-primary:hover {
+        background-color: var(--bs-link-hover-color);
+      }
+      .card {
+        background-color: #fff;
+        border: 1px solid var(--bs-border-color);
+        border-radius: var(--bs-border-radius);
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <form th:action="@{/search}" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div class="form-group">
+                <label for="country1">국가 선택</label>
+                <select name="country1" id="country1" class="form-select">
+                    <option value="">국가 선택</option>
+                    <option value="korea">대한민국</option>
+                    <option value="japan">일본</option>
+                    <option value="usa">미국</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="city1">도시 선택</label>
+                <select name="city1" id="city1" class="form-select">
+                    <option value="">도시 선택</option>
+                    <option value="seoul">서울</option>
+                    <option value="tokyo">도쿄</option>
+                    <option value="newyork">뉴욕</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary">검색</button>
+        </form>
+
+        <!-- 여행지 카드 샘플 -->
+        <div class="card">
+            <p>여행지 1 설명</p>
+        </div>
+        <div class="card">
+            <p>여행지 2 설명</p>
+        </div>
+        <div class="card">
+            <p>여행지 3 설명</p>
+        </div>
+        <div class="card">
+            <p>여행지 4 설명</p>
+        </div>
+        <div class="card">
+            <p>여행지 5 설명</p>
+        </div>
+    </div>
+    <div class="map" id="map"></div>
+</div>
+
+<!-- ✅ Load Google Maps API -->
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDItF6jDbw7qRmIKQy6QQbioL5OfeQjiyI&v=beta&libraries=marker"></script>
+
+<!-- ✅ Load marker-advanced AFTER Google Maps -->
+<script src="https://unpkg.com/@googlemaps/marker-advanced"></script>
+
+<!-- ✅ Define initMap and assign to window AFTER both scripts are guaranteed loaded -->
+<script>
+  function initMap() {
+    const map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: 37.5665, lng: 126.9780 },
+      zoom: 5,
+    });
+
+    const marker = new google.maps.marker.AdvancedMarkerElement({
+      map,
+      position: { lat: 37.5665, lng: 126.9780 },
+      title: "서울"
+    });
+  }
+  window.addEventListener("load", initMap);
+</script>
+</body>
+</html>
