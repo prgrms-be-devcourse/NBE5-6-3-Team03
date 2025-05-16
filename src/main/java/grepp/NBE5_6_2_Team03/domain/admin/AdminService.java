@@ -34,7 +34,6 @@ public class AdminService {
         );
     }
 
-
     @Transactional
     public void updateUserInfo(Long id, UserInfoUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(
@@ -54,8 +53,5 @@ public class AdminService {
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
-
-
-
 
 }
