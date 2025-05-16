@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder @AllArgsConstructor
-public class TravelPlanDto {
+public class TravelPlanRequestDto {
 
     private String country;
     private String name;
@@ -19,5 +19,5 @@ public class TravelPlanDto {
     private LocalDate travelStartDate;
     private LocalDate travelEndDate;
 
-    public TravelPlanDto() {}
+    public TravelPlanRequestDto() {}
 }
