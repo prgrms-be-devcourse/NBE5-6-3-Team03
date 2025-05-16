@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.domain.plan.entity;
+package grepp.NBE5_6_2_Team03.domain.travelplan;
 
 import lombok.Getter;
 

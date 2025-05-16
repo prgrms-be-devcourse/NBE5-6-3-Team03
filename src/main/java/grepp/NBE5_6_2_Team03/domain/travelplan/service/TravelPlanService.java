@@ -1,9 +1,9 @@
-package grepp.NBE5_6_2_Team03.domain.plan.service;
+package grepp.NBE5_6_2_Team03.domain.travelplan.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.TravelPlanRequestDto;
-import grepp.NBE5_6_2_Team03.domain.plan.entity.CountryStatus;
-import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
-import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
+import grepp.NBE5_6_2_Team03.domain.travelplan.CountryStatus;
+import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
