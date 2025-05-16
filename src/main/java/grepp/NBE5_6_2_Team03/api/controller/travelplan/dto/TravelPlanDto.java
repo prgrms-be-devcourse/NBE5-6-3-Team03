@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.api.controller.plan.dto;
+package grepp.NBE5_6_2_Team03.api.controller.travelplan.dto;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;

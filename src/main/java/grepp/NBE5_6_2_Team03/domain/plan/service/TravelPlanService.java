@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.plan.service;
 
-import grepp.NBE5_6_2_Team03.api.controller.plan.dto.TravelPlanDto;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.TravelPlanDto;
 import grepp.NBE5_6_2_Team03.domain.plan.entity.CountryStatus;
 import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
