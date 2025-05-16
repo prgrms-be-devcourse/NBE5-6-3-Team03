@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.global.config.security;
 
 import grepp.NBE5_6_2_Team03.domain.user.service.CustomUserDetailsService;
-import grepp.NBE5_6_2_Team03.global.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,11 +39,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers("/", "/users/**").permitAll()
-                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/recommend").permitAll()
+                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
+                                .requestMatchers("/api/exchange/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
-        http.csrf((auth) -> auth.disable());
+//        http.csrf((auth) -> auth.disable());
 
         http
                 .formLogin(auth -> auth
