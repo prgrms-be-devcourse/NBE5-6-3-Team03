@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.global.handler;
+package grepp.NBE5_6_2_Team03.global.config.security;
 
 import grepp.NBE5_6_2_Team03.domain.user.Role;
 import jakarta.servlet.ServletException;

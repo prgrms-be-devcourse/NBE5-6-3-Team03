@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.exchange.service;
 
-import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeDto;
+import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeResponse;
 import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
 import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateRepository;
 import java.time.LocalDate;
@@ -30,32 +30,29 @@ public class ExchangeService {
     @Value("${exchange.api.url}")
     private String apiUrl;
 
+    public ExchangeResponse[] getCurrentExchanges(LocalDate today) {
+        String accessUrl = createAccessUrl(today);
+        ResponseEntity<ExchangeResponse[]> exchangeResponses = restTemplate.getForEntity(accessUrl, ExchangeResponse[].class);
 
-    public ExchangeDto[] getCurrentExchanges(LocalDate date) {
-
-        String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        String url = String.format("%s?authkey=%s&searchdate=%s&data=AP01",apiUrl,apiKey,formattedDate);
-
-        ResponseEntity<ExchangeDto[]> exchangeResponse = restTemplate.getForEntity(url, ExchangeDto[].class);
-
-        return exchangeResponse.getBody();
+        return exchangeResponses.getBody();
     }
-
-    public ExchangeDto getLatest(String code){
-
-        ExchangeRateEntity entity = exchangeRateRepository.findLatestByCurUnit(code)
+    public ExchangeResponse getLatest(String curUnit){
+        ExchangeRateEntity entity = exchangeRateRepository.findLatestByCurUnit(curUnit)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        return ExchangeDto.toDto(entity);
+        return ExchangeResponse.fromDto(entity);
     }
-
-    public void saveAllExchangeRates(ExchangeDto[] rates, String searchDate) {
-
-        List<ExchangeRateEntity> entities = Arrays.stream(rates)
-            .map(dto -> dto.toEntity(searchDate))
-            .collect(Collectors.toList());
-
+    public void saveAllExchangeRates(ExchangeResponse[] exchanges, String searchDate) {
+        List<ExchangeRateEntity> entities = convertToEntities(exchanges, searchDate);
         exchangeRateRepository.saveAll(entities);
     }
-
+    private String createAccessUrl(LocalDate today) {
+        String formattedToday = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return String.format("%s?authkey=%s&apikey=%s", apiUrl, apiKey,formattedToday);
+    }
+    private List<ExchangeRateEntity> convertToEntities(ExchangeResponse[] exchanges, String searchDate) {
+        return Arrays.stream(exchanges)
+            .map(request -> request.toEntity(searchDate))
+            .collect(Collectors.toList());
+    }
 }

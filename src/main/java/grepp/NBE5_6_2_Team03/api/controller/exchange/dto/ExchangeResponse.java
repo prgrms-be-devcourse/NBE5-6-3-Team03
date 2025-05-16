@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class ExchangeDto {
+public class ExchangeResponse {
 
     @JsonProperty("cur_unit")
     private String curUnit;
@@ -23,11 +23,11 @@ public class ExchangeDto {
     @JsonProperty("tts")
     private String ttsRate;     // 원화 -> 외화
 
-    protected ExchangeDto() {
+    protected ExchangeResponse() {
     }
 
     @Builder
-    private ExchangeDto(String curUnit, String curName, String baseRate, String ttbRate,
+    private ExchangeResponse(String curUnit, String curName, String baseRate, String ttbRate,
         String ttsRate) {
         this.curUnit = curUnit;
         this.curName = curName;
@@ -36,8 +36,8 @@ public class ExchangeDto {
         this.ttsRate = ttsRate;
     }
 
-    public static ExchangeDto toDto(ExchangeRateEntity entity) {
-        return ExchangeDto.builder()
+    public static ExchangeResponse fromDto(ExchangeRateEntity entity) {
+        return ExchangeResponse.builder()
             .curUnit(entity.getCurUnit())
             .curName(entity.getCurName())
             .baseRate(entity.getBaseRate())

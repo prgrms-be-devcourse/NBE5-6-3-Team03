@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.exchange.scheduler;
 
-import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeDto;
+import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeResponse;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -16,25 +16,26 @@ public class ExchangeRateScheduler {
 
     private final ExchangeService exchangeService;
 
-    private boolean isExistExchange(ExchangeDto[] rates){
+    private boolean isExistExchange(ExchangeResponse[] rates){
         return rates == null || rates.length == 0;
     }
 
     @Scheduled(initialDelay = 0, fixedRate=1000000)     // TODO 이거 한번 데이터 받은 이후에 주석처리 해야합니다.
     public void fetchExchangeRates() {
 
+        log.info("Fetch exchange rates start");
+
         try {
-            log.info("Fetch exchange rates start");
 
             LocalDate today = LocalDate.now();
-            ExchangeDto[] rates = exchangeService.getCurrentExchanges(today);
+            ExchangeResponse[] rates = exchangeService.getCurrentExchanges(today);
 
             if (isExistExchange(rates)) {
                 log.info("Not Exist Exchange Rate Data Now");
                 return;
             }
 
-            String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String searchDate = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             exchangeService.saveAllExchangeRates(rates,searchDate);
 
             log.info("Fetch exchange rates done");

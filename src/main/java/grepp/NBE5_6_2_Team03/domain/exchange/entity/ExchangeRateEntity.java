@@ -9,7 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Table(name = "exchange_rate")
-@Getter @Entity
+@Getter
+@Entity
 public class ExchangeRateEntity {
 
     @Id
