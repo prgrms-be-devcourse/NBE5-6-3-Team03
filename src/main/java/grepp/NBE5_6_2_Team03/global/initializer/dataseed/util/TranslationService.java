@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.global.dataseed.util;
+package grepp.NBE5_6_2_Team03.global.initializer.dataseed.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
