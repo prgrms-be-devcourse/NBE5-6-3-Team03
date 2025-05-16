@@ -13,4 +13,8 @@ public enum Role {
     public String getDescription() {
         return description;
     }
+
+    public boolean isSameRoleName(String roleName){
+        return this.name().equals(roleName);
+    }
 }
