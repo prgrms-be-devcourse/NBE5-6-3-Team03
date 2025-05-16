@@ -39,7 +39,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (auth) -> auth
-                                .requestMatchers("/", "/users/**").permitAll()
+                                .requestMatchers("/").permitAll()
                                 .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/recommend").permitAll()
                                 .anyRequest().authenticated()
                 );
@@ -55,6 +55,14 @@ public class SecurityConfig {
                         .failureHandler(loginFailureHandler)
                         .permitAll()
                 );
+
+        http.logout(logout -> logout
+                .logoutUrl("/users/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+        );
 
         return http.build();
     }
