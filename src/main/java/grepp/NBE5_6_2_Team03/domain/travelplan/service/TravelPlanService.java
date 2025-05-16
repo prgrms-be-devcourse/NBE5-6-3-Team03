@@ -1,8 +1,9 @@
-package grepp.NBE5_6_2_Team03.domain.plan.service;
+package grepp.NBE5_6_2_Team03.domain.travelplan.service;
 
-import grepp.NBE5_6_2_Team03.api.controller.plan.dto.TravelPlanDto;
-import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
-import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.TravelPlanRequestDto;
+import grepp.NBE5_6_2_Team03.domain.travelplan.CountryStatus;
+import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -24,13 +25,16 @@ public class TravelPlanService {
         return plans;
     }
 
-    public void createPlan(Long userid, TravelPlanDto planDto) {
+    public void createPlan(Long userid, TravelPlanRequestDto planDto) {
 
         User user = userRepository.findById(userid)
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
+        CountryStatus status = CountryStatus.fromCountryName(planDto.getCountry());
+
         TravelPlan plan = TravelPlan.builder()
             .user(user)
+            .countryStatus(status)
             .name(planDto.getName())
             .country(planDto.getCountry())
             .publicMoney(planDto.getPublicMoney())
@@ -44,11 +48,11 @@ public class TravelPlanService {
         travelPlanRepository.save(plan);
     }
 
-    public TravelPlanDto getPlan(Long id) {
+    public TravelPlanRequestDto getPlan(Long id) {
         TravelPlan plan = travelPlanRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계획입니다."));
 
-        return TravelPlanDto.builder()
+        return TravelPlanRequestDto.builder()
             .name(plan.getName())
             .country(plan.getCountry())
             .publicMoney(plan.getPublicMoney())
@@ -59,10 +63,13 @@ public class TravelPlanService {
     }
 
     @Transactional
-    public void updatePlan(Long id, TravelPlanDto planDto) {
+    public void updatePlan(Long id, TravelPlanRequestDto planDto) {
         TravelPlan existingPlan = travelPlanRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("여행 계획을 찾을 수 없습니다."));
 
+        CountryStatus status = CountryStatus.fromCountryName(planDto.getCountry());
+
+        existingPlan.setCountryStatus(status);
         existingPlan.setName(planDto.getName());
         existingPlan.setCountry(planDto.getCountry());
         existingPlan.setPublicMoney(planDto.getPublicMoney());
@@ -82,4 +89,3 @@ public class TravelPlanService {
         travelPlanRepository.delete(plan);
     }
 }
-

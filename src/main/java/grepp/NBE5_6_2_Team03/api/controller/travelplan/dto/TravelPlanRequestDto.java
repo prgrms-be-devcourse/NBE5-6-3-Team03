@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.api.controller.plan.dto;
+package grepp.NBE5_6_2_Team03.api.controller.travelplan.dto;
 
 import java.time.LocalDate;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder @AllArgsConstructor
-public class TravelPlanDto {
+public class TravelPlanRequestDto {
 
     private String country;
     private String name;
@@ -19,5 +19,5 @@ public class TravelPlanDto {
     private LocalDate travelStartDate;
     private LocalDate travelEndDate;
 
-    public TravelPlanDto() {}
+    public TravelPlanRequestDto() {}
 }

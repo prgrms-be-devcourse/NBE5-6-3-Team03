@@ -1,8 +1,8 @@
-package grepp.NBE5_6_2_Team03.api.controller.plan;
+package grepp.NBE5_6_2_Team03.api.controller.travelplan;
 
-import grepp.NBE5_6_2_Team03.api.controller.plan.dto.TravelPlanDto;
-import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
-import grepp.NBE5_6_2_Team03.domain.plan.service.TravelPlanService;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.TravelPlanRequestDto;
+import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -34,20 +34,20 @@ public class TravelPlanController {
     }
 
     @PostMapping("/create")
-    public String createPlan(@AuthenticationPrincipal CustomUserDetails customUser,@RequestBody TravelPlanDto planDto) {
+    public String createPlan(@AuthenticationPrincipal CustomUserDetails customUser,@RequestBody TravelPlanRequestDto planDto) {
         travelPlanService.createPlan(customUser.getId(),planDto);
         return "redirect:/plan";
     }
 
     @GetMapping("/api/{id}")
     @ResponseBody
-    public TravelPlanDto getPlan(@PathVariable Long id) {
+    public TravelPlanRequestDto getPlan(@PathVariable Long id) {
         return travelPlanService.getPlan(id);
     }
 
     @PatchMapping("/update/{id}")
     public ResponseEntity<String> updatePlan(@PathVariable Long id,
-        @RequestBody TravelPlanDto planDto) {
+        @RequestBody TravelPlanRequestDto planDto) {
         try {
             travelPlanService.updatePlan(id, planDto);
             return ResponseEntity.ok("수정 완료");

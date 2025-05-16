@@ -1,8 +1,8 @@
 package grepp.NBE5_6_2_Team03.domain.schedule.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleRequest;
-import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
-import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
+import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.schedule.repository.TravelScheduleRepository;
