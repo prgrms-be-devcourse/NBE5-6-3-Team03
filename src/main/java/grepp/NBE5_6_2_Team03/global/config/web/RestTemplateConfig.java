@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.global.config;
+package grepp.NBE5_6_2_Team03.global.config.web;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

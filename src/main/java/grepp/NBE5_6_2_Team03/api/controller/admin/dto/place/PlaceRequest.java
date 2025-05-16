@@ -1,6 +1,5 @@
-package grepp.NBE5_6_2_Team03.api.controller.admin.place.dto;
+package grepp.NBE5_6_2_Team03.api.controller.admin.dto.place;
 
-import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
