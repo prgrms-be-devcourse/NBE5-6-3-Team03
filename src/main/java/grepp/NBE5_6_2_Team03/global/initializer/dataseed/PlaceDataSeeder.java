@@ -1,10 +1,10 @@
-package grepp.NBE5_6_2_Team03.global.dataseed;
+package grepp.NBE5_6_2_Team03.global.initializer.dataseed;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CountryResponse;
-import grepp.NBE5_6_2_Team03.domain.admin.place.CountryService;
-import grepp.NBE5_6_2_Team03.domain.admin.place.GooglePlaceService;
-import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
-import grepp.NBE5_6_2_Team03.domain.admin.place.util.TranslationService;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.CountryResponse;
+import grepp.NBE5_6_2_Team03.domain.place.CountryService;
+import grepp.NBE5_6_2_Team03.domain.place.GooglePlaceService;
+import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
+import grepp.NBE5_6_2_Team03.global.initializer.dataseed.util.TranslationService;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -50,7 +50,8 @@ public class PlaceDataSeeder implements CommandLineRunner {
                 place.setPlaceId(place.getPlaceId());
                 place.setCity(translatedCityName);
                 String placeName = place.getPlaceName();
-                if (placeName != null && !placeName.isEmpty() && placeName.substring(0, 1).matches("[가-힣]")) {
+                String city = place.getCity();
+                if (city != null && placeName != null && !placeName.isEmpty() && placeName.substring(0, 1).matches("[가-힣]")) {
                     googlePlaceService.save(place);
                 }
             }

@@ -1,9 +1,9 @@
-package grepp.NBE5_6_2_Team03.domain.admin.place;
+package grepp.NBE5_6_2_Team03.domain.place;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.PlaceResponse;
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.PlaceRequest;
-import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
-import grepp.NBE5_6_2_Team03.domain.admin.place.repository.PlaceRepository;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
+import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
+import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
