@@ -49,6 +49,9 @@ dependencies {
 	implementation 'p6spy:p6spy:3.9.1'
 	implementation 'com.github.gavlyukovskiy:datasource-decorator-spring-boot-autoconfigure:1.9.0'
 
+	// redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 }
 
 tasks.named('test') {
