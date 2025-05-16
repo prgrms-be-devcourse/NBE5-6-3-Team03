@@ -1,30 +1,26 @@
 package grepp.NBE5_6_2_Team03.api.controller.exchange;
 
 import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeDto;
-import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
 import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateRepository;
+import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/exchange")
 public class ExchangeController {
 
-    private final ExchangeRateRepository exchangeRateRepository;
+    private final ExchangeService exchangeService;
 
     @GetMapping("/latest")
-    public ExchangeDto getLatest(@RequestParam String code){
-        ExchangeRateEntity entity = exchangeRateRepository.findLatestByCurUnit(code)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public ExchangeDto getLatestRate(@RequestParam String code){
 
-        return ExchangeDto.toDto(entity);
+        return exchangeService.getLatest(code);
     }
 
 }
