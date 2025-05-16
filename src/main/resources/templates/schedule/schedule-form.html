@@ -10,6 +10,7 @@
             font-family: sans-serif;
             padding: 40px;
         }
+
         .form-wrapper {
             max-width: 600px;
             margin: 0 auto;
@@ -19,15 +20,18 @@
             padding: 32px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
+
         h2 {
             text-align: center;
             margin-bottom: 24px;
         }
+
         label {
             font-weight: 600;
             margin-bottom: 4px;
             display: block;
         }
+
         input[type="text"],
         input[type="date"],
         select {
@@ -39,12 +43,14 @@
             font-size: 1rem;
             box-sizing: border-box;
         }
+
         .button-group {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
         }
+
         .btn {
             padding: 8px 16px;
             border: none;
@@ -52,10 +58,12 @@
             cursor: pointer;
             font-size: 0.95rem;
         }
+
         .btn-primary {
             background-color: #4a6fa5;
             color: white;
         }
+
         .btn-secondary {
             background-color: #6c757d;
             color: white;
@@ -66,7 +74,6 @@
 <body>
 
 <div class="form-wrapper">
-
     <h2 th:text="${travelScheduleId == null ? '일정 등록' : '일정 수정'}">일정 등록</h2>
 
     <form th:object="${request}"
@@ -76,26 +83,34 @@
           method="post">
 
         <label for="content">내용</label>
-        <input type="text" id="content" th:field="*{content}" required>
+        <select id="content" th:field="*{content}" required>
+            <option value="">-- 선택하세요 --</option>
+            <option value="식당">식당</option>
+            <option value="카페">카페</option>
+            <option value="관광">관광</option>
+            <option value="이동">이동</option>
+        </select>
 
         <label for="placeName">장소</label>
         <input type="text" id="placeName" th:field="*{placeName}">
 
-        <label for="departure">출발지</label>
-        <input type="text" id="departure" th:field="*{departure}">
+        <div id="transportFields" style="display: none;">
+            <label for="departure">출발지</label>
+            <input type="text" id="departure" th:field="*{departure}">
 
-        <label for="destination">도착지</label>
-        <input type="text" id="destination" th:field="*{destination}">
+            <label for="destination">도착지</label>
+            <input type="text" id="destination" th:field="*{destination}">
 
-        <label for="transportation">이동수단</label>
-        <select id="transportation" th:field="*{transportation}">
-            <option value="">-- 선택하세요 --</option>
-            <option value="비행기">비행기</option>
-            <option value="지하철">지하철</option>
-            <option value="버스">버스</option>
-            <option value="택시">택시</option>
-            <option value="도보">도보</option>
-        </select>
+            <label for="transportation">이동수단</label>
+            <select id="transportation" th:field="*{transportation}">
+                <option value="">-- 선택하세요 --</option>
+                <option value="비행기">비행기</option>
+                <option value="지하철">지하철</option>
+                <option value="버스">버스</option>
+                <option value="택시">택시</option>
+                <option value="도보">도보</option>
+            </select>
+        </div>
 
         <label for="travelScheduleDate">날짜</label>
         <input type="date" id="travelScheduleDate" th:field="*{travelScheduleDate}" required>
@@ -110,6 +125,18 @@
 
 <script th:if="${errorMessage != null}" th:inline="javascript">
     alert([[${errorMessage}]]);
+</script>
+
+<script>
+    const contentSelect = document.getElementById('content');
+    const transportFields = document.getElementById('transportFields');
+
+    function toggleTransportFields() {
+        transportFields.style.display = contentSelect.value === '이동' ? 'block' : 'none';
+    }
+
+    contentSelect.addEventListener('change', toggleTransportFields);
+    window.addEventListener('DOMContentLoaded', toggleTransportFields);
 </script>
 
 </body>
