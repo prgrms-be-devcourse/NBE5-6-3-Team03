@@ -1,7 +1,7 @@
-package grepp.NBE5_6_2_Team03.domain.schedule;
+package grepp.NBE5_6_2_Team03.domain.schedule.travelschedule;
 
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
-import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
+import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.code.ScheduleStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
