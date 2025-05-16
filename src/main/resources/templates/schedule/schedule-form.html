@@ -10,7 +10,6 @@
             font-family: sans-serif;
             padding: 40px;
         }
-
         .form-wrapper {
             max-width: 600px;
             margin: 0 auto;
@@ -20,34 +19,32 @@
             padding: 32px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
         }
-
         h2 {
             text-align: center;
             margin-bottom: 24px;
         }
-
         label {
             font-weight: 600;
             margin-bottom: 4px;
             display: block;
         }
-
         input[type="text"],
-        input[type="date"] {
+        input[type="date"],
+        select {
             width: 100%;
             padding: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 24px;
             border: 1px solid #ccc;
             border-radius: 4px;
+            font-size: 1rem;
+            box-sizing: border-box;
         }
-
         .button-group {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
         }
-
         .btn {
             padding: 8px 16px;
             border: none;
@@ -55,12 +52,10 @@
             cursor: pointer;
             font-size: 0.95rem;
         }
-
         .btn-primary {
             background-color: #4a6fa5;
             color: white;
         }
-
         .btn-secondary {
             background-color: #6c757d;
             color: white;
@@ -72,10 +67,10 @@
 
 <div class="form-wrapper">
 
-    <h2 th:text="${request.travelScheduleDate == null ? '일정 등록' : '일정 수정'}">일정 등록</h2>
+    <h2 th:text="${travelScheduleId == null ? '일정 등록' : '일정 수정'}">일정 등록</h2>
 
     <form th:object="${request}"
-          th:action="@{${request.travelScheduleDate == null ?
+          th:action="@{${travelScheduleId == null ?
             '/plan/' + travelPlanId + '/schedule/add' :
             '/plan/' + travelPlanId + '/schedule/' + travelScheduleId + '/edit'}}"
           method="post">
@@ -85,6 +80,22 @@
 
         <label for="placeName">장소</label>
         <input type="text" id="placeName" th:field="*{placeName}">
+
+        <label for="departure">출발지</label>
+        <input type="text" id="departure" th:field="*{departure}">
+
+        <label for="destination">도착지</label>
+        <input type="text" id="destination" th:field="*{destination}">
+
+        <label for="transportation">이동수단</label>
+        <select id="transportation" th:field="*{transportation}">
+            <option value="">-- 선택하세요 --</option>
+            <option value="비행기">비행기</option>
+            <option value="지하철">지하철</option>
+            <option value="버스">버스</option>
+            <option value="택시">택시</option>
+            <option value="도보">도보</option>
+        </select>
 
         <label for="travelScheduleDate">날짜</label>
         <input type="date" id="travelScheduleDate" th:field="*{travelScheduleDate}" required>
@@ -96,6 +107,10 @@
 
     </form>
 </div>
+
+<script th:if="${errorMessage != null}" th:inline="javascript">
+    alert([[${errorMessage}]]);
+</script>
 
 </body>
 </html>
