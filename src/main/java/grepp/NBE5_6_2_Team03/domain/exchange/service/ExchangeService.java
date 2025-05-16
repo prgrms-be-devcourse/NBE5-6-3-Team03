@@ -48,8 +48,8 @@ public class ExchangeService {
     }
 
     private String createAccessUrl(LocalDate today) {
-        String formattedToday = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return String.format("%s?authkey=%s&apikey=%s", apiUrl, apiKey,formattedToday);
+        String formattedToday = today.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+        return String.format("%s?authkey=%s&searchdate=%s&data=AP01", apiUrl, apiKey,formattedToday);
     }
 
     private List<ExchangeRateEntity> convertToEntities(ExchangeResponse[] exchanges, String formattedToday) {
