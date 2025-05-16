@@ -60,6 +60,27 @@
             margin-bottom: 20px;
             font-size: 1.8rem;
         }
+        .alert {
+            background-color: #ffeaea;
+            color: #d8000c;
+            border: 1px solid #f5c2c7;
+            padding: 14px 20px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* ✅ 추가: 가운데 정렬 */
+            gap: 10px;
+            font-weight: 600;
+            line-height: 1.4;
+            text-align: center; /* ✅ 텍스트 자체도 가운데 정렬 */
+        }
+
+        .alert span {
+            display: inline-block;
+            word-break: keep-all;
+        }
     </style>
 </head>
 <body>
@@ -68,6 +89,11 @@
 </header>
 
 <div class="container">
+
+    <div th:if="${errorMessage}" class="alert">
+        <span th:utext="${errorMessage}">에러 메시지</span>
+    </div>
+
     <h1>로그인</h1>
     <form th:action="@{/users/login-process}" method="post">
         <input type="text" name="email" placeholder="아이디" required>
