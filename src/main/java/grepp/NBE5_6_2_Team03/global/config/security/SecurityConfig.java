@@ -38,13 +38,13 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (auth) -> auth
-                                .requestMatchers("/", "/users/**").permitAll()
+                                .requestMatchers("/", "/users/sign-up").permitAll()
                                 .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
                                 .requestMatchers("/api/exchange/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
-//        http.csrf((auth) -> auth.disable());
+        http.csrf((auth) -> auth.disable());
 
         http
                 .formLogin(auth -> auth
@@ -55,6 +55,14 @@ public class SecurityConfig {
                         .failureHandler(loginFailureHandler)
                         .permitAll()
                 );
+
+        http.logout(logout -> logout
+                .logoutUrl("/users/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+        );
 
         return http.build();
     }

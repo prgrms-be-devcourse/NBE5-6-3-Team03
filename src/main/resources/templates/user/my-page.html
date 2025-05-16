@@ -218,6 +218,29 @@
             font-size: 0.875rem;
             margin-top: 4px;
         }
+        .delete-button-wrapper {
+          position: fixed;
+          bottom: 55px;
+          right: 0px;
+          z-index: 100;
+        }
+
+        .delete-button {
+          padding: 10px 20px;
+          background-color: #e53935;
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+
+        .delete-button:hover {
+          background-color: #c62828;
+          transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -285,6 +308,12 @@
 
         <button type="submit" class="submit-button">수정 완료</button>
     </form>
+
+        <div class="delete-button-wrapper">
+            <form th:action="@{/users/{id}(id=${userMyPageResponse.id})}" method="post" onsubmit="return confirmDelete()">
+                <button type="submit" class="delete-button">회원 탈퇴</button>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -403,6 +432,10 @@
             resultElement.style.color = 'red';
         }
     });
+
+    function confirmDelete() {
+    return confirm('정말 탈퇴하시겠습니까? 탈퇴 시 모든 정보가 삭제됩니다.');
+}
 </script>
 
 </body>

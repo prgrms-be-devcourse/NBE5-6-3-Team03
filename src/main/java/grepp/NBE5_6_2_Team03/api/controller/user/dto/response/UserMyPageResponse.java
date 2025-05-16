@@ -6,13 +6,15 @@ import lombok.Getter;
 
 @Getter
 public class UserMyPageResponse {
+    private Long id;
     private String email;
     private String name;
     private String phoneNumber;
     private String storeFileName;
 
     @Builder
-    private UserMyPageResponse(String email, String name, String phoneNumber, String storeFileName) {
+    private UserMyPageResponse(Long id, String email, String name, String phoneNumber, String storeFileName) {
+        this.id = id;
         this.email = email;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -23,6 +25,7 @@ public class UserMyPageResponse {
         String storeFileName = user.getUploadFile() != null ? user.getUploadFile().getStoreFileName() : null;
 
         return UserMyPageResponse.builder()
+                .id(user.getId())
                 .email(user.getEmail())
                 .name(user.getName())
                 .phoneNumber(user.getPhoneNumber())

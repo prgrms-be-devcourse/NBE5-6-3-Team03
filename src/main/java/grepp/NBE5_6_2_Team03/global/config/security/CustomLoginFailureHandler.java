@@ -5,8 +5,10 @@ import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,15 +21,18 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     private static final Duration LOGIN_FAIL_TTL = Duration.ofHours(6);
     private static final String DEFAULT_URL = "/";
     private static final String LOGIN_LOCKED_URL = "/?error=isLock";
     private static final int MAX_FAIL_ATTEMPTS_COUNT = 5;
 
-    public CustomLoginFailureHandler(@Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate, UserRepository userRepository) {
+    public CustomLoginFailureHandler(@Qualifier("redisTemplate") RedisTemplate<String, String> redisTemplate,
+                                     UserRepository userRepository, @Lazy BCryptPasswordEncoder passwordEncoder) {
         this.redisTemplate = redisTemplate;
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
@@ -38,7 +43,7 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         String email = request.getParameter("email");
         User user = userRepository.findByEmail(email).orElse(null);
 
-        if(isNotRegisteredUser(user)){
+        if(isNotRegisteredUser(user) || isNotMatchPassword(user.getPassword(), request.getParameter("password"))){
             response.sendRedirect(DEFAULT_URL);
             return;
         }
@@ -57,6 +62,10 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         }
 
         response.sendRedirect(DEFAULT_URL);
+    }
+
+    private boolean isNotMatchPassword(String password, String rawPassword) {
+        return !passwordEncoder.matches(rawPassword, password);
     }
 
     private String findKey(String email) {
