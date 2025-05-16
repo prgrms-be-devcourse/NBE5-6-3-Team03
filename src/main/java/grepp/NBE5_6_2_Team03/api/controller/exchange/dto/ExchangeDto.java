@@ -2,14 +2,10 @@ package grepp.NBE5_6_2_Team03.api.controller.exchange.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-@Getter @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class ExchangeDto {
 
     @JsonProperty("cur_unit")
@@ -26,6 +22,19 @@ public class ExchangeDto {
 
     @JsonProperty("tts")
     private String ttsRate;     // 원화 -> 외화
+
+    protected ExchangeDto() {
+    }
+
+    @Builder
+    private ExchangeDto(String curUnit, String curName, String baseRate, String ttbRate,
+        String ttsRate) {
+        this.curUnit = curUnit;
+        this.curName = curName;
+        this.baseRate = baseRate;
+        this.ttbRate = ttbRate;
+        this.ttsRate = ttsRate;
+    }
 
     public static ExchangeDto toDto(ExchangeRateEntity entity) {
         return ExchangeDto.builder()

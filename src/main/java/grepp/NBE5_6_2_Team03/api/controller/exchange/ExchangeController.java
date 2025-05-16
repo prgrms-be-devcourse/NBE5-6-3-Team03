@@ -18,7 +18,6 @@ public class ExchangeController {
 
     @GetMapping("/latest")
     public ExchangeDto getLatestRate(@RequestParam String code){
-
         return exchangeService.getLatest(code);
     }
 

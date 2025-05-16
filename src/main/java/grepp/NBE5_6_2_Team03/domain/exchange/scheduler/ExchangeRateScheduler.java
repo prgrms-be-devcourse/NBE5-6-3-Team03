@@ -27,8 +27,6 @@ public class ExchangeRateScheduler {
             log.info("Fetch exchange rates start");
 
             LocalDate today = LocalDate.now();
-            String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
             ExchangeDto[] rates = exchangeService.getCurrentExchanges(today);
 
             if (isExistExchange(rates)) {
@@ -36,6 +34,7 @@ public class ExchangeRateScheduler {
                 return;
             }
 
+            String searchDate = LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
             exchangeService.saveAllExchangeRates(rates,searchDate);
 
             log.info("Fetch exchange rates done");
