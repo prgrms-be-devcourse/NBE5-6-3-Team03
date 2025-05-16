@@ -42,8 +42,6 @@ public class TravelPlan {
     private LocalDateTime createdDateTime;
     private LocalDateTime modifyDateTime;
 
-    public TravelPlan() {
-
-    }
+    protected TravelPlan() {}
 }
 
