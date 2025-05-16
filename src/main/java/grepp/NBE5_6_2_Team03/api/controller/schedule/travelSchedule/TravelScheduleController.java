@@ -1,8 +1,8 @@
-package grepp.NBE5_6_2_Team03.api.controller.schedule;
+package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule;
 
-import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleRequest;
-import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
-import grepp.NBE5_6_2_Team03.domain.schedule.service.TravelScheduleService;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
+import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.service.TravelScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

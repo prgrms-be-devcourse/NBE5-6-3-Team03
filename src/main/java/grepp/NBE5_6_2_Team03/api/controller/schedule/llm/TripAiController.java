@@ -1,8 +1,8 @@
-package grepp.NBE5_6_2_Team03.api.controller.llm;
+package grepp.NBE5_6_2_Team03.api.controller.schedule.llm;
 
 import dev.langchain4j.model.chat.ChatLanguageModel;
-import grepp.NBE5_6_2_Team03.api.controller.llm.dto.PlaceRecommendResponse;
-import grepp.NBE5_6_2_Team03.domain.llm.service.TripAiService;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.llm.dto.PlaceRecommendResponse;
+import grepp.NBE5_6_2_Team03.domain.schedule.llm.service.TripAiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

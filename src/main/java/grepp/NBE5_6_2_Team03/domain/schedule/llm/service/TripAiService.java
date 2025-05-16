@@ -1,11 +1,10 @@
-package grepp.NBE5_6_2_Team03.domain.llm.service;
+package grepp.NBE5_6_2_Team03.domain.schedule.llm.service;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
 import dev.langchain4j.service.spring.AiService;
 import dev.langchain4j.service.spring.AiServiceWiringMode;
-import grepp.NBE5_6_2_Team03.api.controller.llm.dto.PlaceRecommendRequest;
-import grepp.NBE5_6_2_Team03.api.controller.llm.dto.PlaceRecommendResponse;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.llm.dto.PlaceRecommendResponse;
 
 @AiService(
     wiringMode = AiServiceWiringMode.EXPLICIT,
