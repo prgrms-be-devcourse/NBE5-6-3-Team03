@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.global.adminiinitializer;
+package grepp.NBE5_6_2_Team03.global.initializer.adminiinitializer;
 
 import grepp.NBE5_6_2_Team03.domain.user.Role;
 import grepp.NBE5_6_2_Team03.domain.user.User;
