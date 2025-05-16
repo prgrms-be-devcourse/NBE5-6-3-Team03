@@ -64,7 +64,7 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND.getDescription()));
 
-        return travelScheduleRepository.findByTravelPlan(plan);
+        return travelScheduleRepository.findSortedSchedules(plan);
     }
 
     public TravelSchedule findById(Long travelScheduleId) {
