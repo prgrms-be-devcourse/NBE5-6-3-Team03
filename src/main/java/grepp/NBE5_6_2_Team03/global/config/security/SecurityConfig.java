@@ -19,6 +19,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final CustomLoginSuccessHandler loginSuccessHandler;
+    private final CustomLoginFailureHandler loginFailureHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -51,6 +52,7 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailureHandler)
                         .permitAll()
                 );
 
