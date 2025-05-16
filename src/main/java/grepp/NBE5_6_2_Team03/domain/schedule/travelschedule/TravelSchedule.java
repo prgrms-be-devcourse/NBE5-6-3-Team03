@@ -1,7 +1,7 @@
-package grepp.NBE5_6_2_Team03.domain.schedule.travelschedule;
+package grepp.NBE5_6_2_Team03.domain.schedule;
 
-import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
-import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.code.ScheduleStatus;
+import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TravelSchedule {
+public class TravelSchedule extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
