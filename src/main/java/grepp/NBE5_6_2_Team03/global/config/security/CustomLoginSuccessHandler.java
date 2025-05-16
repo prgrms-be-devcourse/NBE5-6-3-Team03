@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.global.handler;
 
 import grepp.NBE5_6_2_Team03.domain.user.Role;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

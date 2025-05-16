@@ -70,12 +70,6 @@ public class SecurityConfig {
                 .permitAll()
         );
 
-        http.sessionManagement(session ->
-                session.maximumSessions(1)
-                        .expiredUrl("/")
-                        .maxSessionsPreventsLogin(false)
-        );
-
         return http.build();
     }
 }

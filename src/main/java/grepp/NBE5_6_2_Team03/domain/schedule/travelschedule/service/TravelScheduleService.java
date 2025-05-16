@@ -12,8 +12,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -26,16 +30,20 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
-        TravelSchedule schedule = TravelSchedule.builder()
-            .travelPlan(plan)
-            .content(request.getContent())
-            .placeName(request.getPlaceName())
-            .scheduleStatus(ScheduleStatus.PLANNED)
-            .travelScheduleDate(request.getTravelScheduleDate())
-            .createdDateTime(LocalDateTime.now())
-            .build();
+        validateLocationFields(request.getDeparture(), request.getDestination(), request.getTransportation());
 
+        TravelSchedule schedule = request.toEntity(plan);
         travelScheduleRepository.save(schedule);
+    }
+
+    public void validateLocationFields(String departure, String destination, String transportation) {
+        boolean departureExists = departure != null && !departure.isBlank();
+        boolean destinationExists = destination != null && !destination.isBlank();
+        boolean transportationExists = transportation != null && !transportation.isBlank();
+
+        if (!(departureExists == destinationExists && destinationExists == transportationExists)) {
+            throw new IllegalArgumentException("출발지, 도착지, 이동수단은 모두 입력하거나 모두 비워야 합니다.");
+        }
     }
 
     @Transactional
@@ -46,6 +54,9 @@ public class TravelScheduleService {
         schedule.edit(
             request.getContent(),
             request.getPlaceName(),
+            request.getDeparture(),
+            request.getDestination(),
+            request.getTransportation(),
             request.getTravelScheduleDate()
         );
 
@@ -65,14 +76,33 @@ public class TravelScheduleService {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
-        schedule.updateStatus();
+        schedule.toggleStatus();
     }
 
     public List<TravelSchedule> getSchedulesByPlanId(Long travelPlanId) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
-        return travelScheduleRepository.findByTravelPlan(plan);
+        return travelScheduleRepository.findSortedSchedules(plan);
+    }
+
+    public Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> getGroupedSchedules(Long travelPlanId) {
+        TravelPlan plan = travelPlanRepository.findById(travelPlanId)
+            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
+
+        List<TravelSchedule> schedules = travelScheduleRepository.findSortedSchedules(plan);
+        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = new LinkedHashMap<>();
+
+        for (TravelSchedule schedule : schedules) {
+            LocalDate date = schedule.getTravelScheduleDate();
+            ScheduleStatus status = schedule.getScheduleStatus();
+
+            groupedSchedules.putIfAbsent(date, new LinkedHashMap<>());
+            groupedSchedules.get(date).putIfAbsent(status, new ArrayList<>());
+            groupedSchedules.get(date).get(status).add(schedule);
+        }
+
+        return groupedSchedules;
     }
 
     public TravelSchedule findById(Long travelScheduleId) {
