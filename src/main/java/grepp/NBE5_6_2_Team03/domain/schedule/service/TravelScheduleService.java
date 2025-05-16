@@ -12,8 +12,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -65,6 +69,25 @@ public class TravelScheduleService {
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
         return travelScheduleRepository.findSortedSchedules(plan);
+    }
+
+    public Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> getGroupedSchedules(Long travelPlanId) {
+        TravelPlan plan = travelPlanRepository.findById(travelPlanId)
+            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
+
+        List<TravelSchedule> schedules = travelScheduleRepository.findSortedSchedules(plan);
+        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = new LinkedHashMap<>();
+
+        for (TravelSchedule schedule : schedules) {
+            LocalDate date = schedule.getTravelScheduleDate();
+            ScheduleStatus status = schedule.getScheduleStatus();
+
+            groupedSchedules.putIfAbsent(date, new LinkedHashMap<>());
+            groupedSchedules.get(date).putIfAbsent(status, new ArrayList<>());
+            groupedSchedules.get(date).get(status).add(schedule);
+        }
+
+        return groupedSchedules;
     }
 
     public TravelSchedule findById(Long travelScheduleId) {

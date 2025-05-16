@@ -78,29 +78,59 @@
 
 <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/add'}" class="add-btn">+ 일정 추가</a>
 
-<div class="schedule-container">
-    <div class="schedule-card" th:each="schedule : ${schedules}">
-        <h4 th:text="${schedule.content}">제목</h4>
-        <div th:if="${schedule.placeName != null and !#strings.isEmpty(schedule.placeName)}">
-            장소: <span th:text="${schedule.placeName}"></span>
-        </div>
-        <div>날짜: <span th:text="${schedule.travelScheduleDate}"></span></div>
-        <div>
-            <span th:if="${schedule.scheduleStatus.name() == 'COMPLETED'}" class="status completed">완료</span>
-            <span th:if="${schedule.scheduleStatus.name() != 'COMPLETED'}" class="status ongoing">계획</span>
+<ul class="nav nav-tabs mb-3" id="scheduleTab" role="tablist">
+    <li class="nav-item" th:each="entry, iterStat : ${scheduleMap}">
+        <button class="nav-link" th:classappend="${iterStat.index == 0} ? 'active'"
+                th:id="'tab-' + ${iterStat.index}"
+                data-bs-toggle="tab"
+                th:data-bs-target="'#date-' + ${iterStat.index}"
+                type="button" role="tab">
+            <span th:text="${entry.key}">2025-05-20</span>
+        </button>
+    </li>
+</ul>
+
+<div class="tab-content" id="scheduleTabContent">
+    <div class="tab-pane fade show"
+         th:each="entry, iterStat : ${scheduleMap}"
+         th:classappend="${iterStat.index == 0} ? 'active'"
+         th:id="'date-' + ${iterStat.index}"
+         role="tabpanel">
+
+        <div th:each="statusEntry : ${entry.value}" class="mb-5">
+            <h5 th:if="${statusEntry.key.name() == 'PLANNED'}" class="text-warning">📌 계획</h5>
+            <h5 th:if="${statusEntry.key.name() == 'COMPLETED'}" class="text-success">✅ 완료</h5>
+
+            <div class="schedule-container">
+                <div class="schedule-card" th:each="schedule : ${statusEntry.value}">
+                    <h4 th:text="${schedule.content}">제목</h4>
+                    <div th:if="${schedule.placeName != null and !#strings.isEmpty(schedule.placeName)}">
+                        장소: <span th:text="${schedule.placeName}"></span>
+                    </div>
+                    <div>날짜: <span th:text="${schedule.travelScheduleDate}"></span></div>
+                    <div>
+                        <span th:if="${schedule.scheduleStatus.name() == 'COMPLETED'}" class="status completed">완료</span>
+                        <span th:if="${schedule.scheduleStatus.name() != 'COMPLETED'}" class="status ongoing">계획</span>
+                    </div>
+                    <div class="btn-group">
+                        <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/edit'}"
+                           class="btn-edit">수정</a>
+                        <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/delete'}"
+                              method="post">
+                            <button type="submit" class="btn-delete">삭제</button>
+                        </form>
+                        <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/status'}"
+                              method="post">
+                            <button type="submit" class="btn-status">상태변경</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="btn-group">
-            <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/edit'}" class="btn-edit">수정</a>
-            <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/delete'}" method="post">
-                <button type="submit" class="btn-delete">삭제</button>
-            </form>
-            <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/status'}" method="post">
-                <button type="submit" class="btn-status">상태변경</button>
-            </form>
-        </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

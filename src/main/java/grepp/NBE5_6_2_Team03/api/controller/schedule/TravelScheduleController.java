@@ -2,13 +2,16 @@ package grepp.NBE5_6_2_Team03.api.controller.schedule;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.domain.schedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.schedule.code.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.schedule.service.TravelScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -60,8 +63,8 @@ public class TravelScheduleController {
 
     @GetMapping("/list")
     public String list(@PathVariable Long travelPlanId, Model model) {
-        List<TravelSchedule> schedules = travelScheduleService.getSchedulesByPlanId(travelPlanId);
-        model.addAttribute("schedules", schedules);
+        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
+        model.addAttribute("groupedSchedules", groupedSchedules);
         model.addAttribute("travelPlanId", travelPlanId);
         return "schedule/schedule-list";
     }
