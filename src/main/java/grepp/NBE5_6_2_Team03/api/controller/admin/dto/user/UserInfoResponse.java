@@ -1,11 +1,12 @@
-package grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto;
+package grepp.NBE5_6_2_Team03.api.controller.admin.dto.user;
 
 import grepp.NBE5_6_2_Team03.domain.user.Role;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter
-public class UserInfoUpdateRequest {
+@Getter
+@AllArgsConstructor
+public class UserInfoResponse {
 
     private Long id;
     private String email;

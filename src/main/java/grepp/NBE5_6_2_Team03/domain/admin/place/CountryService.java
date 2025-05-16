@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.admin.place;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.CountryResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.CountryResponse;
 import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Country;
 import grepp.NBE5_6_2_Team03.domain.admin.place.repository.CountryRepository;
 import java.util.List;

@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.admin.userinfo;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoResponse;
-import grepp.NBE5_6_2_Team03.api.controller.admin.userinfo.dto.UserInfoUpdateRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
