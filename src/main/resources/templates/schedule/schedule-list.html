@@ -79,7 +79,7 @@
 <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/add'}" class="add-btn">+ 일정 추가</a>
 
 <ul class="nav nav-tabs mb-3" id="scheduleTab" role="tablist">
-    <li class="nav-item" th:each="entry, iterStat : ${scheduleMap}">
+    <li class="nav-item" th:each="entry, iterStat : ${groupedSchedules}">
         <button class="nav-link" th:classappend="${iterStat.index == 0} ? 'active'"
                 th:id="'tab-' + ${iterStat.index}"
                 data-bs-toggle="tab"
@@ -92,7 +92,7 @@
 
 <div class="tab-content" id="scheduleTabContent">
     <div class="tab-pane fade show"
-         th:each="entry, iterStat : ${scheduleMap}"
+         th:each="entry, iterStat : ${groupedSchedules}"
          th:classappend="${iterStat.index == 0} ? 'active'"
          th:id="'date-' + ${iterStat.index}"
          role="tabpanel">
