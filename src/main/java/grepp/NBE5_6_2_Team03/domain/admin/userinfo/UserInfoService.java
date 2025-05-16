@@ -38,7 +38,13 @@ public class UserInfoService {
         UserInfo userInfo = userInfoRepository.findById(id).orElseThrow(
             () -> new NotFoundException("회원을 찾지 못했습니다.")
         );
-        userInfo.update(request);
+
+        userInfo.update(
+            request.getEmail(),
+            request.getName(),
+            request.getPhoneNumber()
+        );
+
     }
 
     @Transactional
@@ -48,4 +54,8 @@ public class UserInfoService {
         );
         userInfoRepository.deleteById(id);
     }
+
+
+
+
 }

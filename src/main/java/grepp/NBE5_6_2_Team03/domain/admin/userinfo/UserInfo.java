@@ -29,9 +29,10 @@ public class UserInfo {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public void update(UserInfoUpdateRequest request) {
-        this.email = request.getEmail();
-        this.name = request.getName();
-        this.phoneNumber = request.getPhoneNumber();
+    public void update(String email, String name, String phoneNumber) {
+        this.email = email;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
     }
+
 }
