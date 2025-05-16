@@ -20,6 +20,14 @@ public class TravelScheduleController {
 
     private final TravelScheduleService travelScheduleService;
 
+    @GetMapping("/")
+    public String list(@PathVariable Long travelPlanId, Model model) {
+        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
+        model.addAttribute("groupedSchedules", groupedSchedules);
+        model.addAttribute("travelPlanId", travelPlanId);
+        return "schedule/schedule-list";
+    }
+
     @GetMapping("/add")
     public String addForm(@PathVariable Long travelPlanId, Model model) {
         model.addAttribute("travelPlanId", travelPlanId);
@@ -69,14 +77,6 @@ public class TravelScheduleController {
                                  @PathVariable Long travelScheduleId) {
         travelScheduleService.deleteSchedule(travelScheduleId);
         return "redirect:/plan/" + travelPlanId + "/schedule/list";
-    }
-
-    @GetMapping("/list")
-    public String list(@PathVariable Long travelPlanId, Model model) {
-        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
-        model.addAttribute("groupedSchedules", groupedSchedules);
-        model.addAttribute("travelPlanId", travelPlanId);
-        return "schedule/schedule-list";
     }
 
     @PostMapping("/{travelScheduleId}/status")
