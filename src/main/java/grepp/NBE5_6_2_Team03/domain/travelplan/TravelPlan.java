@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.travelplan;
 
+import grepp.NBE5_6_2_Team03.domain.BaseEntity;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,7 +24,7 @@ import lombok.Setter;
 @Setter
 @Table(name = "travel_plan")
 @Builder @AllArgsConstructor
-public class TravelPlan {
+public class TravelPlan extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
