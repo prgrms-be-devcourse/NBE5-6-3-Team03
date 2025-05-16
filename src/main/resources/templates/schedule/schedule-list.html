@@ -33,6 +33,26 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             padding: 16px;
+            position: relative;
+        }
+
+        .expense-btn-wrapper {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+        }
+
+        .btn-expense {
+            padding: 6px 10px;
+            font-size: 0.85rem;
+            border-radius: 4px;
+            border: 1px solid #17a2b8;
+            background: transparent;
+            text-align: center;
+            cursor: pointer;
+            white-space: nowrap;
+            text-decoration: none;
+            color: #17a2b8;
         }
 
         .status {
@@ -103,6 +123,12 @@
 
             <div class="schedule-container">
                 <div class="schedule-card" th:each="schedule : ${statusEntry.value}">
+
+                    <div class="expense-btn-wrapper">
+                        <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/expense/add'}"
+                           class="btn-expense">+ 지출</a>
+                    </div>
+
                     <h4 th:text="${schedule.content}">제목</h4>
                     <div th:if="${schedule.placeName != null and !#strings.isEmpty(schedule.placeName)}">
                         장소: <span th:text="${schedule.placeName}"></span>
@@ -112,6 +138,7 @@
                         <span th:if="${schedule.scheduleStatus.name() == 'COMPLETED'}" class="status completed">완료</span>
                         <span th:if="${schedule.scheduleStatus.name() != 'COMPLETED'}" class="status ongoing">계획</span>
                     </div>
+
                     <div class="btn-group">
                         <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/edit'}"
                            class="btn-edit">수정</a>
@@ -126,8 +153,8 @@
                     </div>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
 </div>
 
