@@ -1,8 +1,8 @@
-package grepp.NBE5_6_2_Team03.api.controller.admin.place;
+package grepp.NBE5_6_2_Team03.api.controller.admin;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.PlaceResponse;
-import grepp.NBE5_6_2_Team03.api.controller.admin.place.dto.PlaceRequest;
-import grepp.NBE5_6_2_Team03.domain.admin.place.PlaceService;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
+import grepp.NBE5_6_2_Team03.domain.place.PlaceService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

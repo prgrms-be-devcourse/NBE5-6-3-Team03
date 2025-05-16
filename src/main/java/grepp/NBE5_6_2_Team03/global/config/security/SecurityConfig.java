@@ -40,11 +40,10 @@ public class SecurityConfig {
                                 .requestMatchers("/", "/users/**").permitAll()
                                 .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
                                 .requestMatchers("/api/exchange/**").permitAll()
-
                                 .anyRequest().authenticated()
                 );
 
-        http.csrf((auth) -> auth.disable());
+//        http.csrf((auth) -> auth.disable());
 
         http
                 .formLogin(auth -> auth

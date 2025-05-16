@@ -1,8 +1,8 @@
-package grepp.NBE5_6_2_Team03.domain.admin.place;
+package grepp.NBE5_6_2_Team03.domain.place;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import grepp.NBE5_6_2_Team03.domain.admin.place.entity.Place;
-import grepp.NBE5_6_2_Team03.domain.admin.place.repository.PlaceRepository;
+import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
+import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceRepository;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
