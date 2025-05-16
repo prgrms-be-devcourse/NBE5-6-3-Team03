@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.user;
 
+import grepp.NBE5_6_2_Team03.domain.BaseEntity;
 import grepp.NBE5_6_2_Team03.domain.user.file.UploadFile;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -8,7 +9,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
