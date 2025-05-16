@@ -1,7 +1,9 @@
-package grepp.NBE5_6_2_Team03.domain.plan.entity;
+package grepp.NBE5_6_2_Team03.domain.travelplan;
 
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +33,9 @@ public class TravelPlan {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
+    CountryStatus countryStatus;
+
     private String country;
     private String name;
     private int publicMoney;
@@ -44,4 +49,3 @@ public class TravelPlan {
 
     protected TravelPlan() {}
 }
-
