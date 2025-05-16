@@ -34,16 +34,6 @@ public class SecurityConfig {
     }
 
     @Bean
-    public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
-        return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
-    }
-
-    @Bean
-    public SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
-
-    @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
@@ -55,7 +45,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         (auth) -> auth
                                 .requestMatchers("/", "/users/sign-up").permitAll()
-                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/recommend").permitAll()
+                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
+                                .requestMatchers("/api/exchange/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
