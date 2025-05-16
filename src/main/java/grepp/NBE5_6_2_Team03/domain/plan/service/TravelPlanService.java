@@ -1,6 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.plan.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.plan.dto.TravelPlanDto;
+import grepp.NBE5_6_2_Team03.domain.plan.entity.CountryStatus;
 import grepp.NBE5_6_2_Team03.domain.plan.entity.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.plan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
@@ -29,8 +30,11 @@ public class TravelPlanService {
         User user = userRepository.findById(userid)
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
+        CountryStatus status = CountryStatus.fromCountryName(planDto.getCountry());
+
         TravelPlan plan = TravelPlan.builder()
             .user(user)
+            .countryStatus(status)
             .name(planDto.getName())
             .country(planDto.getCountry())
             .publicMoney(planDto.getPublicMoney())
@@ -63,6 +67,9 @@ public class TravelPlanService {
         TravelPlan existingPlan = travelPlanRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("여행 계획을 찾을 수 없습니다."));
 
+        CountryStatus status = CountryStatus.fromCountryName(planDto.getCountry());
+
+        existingPlan.setCountryStatus(status);
         existingPlan.setName(planDto.getName());
         existingPlan.setCountry(planDto.getCountry());
         existingPlan.setPublicMoney(planDto.getPublicMoney());
@@ -82,4 +89,3 @@ public class TravelPlanService {
         travelPlanRepository.delete(plan);
     }
 }
-
