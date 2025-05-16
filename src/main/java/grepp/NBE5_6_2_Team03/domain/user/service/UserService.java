@@ -65,6 +65,11 @@ public class UserService {
         return UserMyPageResponse.from(user);
     }
 
+    @Transactional
+    public void deleteUserBy(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
     public boolean isNotDuplicatedName(String name) {
         return !isDuplicatedName(name);
     }
