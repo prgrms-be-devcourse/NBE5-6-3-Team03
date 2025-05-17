@@ -20,6 +20,14 @@ public class TravelScheduleController {
 
     private final TravelScheduleService travelScheduleService;
 
+    @GetMapping("")
+    public String list(@PathVariable Long travelPlanId, Model model) {
+        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
+        model.addAttribute("groupedSchedules", groupedSchedules);
+        model.addAttribute("travelPlanId", travelPlanId);
+        return "schedule/schedule-list";
+    }
+
     @GetMapping("/add")
     public String addForm(@PathVariable Long travelPlanId, Model model) {
         model.addAttribute("travelPlanId", travelPlanId);
@@ -41,7 +49,7 @@ public class TravelScheduleController {
             return "schedule/schedule-form";
         }
 
-        return "redirect:/plan/" + travelPlanId + "/schedule/list";
+        return "redirect:/plan/" + travelPlanId + "/schedule";
     }
 
     @GetMapping("/{travelScheduleId}/edit")
@@ -59,30 +67,32 @@ public class TravelScheduleController {
     @PostMapping("/{travelScheduleId}/edit")
     public String editSchedule(@PathVariable Long travelPlanId,
                                @PathVariable Long travelScheduleId,
-                               @ModelAttribute TravelScheduleRequest request) {
-        travelScheduleService.editSchedule(travelScheduleId, request);
-        return "redirect:/plan/" + travelPlanId + "/schedule/list";
+                               @ModelAttribute TravelScheduleRequest request,
+                               Model model) {
+        model.addAttribute("travelPlanId", travelPlanId);
+
+        try {
+            travelScheduleService.editSchedule(travelScheduleId, request);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("request", request);
+            return "schedule/schedule-form";
+        }
+
+        return "redirect:/plan/" + travelPlanId + "/schedule";
     }
 
     @PostMapping("/{travelScheduleId}/delete")
     public String deleteSchedule(@PathVariable Long travelPlanId,
                                  @PathVariable Long travelScheduleId) {
         travelScheduleService.deleteSchedule(travelScheduleId);
-        return "redirect:/plan/" + travelPlanId + "/schedule/list";
-    }
-
-    @GetMapping("/list")
-    public String list(@PathVariable Long travelPlanId, Model model) {
-        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
-        model.addAttribute("groupedSchedules", groupedSchedules);
-        model.addAttribute("travelPlanId", travelPlanId);
-        return "schedule/schedule-list";
+        return "redirect:/plan/" + travelPlanId + "/schedule";
     }
 
     @PostMapping("/{travelScheduleId}/status")
     public String scheduleStatus(@PathVariable Long travelPlanId,
                                  @PathVariable Long travelScheduleId) {
         travelScheduleService.scheduleStatus(travelScheduleId);
-        return "redirect:/plan/" + travelPlanId + "/schedule/list";
+        return "redirect:/plan/" + travelPlanId + "/schedule";
     }
 }

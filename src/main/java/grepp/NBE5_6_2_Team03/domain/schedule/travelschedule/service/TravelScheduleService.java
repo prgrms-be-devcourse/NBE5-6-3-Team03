@@ -30,26 +30,22 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
+        validateTravelScheduleDate(request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
         validateLocationFields(request.getDeparture(), request.getDestination(), request.getTransportation());
 
         TravelSchedule schedule = request.toEntity(plan);
         travelScheduleRepository.save(schedule);
     }
 
-    public void validateLocationFields(String departure, String destination, String transportation) {
-        boolean departureExists = departure != null && !departure.isBlank();
-        boolean destinationExists = destination != null && !destination.isBlank();
-        boolean transportationExists = transportation != null && !transportation.isBlank();
-
-        if (!(departureExists == destinationExists && destinationExists == transportationExists)) {
-            throw new IllegalArgumentException("출발지, 도착지, 이동수단은 모두 입력하거나 모두 비워야 합니다.");
-        }
-    }
-
     @Transactional
     public Long editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
+
+        TravelPlan plan = schedule.getTravelPlan();
+
+        validateTravelScheduleDate(request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
+        validateLocationFields(request.getDeparture(), request.getDestination(), request.getTransportation());
 
         schedule.edit(
             request.getContent(),
@@ -108,5 +104,21 @@ public class TravelScheduleService {
     public TravelSchedule findById(Long travelScheduleId) {
         return travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
+    }
+
+    private void validateLocationFields(String departure, String destination, String transportation) {
+        boolean departureExists = departure != null && !departure.isBlank();
+        boolean destinationExists = destination != null && !destination.isBlank();
+        boolean transportationExists = transportation != null && !transportation.isBlank();
+
+        if (!(departureExists == destinationExists && destinationExists == transportationExists)) {
+            throw new IllegalArgumentException("출발지, 도착지, 이동수단은 모두 입력하거나 모두 비워야 합니다.");
+        }
+    }
+
+    private void validateTravelScheduleDate(LocalDate travelScheduleDate, LocalDate travelStartDate, LocalDate travelEndDate) {
+        if (travelScheduleDate.isBefore(travelStartDate) || travelScheduleDate.isAfter(travelEndDate)) {
+            throw new IllegalArgumentException("여행 일정 날짜는 여행 계획 날짜 안에 포함되어야 합니다.");
+        }
     }
 }
