@@ -134,14 +134,14 @@
                     <div th:if="${schedule.placeName != null and !#strings.isEmpty(schedule.placeName)}">
                         장소: <span th:text="${schedule.placeName}"></span>
                     </div>
-                    <div th:if="${schedule.departure != null and !#strings.isEmpty(schedule.departure)}">
-                        출발지: <span th:text="${schedule.departure}"></span>
+                    <div th:if="${schedule.travelRoute.departure != null and !#strings.isEmpty(schedule.travelRoute.departure)}">
+                        출발지: <span th:text="${schedule.travelRoute.departure}"></span>
                     </div>
-                    <div th:if="${schedule.destination != null and !#strings.isEmpty(schedule.destination)}">
-                        도착지: <span th:text="${schedule.destination}"></span>
+                    <div th:if="${schedule.travelRoute.destination != null and !#strings.isEmpty(schedule.travelRoute.destination)}">
+                        도착지: <span th:text="${schedule.travelRoute.destination}"></span>
                     </div>
-                    <div th:if="${schedule.transportation != null and !#strings.isEmpty(schedule.transportation)}">
-                        이동수단: <span th:text="${schedule.transportation}"></span>
+                    <div th:if="${schedule.travelRoute.transportation != null and !#strings.isEmpty(schedule.travelRoute.transportation)}">
+                        이동수단: <span th:text="${schedule.travelRoute.transportation}"></span>
                     </div>
 
                     <div>날짜: <span th:text="${schedule.travelScheduleDate}"></span></div>
