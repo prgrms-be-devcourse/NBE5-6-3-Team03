@@ -1,13 +1,11 @@
-package grepp.NBE5_6_2_Team03.domain.schedule.travelschedule;
+package grepp.NBE5_6_2_Team03.domain.travelschedule;
 
 import grepp.NBE5_6_2_Team03.domain.BaseEntity;
-import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.code.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -20,31 +18,25 @@ public class TravelSchedule extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long travelScheduleId;
 
-    @ManyToOne
-    @JoinColumn(name = "travelPlanId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "travel_plan_id")
     private TravelPlan travelPlan;
+
+    @Embedded
+    private TravelRoute travelRoute;
 
     private String content;
     private String placeName;
-    private String departure;
-    private String destination;
-    private String transportation;
 
     @Enumerated(EnumType.STRING)
     private ScheduleStatus scheduleStatus;
-
     private LocalDate travelScheduleDate;
-    private LocalDateTime createdDateTime;
-    private LocalDateTime modifiedDateTime;
 
-    public void edit(String content, String placeName, String departure, String destination, String transportation, LocalDate travelScheduleDate) {
+    public void edit(TravelRoute travelRoute, String content, String placeName, LocalDate travelScheduleDate) {
+        this.travelRoute = travelRoute;
         this.content = content;
         this.placeName = placeName;
-        this.departure = departure;
-        this.transportation = transportation;
-        this.destination = destination;
         this.travelScheduleDate = travelScheduleDate;
-        this.modifiedDateTime = LocalDateTime.now();
     }
 
     public boolean isCompleted() {
@@ -57,6 +49,5 @@ public class TravelSchedule extends BaseEntity {
         } else {
             this.scheduleStatus = ScheduleStatus.COMPLETED;
         }
-        this.modifiedDateTime = LocalDateTime.now();
     }
 }
