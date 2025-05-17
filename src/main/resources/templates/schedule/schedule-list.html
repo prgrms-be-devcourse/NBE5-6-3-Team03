@@ -9,16 +9,23 @@
             background: #f7f9fc;
             padding: 40px;
         }
+        .btn-container {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
         .add-btn {
-            display: block;
-            margin: 0 0 24px auto;
-            padding: 8px 16px;
+            padding: 10px 20px;
             background: #4a6fa5;
             color: white;
             text-decoration: none;
             border-radius: 4px;
             text-align: center;
-            width: max-content;
+            font-size: 0.95rem;
+            min-height: 38px;
+            line-height: 1.4;
         }
         .schedule-container {
             display: flex;
@@ -86,7 +93,10 @@
 
 <h2>여행 일정 목록</h2>
 
-<a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/add'}" class="add-btn">+ 일정 추가</a>
+<div class="btn-container">
+    <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/add'}" class="add-btn">일정 추가</a>
+    <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/expense'}" class="add-btn">정산하기</a>
+</div>
 
 <ul class="nav nav-tabs mb-3" id="scheduleTab" role="tablist">
     <li class="nav-item" th:each="entry, iterStat : ${groupedSchedules}">
@@ -115,8 +125,8 @@
                 <div class="schedule-card" th:each="schedule : ${statusEntry.value}">
 
                     <div class="expense-btn-wrapper">
-                        <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/expense/add'}"
-                           class="btn-expense">+ 지출</a>
+                        <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/expense'}"
+                           class="btn-expense">지출</a>
                     </div>
 
                     <h4 th:text="${schedule.content}">제목</h4>
