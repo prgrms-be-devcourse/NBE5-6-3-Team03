@@ -67,8 +67,18 @@ public class TravelScheduleController {
     @PostMapping("/{travelScheduleId}/edit")
     public String editSchedule(@PathVariable Long travelPlanId,
                                @PathVariable Long travelScheduleId,
-                               @ModelAttribute TravelScheduleRequest request) {
-        travelScheduleService.editSchedule(travelScheduleId, request);
+                               @ModelAttribute TravelScheduleRequest request,
+                               Model model) {
+        model.addAttribute("travelPlanId", travelPlanId);
+
+        try {
+            travelScheduleService.editSchedule(travelScheduleId, request);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("request", request);
+            return "schedule/schedule-form";
+        }
+
         return "redirect:/plan/" + travelPlanId + "/schedule";
     }
 
