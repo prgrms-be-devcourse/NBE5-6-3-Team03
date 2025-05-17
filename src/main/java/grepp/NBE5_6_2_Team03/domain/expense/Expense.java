@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.expense;
 
 import grepp.NBE5_6_2_Team03.domain.BaseEntity;
-import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

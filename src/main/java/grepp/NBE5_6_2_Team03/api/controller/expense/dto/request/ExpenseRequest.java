@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.api.controller.expense.dto.request;
 
 import grepp.NBE5_6_2_Team03.domain.expense.Expense;
-import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
