@@ -114,9 +114,9 @@
             <div class="schedule-container">
                 <div class="schedule-card"
                      th:each="schedule : ${statusEntry.value}"
-                     th:attr="data-departure=${schedule.departure},
-                              data-destination=${schedule.destination},
-                              data-transport=${schedule.transportation},
+                     th:attr="data-departure=${schedule.travelRoute.departure},
+                              data-destination=${schedule.travelRoute.destination},
+                              data-transport=${schedule.travelRoute.transportation},
                               data-schedule-id=${schedule.travelScheduleId}">
 
                     <div class="expense-btn-wrapper">
