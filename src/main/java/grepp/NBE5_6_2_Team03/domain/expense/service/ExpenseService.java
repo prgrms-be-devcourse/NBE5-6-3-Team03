@@ -20,6 +20,7 @@ public class ExpenseService {
     private final ExpenseRepository expenseRepository;
     private final TravelScheduleRepository travelScheduleRepository;
 
+    @Transactional
     public void addExpense(Long travelScheduleId, ExpenseRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
