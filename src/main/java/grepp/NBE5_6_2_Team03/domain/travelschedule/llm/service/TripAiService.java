@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.domain.schedule.llm.service;
+package grepp.NBE5_6_2_Team03.domain.travelschedule.llm.service;
 
 import dev.langchain4j.service.SystemMessage;
 import dev.langchain4j.service.UserMessage;
