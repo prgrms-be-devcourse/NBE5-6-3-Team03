@@ -1,15 +1,16 @@
 package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
-import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.TravelSchedule;
-import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.code.ScheduleStatus;
-import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.service.TravelScheduleService;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
+import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
+import grepp.NBE5_6_2_Team03.domain.travelschedule.service.TravelScheduleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +24,7 @@ public class TravelScheduleController {
 
     private final TravelScheduleService travelScheduleService;
 
-    @GetMapping("")
+    @GetMapping
     public String list(@PathVariable Long travelPlanId, Model model) {
         Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
         model.addAttribute("groupedSchedules", groupedSchedules);
@@ -98,5 +99,4 @@ public class TravelScheduleController {
         travelScheduleService.scheduleStatus(travelScheduleId);
         return "redirect:/plan/" + travelPlanId + "/schedule";
     }
-
 }

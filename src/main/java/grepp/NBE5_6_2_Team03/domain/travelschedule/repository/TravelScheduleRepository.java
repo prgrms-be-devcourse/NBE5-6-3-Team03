@@ -1,7 +1,7 @@
-package grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.repository;
+package grepp.NBE5_6_2_Team03.domain.travelschedule.repository;
 
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
-import grepp.NBE5_6_2_Team03.domain.schedule.travelschedule.TravelSchedule;
+import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
