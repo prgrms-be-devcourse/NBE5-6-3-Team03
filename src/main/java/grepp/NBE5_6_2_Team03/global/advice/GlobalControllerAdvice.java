@@ -11,7 +11,7 @@ public class GlobalControllerAdvice {
 
     @ExceptionHandler(UserSignUpException.class)
     public String userSignUpExceptionHandler(UserSignUpException e){
-        return "redirect:/user/signup-form";
+        return "redirect:/users/sign-up";
     }
 
     @ExceptionHandler(InvalidPasswordException.class)

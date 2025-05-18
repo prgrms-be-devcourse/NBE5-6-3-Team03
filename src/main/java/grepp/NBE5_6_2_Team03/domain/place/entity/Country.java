@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.place.entity;
 
+import grepp.NBE5_6_2_Team03.domain.BaseEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,7 +11,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "country")
-public class Country {
+public class Country extends BaseEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String countryName;

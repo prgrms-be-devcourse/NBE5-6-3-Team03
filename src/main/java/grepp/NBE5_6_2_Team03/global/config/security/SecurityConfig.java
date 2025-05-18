@@ -18,6 +18,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final CustomLoginSuccessHandler loginSuccessHandler;
+    private final CustomLoginFailureHandler loginFailureHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -37,13 +38,14 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (auth) -> auth
-                                .requestMatchers("/", "/users/**").permitAll()
+                                .requestMatchers("/", "/users/sign-up").permitAll()
                                 .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
-                                .requestMatchers("/api/exchange/**").permitAll()
+                                .requestMatchers("/api/**").permitAll()
+                                .requestMatchers("/plan/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
-//        http.csrf((auth) -> auth.disable());
+        http.csrf((auth) -> auth.disable());
 
         http
                 .formLogin(auth -> auth
@@ -51,8 +53,17 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailureHandler)
                         .permitAll()
                 );
+
+        http.logout(logout -> logout
+                .logoutUrl("/users/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+        );
 
         return http.build();
     }

@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.user;
 
+import grepp.NBE5_6_2_Team03.domain.BaseEntity;
 import grepp.NBE5_6_2_Team03.domain.user.file.UploadFile;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -8,7 +9,7 @@ import lombok.Getter;
 @Getter
 @Entity
 @Table(name = "users")
-public class User {
+public class User extends BaseEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,6 +18,7 @@ public class User {
     private String password;
     private String name;
     private String phoneNumber;
+    private boolean isLocked;
 
     @Embedded
     private UploadFile uploadFile;
@@ -46,5 +48,9 @@ public class User {
         if(uploadFile != null) {
             this.uploadFile = uploadFile;
         }
+    }
+
+    public void updateIsLocked(boolean isLocked) {
+        this.isLocked = isLocked;
     }
 }

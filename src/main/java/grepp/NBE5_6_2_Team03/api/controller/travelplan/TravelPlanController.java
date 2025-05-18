@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.api.controller.travelplan;
 
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.TravelPlanRequestDto;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanRequestDto;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
