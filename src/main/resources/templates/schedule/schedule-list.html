@@ -165,6 +165,7 @@
         <span th:text="|${username}님|">테스터님</span>
         <a href="/users/my-page">내 정보</a>
         <form action="/users/logout" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button type="submit">로그아웃</button>
         </form>
     </div>
@@ -243,10 +244,12 @@
                            class="btn-edit">수정</a>
                         <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/delete'}"
                               method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <button type="submit" class="btn-delete">삭제</button>
                         </form>
                         <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/status'}"
                               method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
                             <button type="submit" class="btn-status">상태변경</button>
                         </form>
                     </div>

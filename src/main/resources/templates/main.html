@@ -96,6 +96,7 @@
 
     <h1>로그인</h1>
     <form th:action="@{/users/login-process}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <input type="text" name="email" placeholder="아이디" required>
         <input type="password" name="password" placeholder="비밀번호" required>
         <button type="submit" class="btn">로그인</button>

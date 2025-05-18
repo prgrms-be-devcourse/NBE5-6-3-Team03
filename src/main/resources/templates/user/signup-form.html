@@ -89,6 +89,7 @@
 <div class="container">
     <h1>회원가입</h1>
     <form th:action="@{/users/sign-up}" method="post" th:object="${userSignUpRequest}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="input-group">
             <input type="email" id="email" th:field="*{email}" placeholder="ex) test@example.com" required>
             <button type="button" id="checkEmailBtn">중복 확인</button>
