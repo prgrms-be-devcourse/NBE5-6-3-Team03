@@ -1,29 +1,20 @@
 package grepp.NBE5_6_2_Team03.domain.travelplan;
 
 import grepp.NBE5_6_2_Team03.domain.BaseEntity;
+import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.user.User;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.persistence.*;
 
-@Entity
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.*;
+
 @Getter
 @Setter
 @Table(name = "travel_plan")
-@Builder @AllArgsConstructor
+@Entity
 public class TravelPlan extends BaseEntity {
 
     @Id
@@ -34,8 +25,11 @@ public class TravelPlan extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @OneToMany(mappedBy = "travelPlan")
+    private List<TravelSchedule> travelSchedules = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
-    CountryStatus countryStatus;
+    private CountryStatus countryStatus;
 
     private String country;
     private String name;
@@ -45,8 +39,19 @@ public class TravelPlan extends BaseEntity {
     private LocalDate travelStartDate;
     private LocalDate travelEndDate;
 
-    private LocalDateTime createdDateTime;
-    private LocalDateTime modifyDateTime;
-
     protected TravelPlan() {}
+
+    @Builder
+    private TravelPlan(User user, CountryStatus countryStatus, String country, String name,
+                      int publicMoney, int count, LocalDate travelStartDate, LocalDate travelEndDate) {
+        this.user = user;
+        this.countryStatus = countryStatus;
+        this.country = country;
+        this.name = name;
+        this.publicMoney = publicMoney;
+        this.count = count;
+        this.travelStartDate = travelStartDate;
+        this.travelEndDate = travelEndDate;
+    }
+
 }
