@@ -89,6 +89,20 @@
             margin-bottom: 30px;
             color: #555;
         }
+        .plan-button {
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .plan-button:hover {
+            background-color: #3a5f8a;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
         footer {
             background-color: #ffffff;
             text-align: center;
@@ -117,6 +131,9 @@
     <div class="welcome-box">
         <h1 th:text="|${username}님 환영합니다!|">홍길동님 환영합니다!</h1>
         <p>즐거운 하루 되세요 😊</p>
+        <a href="/plan">
+            <button class="plan-button">여행 계획 등록</button>
+        </a>
     </div>
 </div>
 
