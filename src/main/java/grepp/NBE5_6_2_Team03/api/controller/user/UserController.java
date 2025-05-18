@@ -72,6 +72,12 @@ public class UserController {
         return "redirect:/users/my-page";
     }
 
+    @PostMapping("{user-id}")
+    public String deleteUser(@PathVariable("user-id") Long userId){
+        userService.deleteUserBy(userId);
+        return "redirect:/";
+    }
+
     @ResponseBody
     @GetMapping("/check-email")
     public Map<String, Boolean> checkEmail(@RequestParam("email") String email){

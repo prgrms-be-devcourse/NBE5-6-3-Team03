@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.global.config.security;
 
 import grepp.NBE5_6_2_Team03.domain.user.service.CustomUserDetailsService;
-import grepp.NBE5_6_2_Team03.global.handler.CustomLoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +18,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
     private final CustomLoginSuccessHandler loginSuccessHandler;
+    private final CustomLoginFailureHandler loginFailureHandler;
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
@@ -38,8 +38,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (auth) -> auth
-                                .requestMatchers("/", "/users/**").permitAll()
-                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/recommend").permitAll()
+                                .requestMatchers("/", "/users/sign-up").permitAll()
+                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
+                                .requestMatchers("/api/**").permitAll()
+                                .requestMatchers("/plan/**").permitAll()
                                 .anyRequest().authenticated()
                 );
 
@@ -51,8 +53,17 @@ public class SecurityConfig {
                         .usernameParameter("email")
                         .passwordParameter("password")
                         .successHandler(loginSuccessHandler)
+                        .failureHandler(loginFailureHandler)
                         .permitAll()
                 );
+
+        http.logout(logout -> logout
+                .logoutUrl("/users/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+        );
 
         return http.build();
     }

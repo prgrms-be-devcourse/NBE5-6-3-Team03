@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -21,7 +22,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !user.isLocked();
     }
 
     @Override
@@ -66,5 +67,17 @@ public class CustomUserDetails implements UserDetails {
 
     public Long getId() {
         return user.getId();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomUserDetails that = (CustomUserDetails) o;
+        return Objects.equals(user.getId(), that.user.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(user.getId());
     }
 }
