@@ -149,9 +149,14 @@
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
     fetch('/plan/create', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json',
+        [csrfHeader]: csrfToken
+      },
       body: JSON.stringify(data)
     })
     .then(res => {
