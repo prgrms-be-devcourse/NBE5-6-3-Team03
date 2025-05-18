@@ -2,6 +2,7 @@ package grepp.NBE5_6_2_Team03.domain.exchange.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeResponse;
 import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
+import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -22,6 +23,7 @@ public class ExchangeService {
 
     private final RestTemplate restTemplate = new RestTemplate();
     private final ExchangeRateRepository exchangeRateRepository;
+    private final ExchangeRateQueryRepository exchangeRateQueryRepository;
 
     @Value("${exchange.api.key}")
     private String apiKey;
@@ -56,5 +58,17 @@ public class ExchangeService {
         return Arrays.stream(exchanges)
             .map(request -> request.toEntity(formattedToday))
             .collect(Collectors.toList());
+    }
+
+    public int getRecentAverageRate(String countryCode) {
+        return exchangeRateQueryRepository.getRecentAverageRate(countryCode);
+    }
+
+    public boolean lastestRateCompareToAverageRate(int lastestRate, int averageRate) {
+        if (lastestRate > averageRate) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
