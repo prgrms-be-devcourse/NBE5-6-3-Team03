@@ -8,7 +8,5 @@ import org.springframework.data.repository.query.Param;
 
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRateEntity, Long> {
 
-    @Query("SELECT e FROM ExchangeRateEntity e WHERE e.curUnit = :curUnit ORDER BY e.date DESC")
-    Optional<ExchangeRateEntity> findLatestByCurUnit(@Param("curUnit") String curUnit);
-
+    Optional<ExchangeRateEntity> findTop1ByCurUnitOrderByDateDesc(String curUnit);
 }

@@ -38,7 +38,7 @@ public class ExchangeService {
     }
 
     public ExchangeResponse getLatest(String curUnit){
-        ExchangeRateEntity entity = exchangeRateRepository.findLatestByCurUnit(curUnit)
+        ExchangeRateEntity entity = exchangeRateRepository.findTop1ByCurUnitOrderByDateDesc(curUnit)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         return ExchangeResponse.fromDto(entity);
@@ -60,11 +60,25 @@ public class ExchangeService {
             .collect(Collectors.toList());
     }
 
-    public int getRecentAverageRate(String countryCode) {
-        return exchangeRateQueryRepository.getRecentAverageRate(countryCode);
+    public int getRecentAverageRate(String curUnit) {
+        return exchangeRateQueryRepository.getRecentAverageRate(curUnit);
     }
 
-    public int compareLatestRateToAverageRate(int latestRate, int averageRate) {
-        return Integer.compare(latestRate, averageRate);
+    public int compareLatestRateToAverageRate(String curUnit) {
+        int latest = getLatestExchangeRateInt(curUnit);
+        int average = getRecentAverageRate(curUnit);
+        return Integer.compare(latest, average);
+    }
+
+    public int exchangeToWon(String curUnit, int foreignCurrency) {
+        ExchangeResponse response = getLatest(curUnit);
+        double baseRate = Double.parseDouble(response.getBaseRate().replace(",", ""));
+        double perUnitRate = curUnit.endsWith("(100)") ? baseRate / 100.0 : baseRate;
+
+        return (int) (foreignCurrency * perUnitRate);
+    }
+
+    public int getLatestExchangeRateInt(String curUnit) {
+        return (int) Double.parseDouble(getLatest(curUnit).getBaseRate().replace(",", ""));
     }
 }

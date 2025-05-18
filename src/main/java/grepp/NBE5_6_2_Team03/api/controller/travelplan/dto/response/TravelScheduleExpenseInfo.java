@@ -25,6 +25,7 @@ public class TravelScheduleExpenseInfo {
 
     public static List<TravelScheduleExpenseInfo> convertBy(List<TravelSchedule> travelSchedules) {
        return travelSchedules.stream()
+                .filter(travelSchedule -> travelSchedule.getExpense() != null && travelSchedule.getExpense().getPayedPrice() != null)
                 .map(travelSchedule -> TravelScheduleExpenseInfo.of(
                         travelSchedule.getTravelRoute(),
                         travelSchedule.getContent(),

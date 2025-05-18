@@ -43,10 +43,14 @@
     <div class="col" th:each="plan : ${plans}">
       <div class="card travel-card shadow-sm h-100 border-0">
         <div class="card-body">
-          <a th:href="@{'/plan/' + ${plan.travelPlanId} + '/schedule'}"
-             class="btn btn-sm btn-outline-secondary position-absolute top-0 end-0 m-2">
-            일정보기
-          </a>
+          <div class="position-absolute top-0 end-0 m-2 d-inline-flex gap-2">
+            <a th:href="@{'/plan/' + ${plan.travelPlanId} + '/expense'}"
+               class="btn btn-sm btn-outline-success">정산하기</a>
+
+            <a th:href="@{'/plan/' + ${plan.travelPlanId} + '/schedule'}"
+               class="btn btn-sm btn-outline-secondary">일정보기</a>
+          </div>
+
 
           <h5 class="card-title text-primary fw-bold" th:text="${plan.name}">계획명</h5>
           <h6 class="card-subtitle mb-2 text-muted" th:text="${plan.country}">국가</h6>
