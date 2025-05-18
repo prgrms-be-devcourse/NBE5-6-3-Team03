@@ -1,13 +1,12 @@
 package grepp.NBE5_6_2_Team03.domain.travelplan.service;
 
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.TravelPlanRequestDto;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanRequestDto;
 import grepp.NBE5_6_2_Team03.domain.travelplan.CountryStatus;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -41,8 +40,6 @@ public class TravelPlanService {
             .count(planDto.getCount())
             .travelStartDate(planDto.getTravelStartDate())
             .travelEndDate(planDto.getTravelEndDate())
-            .createdDateTime(LocalDateTime.now())
-            .modifyDateTime(LocalDateTime.now())
             .build();
 
         travelPlanRepository.save(plan);
@@ -76,7 +73,6 @@ public class TravelPlanService {
         existingPlan.setCount(planDto.getCount());
         existingPlan.setTravelStartDate(planDto.getTravelStartDate());
         existingPlan.setTravelEndDate(planDto.getTravelEndDate());
-        existingPlan.setModifyDateTime(LocalDateTime.now());
 
         travelPlanRepository.save(existingPlan);
     }
