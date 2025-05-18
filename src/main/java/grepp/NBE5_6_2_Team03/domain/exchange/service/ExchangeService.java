@@ -64,11 +64,7 @@ public class ExchangeService {
         return exchangeRateQueryRepository.getRecentAverageRate(countryCode);
     }
 
-    public boolean lastestRateCompareToAverageRate(int lastestRate, int averageRate) {
-        if (lastestRate > averageRate) {
-            return true;
-        } else {
-            return false;
-        }
+    public int compareLatestRateToAverageRate(int latestRate, int averageRate) {
+        return Integer.compare(latestRate, averageRate);
     }
 }
