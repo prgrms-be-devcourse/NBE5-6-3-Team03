@@ -166,7 +166,7 @@
 <body>
 
 <header>
-    <div class="site-title">여행 정산</div>
+    <div class="site-title">여행 계획 일정</div>
     <div class="nav-links">
         <span th:text="|${username}님|">null님</span>
         <a href="/users/my-page">내 정보</a>
@@ -180,9 +180,9 @@
     <h1>지출 내역</h1>
 
     <div class="rate-compare" style="text-align: center; font-size: 18px; margin-bottom: 20px;">
-        <span th:if="${compareResult == 1}" style="color: blue;">📈 최신 환율이 평균보다 높습니다</span>
-        <span th:if="${compareResult == 0}" style="color: gray;">＝ 최신 환율이 평균과 같습니다</span>
-        <span th:if="${compareResult == -1}" style="color: red;">📉 최신 환율이 평균보다 낮습니다</span>
+        <span th:if="${response.rateCompareResult == 1}" style="color: blue;">📈 최신 환율이 평균보다 높습니다</span>
+        <span th:if="${response.rateCompareResult == 0}" style="color: gray;">＝ 최신 환율이 평균과 같습니다</span>
+        <span th:if="${response.rateCompareResult == -1}" style="color: red;">📉 최신 환율이 평균보다 낮습니다</span>
     </div>
 
     <div class="expense-container">
