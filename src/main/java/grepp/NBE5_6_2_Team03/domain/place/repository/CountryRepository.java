@@ -13,7 +13,7 @@ public interface CountryRepository extends JpaRepository<Country, Long> {
     Optional<Country> findByCityName(@Param("cityName") String cityName);
 
     @Query("select distinct c.cityName from Country c where c.countryName = :countryName")
-    List<String> findCityByCountry(String countryName);
+    List<String> findCityByCountry(@Param("countryName") String countryName);
 
     @Query("select distinct c.countryName from Country c")
     List<String> findAllCountries();
