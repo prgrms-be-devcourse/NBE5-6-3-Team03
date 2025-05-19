@@ -72,13 +72,17 @@ public class ExchangeService {
 
     public int exchangeToWon(String curUnit, int foreignCurrency) {
         ExchangeResponse response = getLatest(curUnit);
-        double baseRate = Double.parseDouble(response.getBaseRate().replace(",", ""));
-        double perUnitRate = curUnit.endsWith("(100)") ? baseRate / 100.0 : baseRate;
+        double perUnitRate = getPerUnitRate(curUnit, response.getBaseRate());
 
         return (int) (foreignCurrency * perUnitRate);
     }
 
     public int getLatestExchangeRateInt(String curUnit) {
         return (int) Double.parseDouble(getLatest(curUnit).getBaseRate().replace(",", ""));
+    }
+
+    private double getPerUnitRate(String curUnit, String foreignCurrency) {
+        double baseRate = Double.parseDouble(foreignCurrency.replace(",", ""));
+        return curUnit.endsWith("(100)") ? baseRate / 100.0 : baseRate;
     }
 }

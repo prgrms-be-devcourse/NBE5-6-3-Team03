@@ -6,6 +6,7 @@
     <title>메인 화면</title>
     <link rel="stylesheet" href="aa383dd9-7613-461f-abfd-fa1b92bb3d0e.css">
     <style>
+
       body {
         display: flex;
         flex-direction: column;
@@ -124,7 +125,6 @@
         display: inline-block;
         word-break: keep-all;
       }
-
     </style>
 </head>
 <body>
@@ -137,7 +137,6 @@
 
 
 <div class="container">
-
     <div th:if="${errorMessage}" class="alert">
         <span th:utext="${errorMessage}">에러 메시지</span>
     </div>
@@ -150,7 +149,9 @@
         <button type="submit" class="btn">로그인</button>
     </form>
     <button class="btn" onclick="location.href='/users/sign-up'">회원가입</button>
-</div>
+
+    <button class="btn" onclick="location.href='/users/password-reset'">임시 비밀번호 발급</button>
+    <button class="btn" onclick="location.href='/map'">여행지 보기</button>
 </div>
 
 <footer>

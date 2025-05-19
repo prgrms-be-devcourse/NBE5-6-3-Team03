@@ -43,7 +43,7 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         String email = request.getParameter("email");
         User user = userRepository.findByEmail(email).orElse(null);
 
-        if(isNotRegisteredUser(user) || isNotMatchPassword(user.getPassword(), request.getParameter("password"))){
+        if(isNotRegisteredUser(user)){
             response.sendRedirect(DEFAULT_URL);
             return;
         }
@@ -62,10 +62,6 @@ public class CustomLoginFailureHandler implements AuthenticationFailureHandler {
         }
 
         response.sendRedirect(DEFAULT_URL);
-    }
-
-    private boolean isNotMatchPassword(String password, String rawPassword) {
-        return !passwordEncoder.matches(rawPassword, password);
     }
 
     private String findKey(String email) {

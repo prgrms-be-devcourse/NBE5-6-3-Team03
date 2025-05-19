@@ -45,6 +45,11 @@ public class ExpenseService {
         Expense expense = expenseRepository.findById(expenseId)
             .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
 
+        TravelSchedule schedule = expense.getTravelSchedule();
+        if (schedule != null) {
+            schedule.deleteExpense();
+        }
+
         expenseRepository.delete(expense);
     }
 

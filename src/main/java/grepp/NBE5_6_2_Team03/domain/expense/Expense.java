@@ -5,6 +5,8 @@ import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -18,10 +20,11 @@ public class Expense extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "travelScheduleId")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private TravelSchedule travelSchedule;
 
-    private Integer expectPrice;
-    private Integer payedPrice;
+    private int expectPrice;
+    private int payedPrice;
     private String currency;
     private boolean isCompleted;
     private LocalDate expenseDate;

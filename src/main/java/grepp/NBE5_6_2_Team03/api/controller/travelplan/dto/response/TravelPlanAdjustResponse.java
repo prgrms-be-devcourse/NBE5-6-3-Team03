@@ -19,10 +19,11 @@ public class TravelPlanAdjustResponse {
     private int lastestExchangeRate;
     private int exchangePersonalPrice;
     private String curUnit;
+    private int rateCompareResult;
 
     @Builder
     private TravelPlanAdjustResponse(List<TravelScheduleExpenseInfo> expenses, String country, int publicMoney, int count,
-                                     int totalPrice, int remainMoney, int personalPrice, int lastestExchangeRate, int exchangePersonalPrice, String curUnit) {
+                                     int totalPrice, int remainMoney, int personalPrice, int lastestExchangeRate, int exchangePersonalPrice, String curUnit, int rateCompareResult) {
         this.expenses = expenses;
         this.country = country;
         this.publicMoney = publicMoney;
@@ -33,10 +34,11 @@ public class TravelPlanAdjustResponse {
         this.lastestExchangeRate = lastestExchangeRate;
         this.exchangePersonalPrice = exchangePersonalPrice;
         this.curUnit = curUnit;
+        this.rateCompareResult = rateCompareResult;
     }
 
     public static TravelPlanAdjustResponse of(List<TravelScheduleExpenseInfo> expenseInfos, TravelPlan travelPlan, int totalPrice,
-                                              int remainMoney, int personalPrice, int lastestExchangeRate, int exchangePersonalPrice, String curUnit) {
+                                              int remainMoney, int personalPrice, int lastestExchangeRate, int exchangePersonalPrice, String curUnit, int rateCompareResult) {
         return TravelPlanAdjustResponse.builder()
                 .expenses(expenseInfos)
                 .country(travelPlan.getCountry())
@@ -48,6 +50,7 @@ public class TravelPlanAdjustResponse {
                 .lastestExchangeRate(lastestExchangeRate)
                 .exchangePersonalPrice(exchangePersonalPrice)
                 .curUnit(curUnit)
+                .rateCompareResult(rateCompareResult)
                 .build();
     }
 }
