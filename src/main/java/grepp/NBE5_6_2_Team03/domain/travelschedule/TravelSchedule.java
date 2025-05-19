@@ -5,6 +5,8 @@ import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 
@@ -17,11 +19,12 @@ public class TravelSchedule extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long travelScheduleId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "travel_plan_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private TravelPlan travelPlan;
 
-    @OneToOne(mappedBy = "travelSchedule", fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "travelSchedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Expense expense;
 
     @Embedded
@@ -64,6 +67,12 @@ public class TravelSchedule extends BaseEntity {
             this.scheduleStatus = ScheduleStatus.PLANNED;
         } else {
             this.scheduleStatus = ScheduleStatus.COMPLETED;
+        }
+    }
+
+    public void deleteExpense() {
+        if (this.expense != null) {
+            this.expense = null;
         }
     }
 }
