@@ -5,6 +5,10 @@
     <title>여행지 지도</title>
     <link rel="stylesheet" href="/css/styles.css">
     <style>
+      :root {
+        --header-height: 60px;
+      }
+
       html, body {
         margin: 0;
         padding: 0;
@@ -12,21 +16,34 @@
         height: 100%;
       }
 
+      /*body {*/
+      /*  overflow: hidden; !* 필요 시 스크롤 막기 *!*/
+      /*}*/
       body {
-        overflow: hidden; /* 필요 시 스크롤 막기 */
+        padding-top: 60px;
+        margin: 0;
       }
 
+      /* 헤더 고정 및 스타일 */
       header {
+        position: fixed;
+        z-index: 1000;
+        top: 0;
+        left: 0;
+        height: var(--header-height);
+        width: 100%;
         background-color: #ffffff;
         box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        width: 100%;
+        z-index: 1000;
       }
 
+      /* 헤더 내부 내용 고정 */
       .header-inner {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 12px 24px;
+        height: 100%;
         width: 100%;
       }
 
@@ -51,7 +68,7 @@
         color: #4a6fa5;
       }
 
-      .nav-button {
+      .nav-links a, .nav-button {
         padding: 6px 12px;
         font-size: 0.85rem;
         background-color: #4a6fa5;
@@ -63,16 +80,17 @@
         line-height: 1.2;
       }
 
-      .nav-button:hover {
+      .nav-links a, .nav-button:hover {
         background-color: #3a5f8a;
       }
 
+      /* 전체 컨테이너는 헤더 밑으로 내려가야 함 */
       .container {
         display: flex;
         flex-direction: row;
-        height: 100vh;
         width: 100vw;      /* 뷰포트 전체 너비로 */
         max-width: none;   /* 혹시 있을 max-width 제한 제거 */
+        height: calc(100vh - var(--header-height));
       }
 
       .sidebar {
@@ -87,17 +105,19 @@
         box-shadow: 2px 0 5px rgba(0,0,0,0.1);
       }
 
+      /* 미니카드 컨테이너도 헤더 아래로 내려오게 */
       #active-cards-container {
-        flex-grow: 1;
+        margin-top: 0; /* 이미 .container 전체가 내려갔기 때문에 별도 마진 불필요 */
+        flex-basis: 15%;
+        max-width: 200px;
+        background-color: #fff;
+        padding: 10px;
         display: flex;
         flex-direction: column;
         overflow-y: auto;
-        min-height: 0; /* 중요 */
-        margin: 10px 0;
-        padding: 10px;
-        border: 1px solid #ccc;
-        background-color: #aaf;
         gap: 8px;
+        box-shadow: 1px 0 4px rgba(0, 0, 0, 0.05);
+        z-index: 1;
       }
 
       .search-form {
@@ -240,16 +260,10 @@
 <header>
     <div class="header-inner">
         <div class="site-title">
-            <a href="/users/home">여행 계획 일정</a>
+            <a href="/map">여행지 지도 보기</a>
         </div>
         <div class="nav-links">
-            <span th:if="${userMyPageResponse != null}" th:text="|${userMyPageResponse.name}님|">테스터님</span>
-            <a href="/users/my-page" class="nav-button">내 정보</a>
-            <a href="#" class="nav-button"
-               onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
-            <form id="logoutForm" action="/users/logout" method="post" style="display: none;">
-                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-            </form>
+            <a href="/">Home</a>
         </div>
     </div>
 </header>
