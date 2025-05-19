@@ -2,6 +2,9 @@ package grepp.NBE5_6_2_Team03.domain.place.repository;
 
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
 import java.util.List;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -14,4 +17,19 @@ public interface PlaceRepository extends JpaRepository<Place, String> {
 
     @Query("select distinct p.city from Place p order by p.city")
     List<String> findDistinctCities();
+
+    @Query("select p from Place p where p.city = :city")
+    Page<Place> findByCity(String city, Pageable pageable);
+
+    @Query("select p from Place p where p.country = :country")
+    Page<Place> findByCountry(String country, Pageable pageable);
+
+    List<Place> findAll();
+
+    List<Place> findByCountry(String country);
+
+    List<Place> findByCity(String city);
+
+    @Query("select distinct p.country from Place p where p.city = :city")
+    Optional<String> findCountryByCity(String city);
 }

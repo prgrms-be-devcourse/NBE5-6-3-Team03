@@ -28,6 +28,8 @@
       background-color: #f8f9fa;
     }
   </style>
+  <meta name="_csrf" th:content="${_csrf.token}"/>
+  <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
 <body>
 <div class="container mt-5">
@@ -64,6 +66,7 @@
           </button>
           <form th:action="@{'/plan/delete/' + ${plan.travelPlanId}}" method="post"
                 onsubmit="return confirm('정말 삭제하시겠습니까?');">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
             <button type="submit" class="btn btn-outline-danger btn-sm">삭제</button>
           </form>
         </div>
@@ -79,6 +82,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <form id="planForm">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div class="modal-header">
           <h5 class="modal-title text-primary" id="planModalLabel">✈️ 여행 계획 등록</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
@@ -145,9 +149,14 @@
     const formData = new FormData(form);
     const data = Object.fromEntries(formData.entries());
 
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
     fetch('/plan/create', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json',
+        [csrfHeader]: csrfToken
+      },
       body: JSON.stringify(data)
     })
     .then(res => {
