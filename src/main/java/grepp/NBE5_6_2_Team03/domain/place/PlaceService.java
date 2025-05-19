@@ -43,6 +43,7 @@ public class PlaceService {
             throw new IllegalArgumentException("해당 ID의 장소를 찾을 수 없습니다: " + id);
         }
 
+        // TODO 방어적 복사 개념 공부하기
         place.update(
             formPlace.getCity(),
             formPlace.getCountry(),
