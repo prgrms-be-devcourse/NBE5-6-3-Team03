@@ -79,6 +79,17 @@
         height: 300px;
       }
 
+      .chart-container {
+        width: 90%;
+        max-width: 800px;
+        margin: 30px auto;
+      }
+
+      canvas {
+        width: 100% !important;
+        height: auto !important;
+        aspect-ratio: 4 / 3;
+      }
 
     </style>
 </head>
@@ -97,10 +108,15 @@
     </div>
 </header>
 <h2>Country-wise Travel Plans</h2>
-<canvas id="countryChart" width="600" height="400"></canvas>
+<div class="chart-container">
+    <canvas id="countryChart"></canvas>
+</div>
 
 <h2>Monthly Travel Plans This Year</h2>
-<canvas id="monthChart" width="600" height="400"></canvas>
+<div class="chart-container">
+    <canvas id="monthChart"></canvas>
+</div>
+
 
 <script th:inline="javascript">
 
