@@ -1,11 +1,16 @@
 package grepp.NBE5_6_2_Team03.domain.admin;
 
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatisticResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
+import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminService {
 
     private final UserRepository userRepository;
+    private final TravelPlanRepository travelPlanRepository;
 
     public Page<UserInfoResponse> findAll(Pageable pageable) {
         Page<User> userInfos = userRepository.findAll(pageable);
@@ -30,6 +36,7 @@ public class AdminService {
             userInfo.getEmail(),
             userInfo.getName(),
             userInfo.getPhoneNumber(),
+            userInfo.isLocked(),
             userInfo.getRole()
         );
     }
@@ -50,8 +57,30 @@ public class AdminService {
     }
 
     @Transactional
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    public void lockedById(Long id) {
+        userRepository.lockUser(id);
+    }
+
+    public List<MonthlyStatisticResponse> getMonthStatistics() {
+        List<Object[]> monthlyStatsRaw = travelPlanRepository.getMonthStatistics();
+        List<MonthlyStatisticResponse> monthlyStatisticResponses = new ArrayList<>();
+        for(Object[] obj : monthlyStatsRaw) {
+            int month = (Integer) obj[0];
+            long count = (Long) obj[1];
+            monthlyStatisticResponses.add(new MonthlyStatisticResponse(month, count));
+        }
+        return monthlyStatisticResponses;
+    }
+
+    public List<CountriesStatisticResponse> getCountriesStatistics() {
+        List<Object[]> monthlyStatisticsMap = travelPlanRepository.getCountriesStatistics();
+        List<CountriesStatisticResponse> countriesStatisticResponses = new ArrayList<>();
+        for(Object[] obj : monthlyStatisticsMap) {
+            String country = (String) obj[0];
+            long count = (Long) obj[1];
+            countriesStatisticResponses.add(new CountriesStatisticResponse(country, count));
+        }
+        return countriesStatisticResponses;
     }
 
 }

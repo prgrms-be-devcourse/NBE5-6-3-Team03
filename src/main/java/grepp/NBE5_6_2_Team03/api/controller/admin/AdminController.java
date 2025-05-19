@@ -1,8 +1,11 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin;
 
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatisticResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -55,10 +58,18 @@ public class AdminController {
         @PathVariable("id") Long id,
         RedirectAttributes redirectAttributes
     ) {
-        adminService.deleteById(id);
+        adminService.lockedById(id);
         redirectAttributes.addFlashAttribute("message", "UserInfo deleted successfully.");
         return "redirect:/admin/user-info";
     }
 
+    @GetMapping("/statistic")
+    public String statistic(Model model) {
+        List<CountriesStatisticResponse> countriesStatisticResponses = adminService.getCountriesStatistics();
+        List<MonthlyStatisticResponse> monthlyStatisticResponses = adminService.getMonthStatistics();
+        model.addAttribute("countriesStatisticResponses", countriesStatisticResponses);
+        model.addAttribute("monthlyStatisticResponses", monthlyStatisticResponses);
+        return "admin/statistic";
+    }
 
 }
