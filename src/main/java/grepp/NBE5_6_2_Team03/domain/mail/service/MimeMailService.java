@@ -12,7 +12,7 @@ import org.thymeleaf.context.Context;
 
 @Service
 @RequiredArgsConstructor
-public class MailService {
+public class MimeMailService {
 
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
