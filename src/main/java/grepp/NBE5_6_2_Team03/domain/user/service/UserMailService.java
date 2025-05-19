@@ -41,7 +41,9 @@ public class UserMailService {
 
         String code = mailService.sendCodeToEmail(codeType, email);
         String encodedPassword = passwordEncoder.encode(code);
+
         user.modifyPassword(encodedPassword);
+        user.updateIsLocked(false);
         return Collections.singletonMap("success", true);
     }
 }
