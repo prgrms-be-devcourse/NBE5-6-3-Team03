@@ -24,6 +24,19 @@
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
+        /* ✅ 헤더 링크 스타일 */
+        .header-link {
+            text-decoration: none;
+            color: #4a6fa5;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .header-link:hover {
+            color: #3a5f8a;
+        }
+
         .container {
             text-align: center;
             background: white;
@@ -70,11 +83,11 @@
             font-size: 0.95rem;
             display: flex;
             align-items: center;
-            justify-content: center; /* ✅ 추가: 가운데 정렬 */
+            justify-content: center;
             gap: 10px;
             font-weight: 600;
             line-height: 1.4;
-            text-align: center; /* ✅ 텍스트 자체도 가운데 정렬 */
+            text-align: center;
         }
 
         .alert span {
@@ -85,24 +98,26 @@
 </head>
 <body>
 <header>
-    <h2>Welcome to Our Site</h2>
+    <h2 style="text-align: left; padding-left: 20px;">
+        <a href="/" class="header-link">여행 계획 일정 관리</a>
+    </h2>
 </header>
 
 <div class="container">
-
     <div th:if="${errorMessage}" class="alert">
         <span th:utext="${errorMessage}">에러 메시지</span>
     </div>
 
     <h1>로그인</h1>
     <form th:action="@{/users/login-process}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <input type="text" name="email" placeholder="아이디" required>
         <input type="password" name="password" placeholder="비밀번호" required>
         <button type="submit" class="btn">로그인</button>
     </form>
     <button class="btn" onclick="location.href='/users/sign-up'">회원가입</button>
-    <button class="btn" onclick="location.href='/trip-chat'">관광지 추천 채팅</button>
-</div>
+    <button class="btn" onclick="location.href='/users/password-reset'">임시 비밀번호 발급</button>
+    <button class="btn" onclick="location.href='/map'">여행지 보기</button>
 </div>
 
 <footer>

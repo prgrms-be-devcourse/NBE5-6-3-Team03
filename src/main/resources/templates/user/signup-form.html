@@ -15,6 +15,7 @@
             font-family: "Plus Jakarta Sans", sans-serif;
             color: #333;
         }
+
         header, footer {
             width: 100%;
             padding: 15px;
@@ -23,6 +24,19 @@
             text-align: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
+        /* ✅ 헤더 링크 스타일 */
+        .header-link {
+            text-decoration: none;
+            color: #4a6fa5;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .header-link:hover {
+            color: #3a5f8a;
+        }
+
         .container {
             background: white;
             padding: 40px;
@@ -32,11 +46,13 @@
             margin: auto;
             text-align: center;
         }
+
         .input-group, .single-input {
             display: flex;
             align-items: center;
             margin: 8px 0;
         }
+
         .input-group input, .single-input input {
             flex: 1;
             padding: 10px;
@@ -44,6 +60,7 @@
             border-radius: 8px;
             font-size: 1rem;
         }
+
         .input-group button {
             margin-left: 5px;
             padding: 10px 12px;
@@ -55,9 +72,11 @@
             transition: background-color 0.3s;
             font-size: 0.9rem;
         }
+
         .input-group button:hover {
             background-color: #3a5f8a;
         }
+
         .btn {
             margin-top: 15px;
             padding: 10px 20px;
@@ -70,9 +89,11 @@
             transition: background-color 0.3s;
             width: 100%;
         }
+
         .btn:hover {
             background-color: #3a5f8a;
         }
+
         .check-result {
             margin-top: 5px;
             font-size: 0.9rem;
@@ -82,13 +103,18 @@
     </style>
 </head>
 <body>
+
 <header>
-    <h2>Welcome to Our Site</h2>
+    <h2 style="text-align: left; padding-left: 20px;">
+        <a href="/" class="header-link">여행 계획 일정 관리</a>
+    </h2>
 </header>
 
 <div class="container">
     <h1>회원가입</h1>
     <form th:action="@{/users/sign-up}" method="post" th:object="${userSignUpRequest}">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
         <div class="input-group">
             <input type="email" id="email" th:field="*{email}" placeholder="ex) test@example.com" required>
             <button type="button" id="checkEmailBtn">중복 확인</button>
