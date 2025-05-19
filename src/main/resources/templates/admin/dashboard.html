@@ -154,28 +154,22 @@
       <h2>회원 관리</h2>
       <p>회원 목록 조회 및 권한 수정</p>
       <form id="redirectForm" action="/admin/user-info" method="GET">
-        <input type="hidden" name="_csrf" value="your-csrf-token-value">
         <button type="submit">바로가기</button>
       </form>
     </div>
 
     <div class="card">
       <h2>통계 분석</h2>
-      <p>일일 방문자, 매출 확인</p>
-      <button>확인하기</button>
+      <p>선호 국가 및 선호 여행월 분석</p>
+      <form id="redirectForm" action="/admin/statistic" method="GET">
+        <button type="submit">바로가기</button>
+      </form>
     </div>
-
-<!--    <div class="card">-->
-<!--      <h2>문의 내역</h2>-->
-<!--      <p>고객 문의사항 및 답변 관리</p>-->
-<!--      <button>바로가기</button>-->
-<!--    </div>-->
 
     <div class="card">
       <h2>장소 관리</h2>
       <p>여행지 장소 확인 및 관리</p>
       <form id="redirectForm" action="/place/info" method="GET">
-        <input type="hidden" name="_csrf" value="your-csrf-token-value">
         <button type="submit">바로가기</button>
       </form>
     </div>
