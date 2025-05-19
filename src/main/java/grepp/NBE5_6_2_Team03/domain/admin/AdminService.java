@@ -57,6 +57,14 @@ public class AdminService {
 
     }
 
+    public boolean isDuplicatedEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    public boolean isDuplicatedUsername(String username) {
+        return userRepository.findByName(username).isPresent();
+    }
+
     @Transactional
     public void lockedById(Long id) {
         if(userRepository.getRoleById(id).equals("ROLE_ADMIN")) {
