@@ -72,9 +72,21 @@
     .user-info {
       flex-grow: 1;
     }
+
     .user-id {
       font-size: 0.85rem;
       color: #6c757d;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      background-color: #dc3545; /* 붉은색 계열 */
+      border-radius: 8px;
+      vertical-align: middle;
     }
   </style>
 </head>
@@ -101,11 +113,14 @@
       <div class="card shadow-sm border-0 user-card d-flex flex-row justify-content-between align-items-center p-3">
         <!-- 유저 정보 -->
         <div class="user-info">
-          <h5 class="text-primary mb-1" th:text="${user.name}">유저 이름</h5>
+          <div class="d-flex align-items-center mb-1">
+            <h5 class="text-primary mb-0 me-2" th:text="${user.name}">유저 이름</h5>
+            <span th:if="${user.locked}" class="badge bg-secondary" style="font-size: 0.75rem; padding: 0.25em 0.5em;">탈퇴</span>
+          </div>
           <div class="text-muted mb-1" th:text="${user.email}">이메일</div>
           <div class="mb-1" th:text="${user.phoneNumber}">전화번호</div>
-          <div><strong>권한:</strong> <span th:text="${user.role}">ROLE</span></div>
-          <div><strong>삭제된 계정:</strong> <span th:text="${user.locked}">LOCK</span></div>
+          <div>현재 권한: <span th:text="${user.role}">ROLE</span></div>
+
         </div>
 
         <!-- 버튼 영역 -->
