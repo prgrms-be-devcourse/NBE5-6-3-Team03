@@ -20,7 +20,7 @@ public class TravelPlanQueryController {
     private final TravelPlanQueryService travelPlanQueryService;
 
     @GetMapping("/{travelPlanId}/expense")
-    public String getAdjustmentInfo(@PathVariable Long travelPlanId, Model model,
+    public String getAdjustmentInfo(@PathVariable("travelPlanId") Long travelPlanId, Model model,
         @AuthenticationPrincipal CustomUserDetails customUser) {
         TravelPlanAdjustResponse response = travelPlanQueryService.getAdjustmentInfo(travelPlanId);
         model.addAttribute("response", response);

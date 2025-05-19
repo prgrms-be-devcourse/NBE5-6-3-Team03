@@ -18,8 +18,8 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @GetMapping
-    public String list(@PathVariable Long travelPlanId,
-                       @PathVariable Long travelScheduleId,
+    public String list(@PathVariable("travelPlanId") Long travelPlanId,
+                       @PathVariable("travelScheduleId") Long travelScheduleId,
                        @AuthenticationPrincipal CustomUserDetails customUser,
                        Model model) {
         Expense expense = expenseService.findByScheduleId(travelScheduleId).orElse(null);
@@ -31,8 +31,8 @@ public class ExpenseController {
     }
 
     @GetMapping("/add")
-    public String addForm(@PathVariable Long travelPlanId,
-                          @PathVariable Long travelScheduleId,
+    public String addForm(@PathVariable("travelPlanId") Long travelPlanId,
+                          @PathVariable("travelScheduleId") Long travelScheduleId,
                           @AuthenticationPrincipal CustomUserDetails customUser,
                           Model model) {
         model.addAttribute("travelPlanId", travelPlanId);
@@ -43,17 +43,17 @@ public class ExpenseController {
     }
 
     @PostMapping("/add")
-    public String addExpense(@PathVariable Long travelPlanId,
-                             @PathVariable Long travelScheduleId,
+    public String addExpense(@PathVariable("travelPlanId") Long travelPlanId,
+                             @PathVariable("travelScheduleId") Long travelScheduleId,
                              @ModelAttribute ExpenseRequest request) {
         expenseService.addExpense(travelScheduleId, request);
         return "redirect:/plan/" + travelPlanId + "/schedule/" + travelScheduleId + "/expense";
     }
 
     @GetMapping("/{expenseId}/edit")
-    public String editForm(@PathVariable Long travelPlanId,
-                           @PathVariable Long travelScheduleId,
-                           @PathVariable Long expenseId,
+    public String editForm(@PathVariable("travelPlanId") Long travelPlanId,
+                           @PathVariable("travelScheduleId") Long travelScheduleId,
+                           @PathVariable("expenseId") Long expenseId,
                            @AuthenticationPrincipal CustomUserDetails customUser,
                            Model model) {
         Expense expense = expenseService.findById(expenseId);
@@ -67,18 +67,18 @@ public class ExpenseController {
     }
 
     @PostMapping("/{expenseId}/edit")
-    public String editExpense(@PathVariable Long travelPlanId,
-                               @PathVariable Long travelScheduleId,
-                               @PathVariable Long expenseId,
+    public String editExpense(@PathVariable("travelPlanId") Long travelPlanId,
+                               @PathVariable("travelScheduleId") Long travelScheduleId,
+                               @PathVariable("expenseId") Long expenseId,
                                @ModelAttribute ExpenseRequest request) {
         expenseService.editExpense(expenseId, request);
         return "redirect:/plan/" + travelPlanId + "/schedule/" + travelScheduleId + "/expense";
     }
 
     @PostMapping("/{expenseId}/delete")
-    public String deleteExpense(@PathVariable Long travelPlanId,
-                                @PathVariable Long travelScheduleId,
-                                @PathVariable Long expenseId) {
+    public String deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
+                                @PathVariable("travelScheduleId") Long travelScheduleId,
+                                @PathVariable("expenseId") Long expenseId) {
         expenseService.deleteExpense(expenseId);
         return "redirect:/plan/" + travelPlanId + "/schedule/" + travelScheduleId + "/expense";
     }
