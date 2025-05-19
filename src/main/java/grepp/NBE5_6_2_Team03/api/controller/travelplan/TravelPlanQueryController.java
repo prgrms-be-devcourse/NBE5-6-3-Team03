@@ -24,8 +24,9 @@ public class TravelPlanQueryController {
         @AuthenticationPrincipal CustomUserDetails customUser) {
         TravelPlanAdjustResponse response = travelPlanQueryService.getAdjustmentInfo(travelPlanId);
         model.addAttribute("response", response);
-        model.addAttribute("user",customUser);
-        model.addAttribute("userEmail",customUser.getUser().getEmail());
+        model.addAttribute("user", customUser);
+        model.addAttribute("username", customUser.getUsername());
+        model.addAttribute("userEmail", customUser.getUser().getEmail());
 
         return "plan/expense";
     }
