@@ -25,14 +25,6 @@ public class TravelPlanController {
 
     private final TravelPlanService travelPlanService;
 
-    @GetMapping
-    public String listPlans(@AuthenticationPrincipal CustomUserDetails customUser, Model model) {
-        List<TravelPlan> plans = travelPlanService.getPlansByUser(customUser.getId());
-        model.addAttribute("plans", plans);
-        model.addAttribute("user", customUser);
-        return "plan/plan";
-    }
-
     @PostMapping("/create")
     @ResponseBody
     public ResponseEntity<String> createPlan(@AuthenticationPrincipal CustomUserDetails customUser,
@@ -66,7 +58,7 @@ public class TravelPlanController {
     @PostMapping("/delete/{id}")
     public String deletePlan(@PathVariable Long id) {
         travelPlanService.deletePlan(id);
-        return "redirect:/plan";
+        return "redirect:/users/home";
     }
 
 }
