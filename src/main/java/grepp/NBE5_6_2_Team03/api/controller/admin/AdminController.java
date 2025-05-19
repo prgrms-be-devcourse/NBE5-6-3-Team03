@@ -33,8 +33,8 @@ public class AdminController {
 
     @GetMapping("/user-info")
     public String userInfos(
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "15") int size,
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "15") int size,
         Model model) {
         int minPageLimit = Math.max(0, page);
         Page<UserInfoResponse> userPage = adminService.findAll(PageRequest.of(minPageLimit, size));
