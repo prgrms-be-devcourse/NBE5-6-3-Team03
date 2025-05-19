@@ -91,16 +91,16 @@ public class UserService {
         );
     }
 
+    public boolean isDuplicatedEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
     private boolean isDuplicateUserInfo(String email, String name){
         return isDuplicatedEmail(email) || isDuplicatedName(name);
     }
 
     private boolean isDuplicatedName(String name) {
         return userRepository.findByName(name).isPresent();
-    }
-
-    private boolean isDuplicatedEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
     }
 
     private boolean isNotMatchPassword(String encodedPassword, String rawPassword) {
