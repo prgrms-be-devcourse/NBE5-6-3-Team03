@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>정산 결과 안내</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f6f9fc;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 600px;
+      background-color: #ffffff;
+      margin: 30px auto;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+    h2 {
+      color: #2c3e50;
+      text-align: center;
+    }
+    p {
+      font-size: 15px;
+      color: #333;
+      margin: 8px 0;
+    }
+    strong {
+      color: #2c3e50;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h2>정산 결과 안내</h2>
+
+  <p><strong>국가:</strong> <span th:text="${response.country}">일본</span></p>
+  <p><strong>전체 예산:</strong> <span th:text="${response.publicMoney} + ' ' + ${response.curUnit}">50000 JPY</span></p>
+  <p><strong>사용 인원:</strong> <span th:text="${response.count} + ' 명'">3 명</span></p>
+  <p><strong>총 지출:</strong> <span th:text="${response.totalExpense} + ' ' + ${response.curUnit}">36000 JPY</span></p>
+  <p><strong>남은 금액:</strong> <span th:text="${response.remainMoney} + ' ' + ${response.curUnit}">14000 JPY</span></p>
+  <p><strong>1인당 정산금:</strong> <span th:text="${response.personalPrice} + ' ' + ${response.curUnit}">12000 JPY</span></p>
+  <p><strong>최신 환율:</strong> <span th:text="${response.lastestExchangeRate}">9.1</span></p>
+  <p><strong>환산 금액(1인당):</strong> <span th:text="${response.exchangePersonalPrice} + ' 원'">109200 원</span></p>
+
+  <br/>
+</div>
+</body>
+</html>

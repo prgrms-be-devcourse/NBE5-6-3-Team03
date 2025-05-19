@@ -1,12 +1,15 @@
 package grepp.NBE5_6_2_Team03.api.controller.mail;
 
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
 import grepp.NBE5_6_2_Team03.domain.mail.service.MailService;
+import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanQueryService;
 import grepp.NBE5_6_2_Team03.domain.user.User;
-import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -15,12 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class MailController {
 
     private final MailService mailService;
-    private final UserRepository userRepository;
+    private final TravelPlanQueryService travelPlanQueryService;
 
     @PostMapping("/send")
-    public String sendMail(@AuthenticationPrincipal User user) {
+    public String sendMail(@RequestParam Long planId, @AuthenticationPrincipal User user) {
 
-        String email = user.getEmail();
+        TravelPlanAdjustResponse response = travelPlanQueryService.getAdjustmentInfo(planId);
+        Map<String,Object> model = Map.of("response",response);
 
+        mailService.sendSettlementMail(
+            user.getEmail(),
+            "정산 결과 안내",
+            "settlement-summary",
+            model
+        );
+        return "send success";
     }
 }
