@@ -18,7 +18,6 @@ import static grepp.NBE5_6_2_Team03.domain.user.mail.CodeType.*;
 public class UserMailController {
 
     private final UserMailService userMailService;
-    private final StringRedisTemplate redisTemplate;
 
     @GetMapping("/password-reset")
     public String passwordResetForm(){
@@ -28,14 +27,6 @@ public class UserMailController {
     @ResponseBody
     @PostMapping("/email/{email}/send-mail")
     public Map<String, Boolean> sendCodeToMail(@PathVariable("email") String email){
-        String key = "tempPw:" + email;
-        String value = "requested";
-
-        if(redisTemplate.hasKey(key)){
-            return Collections.singletonMap("success", false);
-        }
-
-        redisTemplate.opsForValue().set(key, value, Duration.ofMinutes(5));
         return userMailService.sendTemporaryPassword(PASSWORD, email);
     }
 
