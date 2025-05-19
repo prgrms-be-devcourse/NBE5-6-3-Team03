@@ -20,5 +20,4 @@ public class ExchangeController {
     public ExchangeResponse getLatestRate(@RequestParam String curUnit){
         return exchangeService.getLatest(curUnit);
     }
-
 }
