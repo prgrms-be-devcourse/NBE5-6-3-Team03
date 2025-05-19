@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>정산</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            background-color: #f7f9fc;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: #ffffff;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .site-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #4a6fa5;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-links span {
+            font-weight: bold;
+            color: #4a6fa5;
+            font-size: 1rem;
+        }
+
+        .nav-links a, .nav-links button {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            background-color: #4a6fa5;
+            color: white;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        main {
+            flex: 1;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .expense-container {
+            max-width: 950px;
+            margin: 0 auto 40px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            background: #ffffff;
+        }
+
+        .expense-table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #ccc;
+        }
+
+        .expense-table thead {
+            background-color: #4a90e2;
+            color: white;
+        }
+
+        .expense-table th, .expense-table td {
+            padding: 14px;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .expense-table td:last-child {
+            color: #2a68c8;
+            font-weight: bold;
+        }
+
+        .button-wrapper {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #357abd;
+        }
+
+        .summary-section {
+            display: none;
+            background-color: #ffffff;
+            border: 1px solid #dcdcdc;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .summary-section h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .summary-section p {
+            margin: 8px 0;
+            font-size: 16px;
+        }
+
+        .goto-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 40px;
+            margin-right: 40px;
+        }
+
+        .goto-buttons a {
+            text-decoration: none;
+        }
+
+        .goto-buttons a + a {
+            margin-left: 10px;
+        }
+
+        footer {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: #777;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="site-title">여행 정산</div>
+    <div class="nav-links">
+        <span th:text="|${username}님|">null님</span>
+        <a href="/users/my-page">내 정보</a>
+        <form action="/users/logout" method="post">
+            <button type="submit">로그아웃</button>
+        </form>
+    </div>
+</header>
+
+<main>
+    <h1>지출 내역</h1>
+
+    <div class="rate-compare" style="text-align: center; font-size: 18px; margin-bottom: 20px;">
+        <span th:if="${compareResult == 1}" style="color: blue;">📈 최신 환율이 평균보다 높습니다</span>
+        <span th:if="${compareResult == 0}" style="color: gray;">＝ 최신 환율이 평균과 같습니다</span>
+        <span th:if="${compareResult == -1}" style="color: red;">📉 최신 환율이 평균보다 낮습니다</span>
+    </div>
+
+    <div class="expense-container">
+        <table class="expense-table">
+            <thead>
+            <tr>
+                <th>장소</th>
+                <th>내용</th>
+                <th>출발지</th>
+                <th>도착지</th>
+                <th>이동수단</th>
+                <th>지출액</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="expense : ${response.expenses}">
+                <td th:text="${expense.placeName != '' ? expense.placeName : '장소 없음'}">장소</td>
+                <td th:text="${expense.content}">내용</td>
+                <td th:text="${expense.travelRoute.departure != '' ? expense.travelRoute.departure : '출발지 없음'}">출발지</td>
+                <td th:text="${expense.travelRoute.destination != '' ? expense.travelRoute.destination : '도착지 없음'}">도착지</td>
+                <td th:text="${expense.travelRoute.transportation != '' ? expense.travelRoute.transportation : '이동수단 없음'}">이동수단</td>
+                <td th:text="${expense.payedPrice + ' ' + response.curUnit}">1000 JPY</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="button-wrapper">
+        <button onclick="showSummary()">정산하기</button>
+    </div>
+
+    <div class="summary-section" id="settlementInfo">
+        <h3>정산 결과</h3>
+        <p><strong>국가:</strong> <span th:text="${response.country}"></span></p>
+        <p><strong>전체 예산:</strong> <span th:text="${response.publicMoney} + ' ' + ${response.curUnit}"></span></p>
+        <p><strong>사용 인원:</strong> <span th:text="${response.count} + ' 명'"></span></p>
+        <p><strong>총 지출:</strong> <span th:text="${response.totalExpense} + ' ' + ${response.curUnit}"></span></p>
+        <p><strong>남은 금액:</strong> <span th:text="${response.remainMoney} + ' ' + ${response.curUnit}"></span></p>
+        <p><strong>1인당 정산금:</strong> <span th:text="${response.personalPrice} + ' ' + ${response.curUnit}"></span></p>
+        <p><strong>최신 환율:</strong> <span th:text="${response.lastestExchangeRate}"></span></p>
+        <p><strong>환산 금액(1인당):</strong>
+            <span th:text="${response.exchangePersonalPrice} + ' 원'"></span>
+        </p>
+    </div>
+
+    <div class="goto-buttons">
+        <a href="/plan">
+            <button>여행 계획 목록</button>
+        </a>
+        <a href="/mail" id="mailButton" style="display: none;">
+            <button>메일 보내기</button>
+        </a>
+    </div>
+</main>
+
+<footer>
+    &copy; 2025 여행 정산 시스템
+</footer>
+
+<script>
+    function showSummary() {
+        document.getElementById("settlementInfo").style.display = "block";
+        document.getElementById("mailButton").style.display = "inline-block";
+    }
+</script>
+
+</body>
+</html>
