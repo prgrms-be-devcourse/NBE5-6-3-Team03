@@ -17,4 +17,5 @@ public interface TravelPlanRepository extends JpaRepository<TravelPlan, Long> {
         + "group by month(t.travel_start_date) order by month(t.travel_start_date)", nativeQuery = true)
     List<Object[]> getMonthStatistics();
 
+    long deleteByUserId(Long userId);
 }
