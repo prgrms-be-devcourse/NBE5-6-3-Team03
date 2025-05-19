@@ -55,7 +55,7 @@ public class TravelPlanQueryService {
 
     private int getTotalExpenses(List<Expense> expenses) {
         return expenses.stream()
-            .mapToInt(e -> e.getPayedPrice() != null ? e.getPayedPrice() : 0)
+            .mapToInt(Expense::getPayedPrice)
                 .sum();
     }
 

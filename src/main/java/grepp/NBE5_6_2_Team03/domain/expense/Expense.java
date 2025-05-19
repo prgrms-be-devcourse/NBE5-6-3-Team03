@@ -20,8 +20,8 @@ public class Expense extends BaseEntity {
     @JoinColumn(name = "travelScheduleId")
     private TravelSchedule travelSchedule;
 
-    private Integer expectPrice;
-    private Integer payedPrice;
+    private int expectPrice;
+    private int payedPrice;
     private String currency;
     private boolean isCompleted;
     private LocalDate expenseDate;
