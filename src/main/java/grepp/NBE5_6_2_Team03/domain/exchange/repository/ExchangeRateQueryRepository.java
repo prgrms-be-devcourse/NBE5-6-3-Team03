@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.exchange.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import grepp.NBE5_6_2_Team03.domain.exchange.entity.QExchangeRateEntity;
+import grepp.NBE5_6_2_Team03.domain.exchange.entity.*;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public class ExchangeRateQueryRepository {
 
-    private JPAQueryFactory queryFactory;
-    private QExchangeRateEntity qExchangeRate = QExchangeRateEntity.exchangeRateEntity;
-    private EntityManager em;
+    private final JPAQueryFactory queryFactory;
+    private final QExchangeRateEntity qExchangeRate = QExchangeRateEntity.exchangeRateEntity;
+    private final EntityManager em;
 
     public ExchangeRateQueryRepository(EntityManager em) {
         this.em = em;
