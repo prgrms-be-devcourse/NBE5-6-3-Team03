@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface PlaceRepository extends JpaRepository<Place, String> {
 
@@ -19,10 +20,10 @@ public interface PlaceRepository extends JpaRepository<Place, String> {
     List<String> findDistinctCities();
 
     @Query("select p from Place p where p.city = :city")
-    Page<Place> findByCity(String city, Pageable pageable);
+    Page<Place> findByCity(@Param("city") String city, Pageable pageable);
 
     @Query("select p from Place p where p.country = :country")
-    Page<Place> findByCountry(String country, Pageable pageable);
+    Page<Place> findByCountry(@Param("country") String country, Pageable pageable);
 
     List<Place> findAll();
 
@@ -31,5 +32,5 @@ public interface PlaceRepository extends JpaRepository<Place, String> {
     List<Place> findByCity(String city);
 
     @Query("select distinct p.country from Place p where p.city = :city")
-    Optional<String> findCountryByCity(String city);
+    Optional<String> findCountryByCity(@Param("city") String city);
 }
