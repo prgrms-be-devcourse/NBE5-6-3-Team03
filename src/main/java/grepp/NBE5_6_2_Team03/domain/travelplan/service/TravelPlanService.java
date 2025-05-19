@@ -25,6 +25,7 @@ public class TravelPlanService {
         return plans;
     }
 
+    @Transactional
     public void createPlan(Long userid, TravelPlanRequestDto planDto) {
 
         User user = userRepository.findById(userid)

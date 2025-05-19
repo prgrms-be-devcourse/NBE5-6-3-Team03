@@ -30,16 +30,17 @@ public class TravelPlanQueryService {
         List<TravelSchedule> travelSchedules = travelPlan.getTravelSchedules();
         List<Expense> expenses = findNotNullExpense(travelSchedules);
 
+        String curUnit = travelPlan.getCountryStatus().getCode();
+
         int remainMoney = getRemainMoney(travelPlan.getPublicMoney(), expenses);
         int personalPrice = getPersonalPrice(remainMoney, travelPlan.getCount());
-
-        String curUnit = travelPlan.getCountryStatus().getCode();
+        int rateCompareResult = exchangeService.compareLatestRateToAverageRate(curUnit);
 
         int latestExchangeRate = exchangeService.getLatestExchangeRateInt(curUnit);
         int exchangePersonalPrice = exchangeService.exchangeToWon(curUnit, personalPrice);
 
         List<TravelScheduleExpenseInfo> expenseInfos = TravelScheduleExpenseInfo.convertBy(travelSchedules);
-        return TravelPlanAdjustResponse.of(expenseInfos, travelPlan, getTotalExpenses(expenses), remainMoney, personalPrice, latestExchangeRate, exchangePersonalPrice, curUnit);
+        return TravelPlanAdjustResponse.of(expenseInfos, travelPlan, getTotalExpenses(expenses), remainMoney, personalPrice, latestExchangeRate, exchangePersonalPrice, curUnit, rateCompareResult);
     }
 
     private List<Expense> findNotNullExpense(List<TravelSchedule> travelSchedules) {
@@ -55,7 +56,7 @@ public class TravelPlanQueryService {
 
     private int getTotalExpenses(List<Expense> expenses) {
         return expenses.stream()
-            .mapToInt(e -> e.getPayedPrice() != null ? e.getPayedPrice() : 0)
+            .mapToInt(Expense::getPayedPrice)
                 .sum();
     }
 

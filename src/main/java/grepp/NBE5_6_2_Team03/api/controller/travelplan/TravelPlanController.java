@@ -39,13 +39,13 @@ public class TravelPlanController {
 
     @GetMapping("/api/{id}")
     @ResponseBody
-    public TravelPlanRequestDto getPlan(@PathVariable Long id) {
+    public TravelPlanRequestDto getPlan(@PathVariable("id") Long id) {
         return travelPlanService.getPlan(id);
     }
 
     @PatchMapping("/update/{id}")
     @ResponseBody
-    public ResponseEntity<String> updatePlan(@PathVariable Long id,
+    public ResponseEntity<String> updatePlan(@PathVariable("id") Long id,
         @RequestBody TravelPlanRequestDto planDto) {
         try {
             travelPlanService.updatePlan(id, planDto);

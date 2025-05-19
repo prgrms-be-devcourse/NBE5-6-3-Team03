@@ -3,6 +3,7 @@ package grepp.NBE5_6_2_Team03.domain.user.service;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.UserMyPageResponse;
+import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.exception.InvalidPasswordException;
 import grepp.NBE5_6_2_Team03.domain.user.file.FileStore;
@@ -27,6 +28,7 @@ import static grepp.NBE5_6_2_Team03.global.exception.Reason.*;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final TravelPlanRepository travelPlanRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final FileStore fileStore;
     private final SecurityContextUpdater securityContextUpdater;
@@ -67,6 +69,7 @@ public class UserService {
 
     @Transactional
     public void deleteUserBy(Long userId) {
+        travelPlanRepository.deleteByUserId(userId);
         userRepository.deleteById(userId);
     }
 
@@ -91,16 +94,16 @@ public class UserService {
         );
     }
 
+    public boolean isDuplicatedEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
     private boolean isDuplicateUserInfo(String email, String name){
         return isDuplicatedEmail(email) || isDuplicatedName(name);
     }
 
     private boolean isDuplicatedName(String name) {
         return userRepository.findByName(name).isPresent();
-    }
-
-    private boolean isDuplicatedEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
     }
 
     private boolean isNotMatchPassword(String encodedPassword, String rawPassword) {

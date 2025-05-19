@@ -20,10 +20,10 @@ public class MapController {
 
     @GetMapping("/map")
     public String getMapPage(Model model,
-        @RequestParam(required = false) String countryRequest,
-        @RequestParam(required = false) String cityRequest,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "20") int size) {
+        @RequestParam(name = "countryRequest", required = false) String countryRequest,
+        @RequestParam(name = "cityRequest", required = false) String cityRequest,
+        @RequestParam(name = "page", defaultValue = "0") int page,
+        @RequestParam(name = "size", defaultValue = "20") int size) {
 
         int minPageLimit = Math.max(0, page);
         Pageable pageable = PageRequest.of(minPageLimit, size);

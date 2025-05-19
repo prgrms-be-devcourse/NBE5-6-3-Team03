@@ -17,8 +17,7 @@ public class ExchangeController {
     private final ExchangeService exchangeService;
 
     @GetMapping("/latest")
-    public ExchangeResponse getLatestRate(@RequestParam String curUnit){
+    public ExchangeResponse getLatestRate(@RequestParam("curUnit") String curUnit){
         return exchangeService.getLatest(curUnit);
     }
-
 }

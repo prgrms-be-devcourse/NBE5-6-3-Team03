@@ -38,9 +38,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (auth) -> auth
-                                .requestMatchers("/", "/users/sign-up").permitAll()
+                                .requestMatchers("/", "/users/**", "/users/email/**").permitAll()
                                 .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
-                                .requestMatchers("/api/**").permitAll()
+                                .requestMatchers("/api/**","mail/send").permitAll()
                                 .requestMatchers("/plan/**").permitAll()
                                 .requestMatchers("/map/**", "/admin/**").permitAll()
                                 .anyRequest().authenticated()

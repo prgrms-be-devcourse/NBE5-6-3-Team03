@@ -12,8 +12,8 @@ import lombok.Setter;
 public class ExpenseRequest {
 
     @NotBlank
-    private Integer expectPrice;
-    private Integer payedPrice;
+    private int expectPrice;
+    private int payedPrice;
 
     public ExpenseRequest() {
     }
@@ -26,7 +26,7 @@ public class ExpenseRequest {
             .expectPrice(this.expectPrice)
             .payedPrice(this.payedPrice)
             .currency(currencyCode)
-            .isCompleted(this.payedPrice != null)
+            .isCompleted(this.payedPrice != 0)
             .expenseDate(schedule.getTravelScheduleDate())
             .build();
     }

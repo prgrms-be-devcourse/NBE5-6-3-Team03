@@ -12,6 +12,7 @@ public class UserInfoResponse {
     private String email;
     private String name;
     private String phoneNumber;
+    private Boolean locked;
     private Role role;
 
 }
