@@ -25,7 +25,7 @@ public class TravelScheduleController {
     private final TravelScheduleService travelScheduleService;
 
     @GetMapping
-    public String list(@PathVariable Long travelPlanId, Model model) {
+    public String list(@PathVariable("travelPlanId") Long travelPlanId, Model model) {
         Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
         model.addAttribute("groupedSchedules", groupedSchedules);
         model.addAttribute("travelPlanId", travelPlanId);
@@ -33,14 +33,14 @@ public class TravelScheduleController {
     }
 
     @GetMapping("/add")
-    public String addForm(@PathVariable Long travelPlanId, Model model) {
+    public String addForm(@PathVariable("travelPlanId") Long travelPlanId, Model model) {
         model.addAttribute("travelPlanId", travelPlanId);
         model.addAttribute("request", new TravelScheduleRequest());
         return "schedule/schedule-form";
     }
 
     @PostMapping("/add")
-    public String addSchedule(@PathVariable Long travelPlanId,
+    public String addSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                               @ModelAttribute TravelScheduleRequest request,
                               Model model) {
         model.addAttribute("travelPlanId", travelPlanId);
@@ -57,8 +57,8 @@ public class TravelScheduleController {
     }
 
     @GetMapping("/{travelScheduleId}/edit")
-    public String editForm(@PathVariable Long travelPlanId,
-                           @PathVariable Long travelScheduleId,
+    public String editForm(@PathVariable("travelPlanId") Long travelPlanId,
+                           @PathVariable("travelScheduleId") Long travelScheduleId,
                            Model model) {
         TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
 
@@ -69,8 +69,8 @@ public class TravelScheduleController {
     }
 
     @PostMapping("/{travelScheduleId}/edit")
-    public String editSchedule(@PathVariable Long travelPlanId,
-                               @PathVariable Long travelScheduleId,
+    public String editSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+                               @PathVariable("travelScheduleId") Long travelScheduleId,
                                @ModelAttribute TravelScheduleRequest request,
                                Model model) {
         model.addAttribute("travelPlanId", travelPlanId);
@@ -87,15 +87,15 @@ public class TravelScheduleController {
     }
 
     @PostMapping("/{travelScheduleId}/delete")
-    public String deleteSchedule(@PathVariable Long travelPlanId,
-                                 @PathVariable Long travelScheduleId) {
+    public String deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+                                 @PathVariable("travelScheduleId") Long travelScheduleId) {
         travelScheduleService.deleteSchedule(travelScheduleId);
         return "redirect:/plan/" + travelPlanId + "/schedule";
     }
 
     @PostMapping("/{travelScheduleId}/status")
-    public String scheduleStatus(@PathVariable Long travelPlanId,
-                                 @PathVariable Long travelScheduleId) {
+    public String scheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
+                                 @PathVariable("travelScheduleId") Long travelScheduleId) {
         travelScheduleService.scheduleStatus(travelScheduleId);
         return "redirect:/plan/" + travelPlanId + "/schedule";
     }
