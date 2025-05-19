@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.api.controller.mail;
 
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
-import grepp.NBE5_6_2_Team03.domain.mail.service.MailService;
+import grepp.NBE5_6_2_Team03.domain.mail.service.MimeMailService;
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanQueryService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import java.util.Map;
@@ -11,14 +11,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/mail")
 public class MailController {
 
-    private final MailService mailService;
+    private final MimeMailService mimeMailService;
     private final TravelPlanQueryService travelPlanQueryService;
 
     @PostMapping("/send")
@@ -27,7 +26,7 @@ public class MailController {
         TravelPlanAdjustResponse response = travelPlanQueryService.getAdjustmentInfo(planId);
         Map<String,Object> settlementForm = Map.of("response",response);
 
-        mailService.sendSettlementMail(
+        mimeMailService.sendSettlementMail(
             customUser.getUser().getEmail(),
             "정산 결과 안내",
             "settlement-summary",
