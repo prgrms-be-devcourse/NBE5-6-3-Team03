@@ -14,4 +14,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Modifying
     @Query("update User u set u.isLocked = true where u.id = :id")
     void lockUser(@Param("id") Long id);
+
+    @Query("select u.role from User u where u.id = :id")
+    String getRoleById(@Param("id") Long id);
 }

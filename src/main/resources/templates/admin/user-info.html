@@ -235,5 +235,9 @@
     form.querySelector('#editRole').value = role;
   });
 </script>
+<script th:inline="javascript">
+  var msg = [[${message}]];
+  if (msg) alert(msg);
+</script>
 </body>
 </html>

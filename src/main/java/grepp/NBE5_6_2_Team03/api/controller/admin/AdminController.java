@@ -5,6 +5,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatistic
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
+import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,8 +49,13 @@ public class AdminController {
         UserInfoUpdateRequest request,
         RedirectAttributes redirectAttributes) {
 
-        adminService.updateUserInfo(id, request);
-        redirectAttributes.addFlashAttribute("message", "UserInfo updated successfully.");
+        try {
+            adminService.updateUserInfo(id, request);
+            redirectAttributes.addFlashAttribute("message", "UserInfo updated successfully.");
+        } catch (NotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+
         return "redirect:/admin/user-info";
     }
 
@@ -58,8 +64,12 @@ public class AdminController {
         @PathVariable("id") Long id,
         RedirectAttributes redirectAttributes
     ) {
-        adminService.lockedById(id);
-        redirectAttributes.addFlashAttribute("message", "UserInfo deleted successfully.");
+        try {
+            adminService.lockedById(id);
+            redirectAttributes.addFlashAttribute("message", "UserInfo deleted successfully.");
+        } catch ( NotFoundException e ) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
         return "redirect:/admin/user-info";
     }
 
