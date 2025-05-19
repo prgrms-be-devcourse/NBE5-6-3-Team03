@@ -26,6 +26,7 @@ public class TravelScheduleService {
     private final TravelScheduleRepository travelScheduleRepository;
     private final TravelPlanRepository travelPlanRepository;
 
+    @Transactional
     public void addSchedule(Long travelPlanId, TravelScheduleRequest request) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
