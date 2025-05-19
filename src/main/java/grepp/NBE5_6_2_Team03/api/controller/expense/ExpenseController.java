@@ -3,7 +3,10 @@ package grepp.NBE5_6_2_Team03.api.controller.expense;
 import grepp.NBE5_6_2_Team03.api.controller.expense.dto.request.ExpenseRequest;
 import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.expense.service.ExpenseService;
+import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
+import grepp.NBE5_6_2_Team03.domain.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +21,12 @@ public class ExpenseController {
     @GetMapping
     public String list(@PathVariable Long travelPlanId,
                        @PathVariable Long travelScheduleId,
-                       Model model) {
+                       Model model, @AuthenticationPrincipal CustomUserDetails customUser) {
         Expense expense = expenseService.findByScheduleId(travelScheduleId).orElse(null);
         model.addAttribute("expense", expense);
         model.addAttribute("travelPlanId", travelPlanId);
         model.addAttribute("travelScheduleId", travelScheduleId);
+        model.addAttribute("customUser", customUser);
         return "expense/expense-list";
     }
 

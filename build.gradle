@@ -60,6 +60,9 @@ dependencies {
 
 	// h2
 	testImplementation 'com.h2database:h2'
+	// mail
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 clean {
