@@ -41,12 +41,12 @@ public class TravelPlanController {
 
     @GetMapping("/api/{id}")
     @ResponseBody
-    public TravelPlanRequestDto getPlan(@PathVariable Long id) {
+    public TravelPlanRequestDto getPlan(@PathVariable("id") Long id) {
         return travelPlanService.getPlan(id);
     }
 
     @PatchMapping("/update/{id}")
-    public ResponseEntity<String> updatePlan(@PathVariable Long id,
+    public ResponseEntity<String> updatePlan(@PathVariable("id") Long id,
         @RequestBody TravelPlanRequestDto planDto) {
         try {
             travelPlanService.updatePlan(id, planDto);
@@ -57,7 +57,7 @@ public class TravelPlanController {
     }
 
     @PostMapping("/delete/{id}")
-    public String deletePlan(@PathVariable Long id) {
+    public String deletePlan(@PathVariable("id") Long id) {
         travelPlanService.deletePlan(id);
         return "redirect:/plan";
     }
