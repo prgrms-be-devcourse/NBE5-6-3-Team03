@@ -143,6 +143,9 @@
   </div>
 </div>
 
+<script th:if="${errorMessage != null}" th:inline="javascript">
+  alert([[${errorMessage}]]);
+</script>
 
 <!-- ✅ 모달 등록 처리 JS -->
 <script>
@@ -163,17 +166,18 @@
       },
       body: JSON.stringify(data)
     })
-    .then(res => {
+    .then(async res => {
+      const message = await res.text(); // 응답 메시지 읽기
       if (!res.ok) {
-        throw new Error('등록 실패');
+        // 실패한 경우
+        alert(`${message}`); // 서버에서 보낸 예외 메시지 출력
+      } else {
+        // 성공한 경우
+        alert('등록 완료!');
+        form.reset();
+        bootstrap.Modal.getInstance(document.getElementById('planModal')).hide();
+        location.reload(); // 리스트 갱신 등
       }
-      return res.text();
-    })
-    .then(() => {
-      alert('등록 완료!');
-      form.reset();
-      bootstrap.Modal.getInstance(document.getElementById('planModal')).hide();
-      location.reload(); // 또는 리스트만 갱신
     })
     .catch(err => alert(err));
   });
@@ -227,22 +231,26 @@
       data.travelEndDate = document.getElementById(
           'editEnd').value;
     }
+    const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
     fetch(`/plan/update/${id}`, {
       method: 'PATCH',
-      headers: {'Content-Type': 'application/json'},
+      headers: {'Content-Type': 'application/json',
+        [csrfHeader]: csrfToken},
       body: JSON.stringify(data)
     })
-    .then(res => {
+    .then(async res => {
+      const message = await res.text(); // 응답 메시지 읽기
       if (!res.ok) {
-        throw new Error("수정 실패");
+        // 실패한 경우
+        alert(`${message}`); // 서버에서 보낸 예외 메시지 출력
       }
-      return res.text();
-    })
-    .then(() => {
-      alert("수정 완료!");
-      bootstrap.Modal.getInstance(document.getElementById('editPlanModal')).hide();
-      location.reload();
+      else {
+        alert("수정 완료!");
+        bootstrap.Modal.getInstance(document.getElementById('editPlanModal')).hide();
+        location.reload();
+      }
     })
     .catch(err => alert(err));
   });

@@ -34,9 +34,15 @@ public class TravelPlanController {
     }
 
     @PostMapping("/create")
-    public String createPlan(@AuthenticationPrincipal CustomUserDetails customUser,@RequestBody TravelPlanRequestDto planDto) {
-        travelPlanService.createPlan(customUser.getId(),planDto);
-        return "redirect:/plan";
+    @ResponseBody
+    public ResponseEntity<String> createPlan(@AuthenticationPrincipal CustomUserDetails customUser,
+        @RequestBody TravelPlanRequestDto planDto) {
+        try {
+            travelPlanService.createPlan(customUser.getId(), planDto);
+            return ResponseEntity.ok("success");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/api/{id}")
@@ -46,13 +52,14 @@ public class TravelPlanController {
     }
 
     @PatchMapping("/update/{id}")
+    @ResponseBody
     public ResponseEntity<String> updatePlan(@PathVariable Long id,
         @RequestBody TravelPlanRequestDto planDto) {
         try {
             travelPlanService.updatePlan(id, planDto);
             return ResponseEntity.ok("수정 완료");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
