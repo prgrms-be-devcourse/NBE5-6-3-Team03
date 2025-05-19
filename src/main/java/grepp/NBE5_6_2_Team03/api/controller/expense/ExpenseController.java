@@ -45,8 +45,18 @@ public class ExpenseController {
     @PostMapping("/add")
     public String addExpense(@PathVariable("travelPlanId") Long travelPlanId,
                              @PathVariable("travelScheduleId") Long travelScheduleId,
-                             @ModelAttribute ExpenseRequest request) {
-        expenseService.addExpense(travelScheduleId, request);
+                             @ModelAttribute ExpenseRequest request,
+                             Model model) {
+        try {
+            expenseService.addExpense(travelScheduleId, request);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("request", request);
+            model.addAttribute("travelPlanId", travelPlanId);
+            model.addAttribute("travelScheduleId", travelScheduleId);
+            return "expense/expense-form";
+        }
+
         return "redirect:/plan/" + travelPlanId + "/schedule/" + travelScheduleId + "/expense";
     }
 
@@ -68,10 +78,20 @@ public class ExpenseController {
 
     @PostMapping("/{expenseId}/edit")
     public String editExpense(@PathVariable("travelPlanId") Long travelPlanId,
-                               @PathVariable("travelScheduleId") Long travelScheduleId,
-                               @PathVariable("expenseId") Long expenseId,
-                               @ModelAttribute ExpenseRequest request) {
-        expenseService.editExpense(expenseId, request);
+                              @PathVariable("travelScheduleId") Long travelScheduleId,
+                              @PathVariable("expenseId") Long expenseId,
+                              @ModelAttribute ExpenseRequest request,
+                              Model model) {
+        try {
+            expenseService.editExpense(travelScheduleId, request);
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("request", request);
+            model.addAttribute("travelPlanId", travelPlanId);
+            model.addAttribute("travelScheduleId", travelScheduleId);
+            model.addAttribute("expenseId", expenseId);
+            return "expense/expense-form";
+        }
         return "redirect:/plan/" + travelPlanId + "/schedule/" + travelScheduleId + "/expense";
     }
 
