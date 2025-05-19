@@ -25,7 +25,7 @@ public class MailService {
 
             Context context = new Context();
             context.setVariables(templateModel);
-            String html = templateEngine.process(templateName, context);
+            String html = templateEngine.process("mail/settlement-summary", context);
 
             helper.setTo(to);
             helper.setSubject(subject);

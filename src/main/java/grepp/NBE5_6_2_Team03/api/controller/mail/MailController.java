@@ -3,16 +3,17 @@ package grepp.NBE5_6_2_Team03.api.controller.mail;
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
 import grepp.NBE5_6_2_Team03.domain.mail.service.MailService;
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanQueryService;
-import grepp.NBE5_6_2_Team03.domain.user.User;
+import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-@RestController
+@Controller
 @RequiredArgsConstructor
 @RequestMapping("/mail")
 public class MailController {
@@ -21,17 +22,17 @@ public class MailController {
     private final TravelPlanQueryService travelPlanQueryService;
 
     @PostMapping("/send")
-    public String sendMail(@RequestParam Long planId, @AuthenticationPrincipal User user) {
+    public String sendSettlementMail(@RequestParam Long planId, @AuthenticationPrincipal CustomUserDetails customUser) {
 
         TravelPlanAdjustResponse response = travelPlanQueryService.getAdjustmentInfo(planId);
-        Map<String,Object> model = Map.of("response",response);
+        Map<String,Object> settlementForm = Map.of("response",response);
 
         mailService.sendSettlementMail(
-            user.getEmail(),
+            customUser.getUser().getEmail(),
             "정산 결과 안내",
             "settlement-summary",
-            model
+            settlementForm
         );
-        return "send success";
+        return "redirect:/users/home";
     }
 }
