@@ -2,6 +2,7 @@ package grepp.NBE5_6_2_Team03.domain.travelplan.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelScheduleExpenseInfo;
+import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanQueryRepository;
@@ -17,9 +18,11 @@ import java.util.Objects;
 public class TravelPlanQueryService {
 
     private final TravelPlanQueryRepository planQueryRepository;
+    private final ExchangeService exchangeService;
 
-    public TravelPlanQueryService(TravelPlanQueryRepository planQueryRepository) {
+    public TravelPlanQueryService(TravelPlanQueryRepository planQueryRepository, ExchangeService exchangeService) {
         this.planQueryRepository = planQueryRepository;
+        this.exchangeService = exchangeService;
     }
 
     public TravelPlanAdjustResponse getAdjustmentInfo(Long travelPlanId){
@@ -30,8 +33,13 @@ public class TravelPlanQueryService {
         int remainMoney = getRemainMoney(travelPlan.getPublicMoney(), expenses);
         int personalPrice = getPersonalPrice(remainMoney, travelPlan.getCount());
 
+        String curUnit = travelPlan.getCountryStatus().getCode();
+
+        int latestExchangeRate = exchangeService.getLatestExchangeRateInt(curUnit);
+        int exchangePersonalPrice = exchangeService.exchangeToWon(curUnit, personalPrice);
+
         List<TravelScheduleExpenseInfo> expenseInfos = TravelScheduleExpenseInfo.convertBy(travelSchedules);
-        return TravelPlanAdjustResponse.of(expenseInfos, travelPlan, getTotalExpenses(expenses), personalPrice, remainMoney);
+        return TravelPlanAdjustResponse.of(expenseInfos, travelPlan, getTotalExpenses(expenses), remainMoney, personalPrice, latestExchangeRate, exchangePersonalPrice, curUnit);
     }
 
     private List<Expense> findNotNullExpense(List<TravelSchedule> travelSchedules) {
@@ -47,7 +55,7 @@ public class TravelPlanQueryService {
 
     private int getTotalExpenses(List<Expense> expenses) {
         return expenses.stream()
-                .mapToInt(Expense::getPayedPrice)
+            .mapToInt(e -> e.getPayedPrice() != null ? e.getPayedPrice() : 0)
                 .sum();
     }
 

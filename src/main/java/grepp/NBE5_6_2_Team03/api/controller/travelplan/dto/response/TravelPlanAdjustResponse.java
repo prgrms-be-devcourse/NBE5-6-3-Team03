@@ -13,24 +13,30 @@ public class TravelPlanAdjustResponse {
     private String country;
     private int publicMoney;
     private int count;
-    private int totalPrice;
+    private int totalExpense;
     private int remainMoney;
     private int personalPrice;
+    private int lastestExchangeRate;
+    private int exchangePersonalPrice;
+    private String curUnit;
 
     @Builder
-    private TravelPlanAdjustResponse(List<TravelScheduleExpenseInfo> expenses, String country, int publicMoney,
-                                    int count, int totalPrice, int personalPrice, int remainMoney) {
+    private TravelPlanAdjustResponse(List<TravelScheduleExpenseInfo> expenses, String country, int publicMoney, int count,
+                                     int totalPrice, int remainMoney, int personalPrice, int lastestExchangeRate, int exchangePersonalPrice, String curUnit) {
         this.expenses = expenses;
         this.country = country;
         this.publicMoney = publicMoney;
         this.count = count;
-        this.totalPrice = totalPrice;
-        this.personalPrice = personalPrice;
+        this.totalExpense = totalPrice;
         this.remainMoney = remainMoney;
+        this.personalPrice = personalPrice;
+        this.lastestExchangeRate = lastestExchangeRate;
+        this.exchangePersonalPrice = exchangePersonalPrice;
+        this.curUnit = curUnit;
     }
 
-    public static TravelPlanAdjustResponse of(List<TravelScheduleExpenseInfo> expenseInfos, TravelPlan travelPlan,
-                                              int totalPrice, int remainMoney, int personalPrice) {
+    public static TravelPlanAdjustResponse of(List<TravelScheduleExpenseInfo> expenseInfos, TravelPlan travelPlan, int totalPrice,
+                                              int remainMoney, int personalPrice, int lastestExchangeRate, int exchangePersonalPrice, String curUnit) {
         return TravelPlanAdjustResponse.builder()
                 .expenses(expenseInfos)
                 .country(travelPlan.getCountry())
@@ -39,6 +45,9 @@ public class TravelPlanAdjustResponse {
                 .totalPrice(totalPrice)
                 .personalPrice(personalPrice)
                 .remainMoney(remainMoney)
+                .lastestExchangeRate(lastestExchangeRate)
+                .exchangePersonalPrice(exchangePersonalPrice)
+                .curUnit(curUnit)
                 .build();
     }
 }

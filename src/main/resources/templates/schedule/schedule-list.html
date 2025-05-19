@@ -79,7 +79,7 @@
             background: #4a6fa5;
             color: white;
             text-decoration: none;
-            border-radius: 4px;
+            border-radius: 6px;
             text-align: center;
             font-size: 0.95rem;
             min-height: 38px;
@@ -106,7 +106,7 @@
         .btn-expense {
             padding: 6px 10px;
             font-size: 0.85rem;
-            border-radius: 4px;
+            border-radius: 6px;
             border: 1px solid #17a2b8;
             background: transparent;
             text-align: center;
@@ -118,7 +118,7 @@
         .status {
             display: inline-block;
             padding: 2px 6px;
-            border-radius: 4px;
+            border-radius: 6px;
             color: white;
             font-size: 0.75rem;
         }
@@ -134,7 +134,7 @@
         .btn-group button {
             padding: 6px 10px;
             font-size: 0.85rem;
-            border-radius: 4px;
+            border-radius: 6px;
             border: 1px solid;
             background: transparent;
             text-align: center;
@@ -172,11 +172,15 @@
     </div>
 </header>
 
-<h2>여행 일정 목록</h2>
+<h2 style="display: flex; justify-content: space-between; align-items: center; margin: 40px 30px 20px;">
+    여행 일정 목록
+    <a href="/plan" style="font-size: 0.95rem; background-color: #6c757d; color: white; padding: 10px 20px; border-radius: 6px; text-decoration: none; min-height: 38px; line-height: 1.4;">
+        여행 계획 목록
+    </a>
+</h2>
 
 <div class="btn-container">
     <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/add'}" class="add-btn">일정 추가</a>
-    <a th:href="@{'/plan/' + ${travelPlanId} + '/schedule/expense'}" class="add-btn">정산하기</a>
 </div>
 
 <ul class="nav nav-tabs mb-3" id="scheduleTab" role="tablist" style="margin: 0 30px;">
