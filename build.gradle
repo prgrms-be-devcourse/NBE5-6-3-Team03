@@ -34,6 +34,8 @@ dependencies {
 	implementation 'com.google.api-client:google-api-client:1.33.2'
 	implementation 'com.google.maps:google-maps-services:0.18.1'
 	implementation 'mysql:mysql-connector-java:8.0.33'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
