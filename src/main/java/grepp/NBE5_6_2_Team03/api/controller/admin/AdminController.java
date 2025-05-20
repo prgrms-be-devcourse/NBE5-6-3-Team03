@@ -5,7 +5,10 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatistic
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
+import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -48,8 +52,13 @@ public class AdminController {
         UserInfoUpdateRequest request,
         RedirectAttributes redirectAttributes) {
 
-        adminService.updateUserInfo(id, request);
-        redirectAttributes.addFlashAttribute("message", "UserInfo updated successfully.");
+        try {
+            adminService.updateUserInfo(id, request);
+            redirectAttributes.addFlashAttribute("message", "유저 정보가 성공적으로 수정되었습니다.");
+        } catch (NotFoundException e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
+
         return "redirect:/admin/user-info";
     }
 
@@ -58,8 +67,12 @@ public class AdminController {
         @PathVariable("id") Long id,
         RedirectAttributes redirectAttributes
     ) {
-        adminService.lockedById(id);
-        redirectAttributes.addFlashAttribute("message", "UserInfo deleted successfully.");
+        try {
+            adminService.lockedById(id);
+            redirectAttributes.addFlashAttribute("message", "유저를 탈퇴처리 하였습니다.");
+        } catch ( NotFoundException e ) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
+        }
         return "redirect:/admin/user-info";
     }
 
@@ -70,6 +83,20 @@ public class AdminController {
         model.addAttribute("countriesStatisticResponses", countriesStatisticResponses);
         model.addAttribute("monthlyStatisticResponses", monthlyStatisticResponses);
         return "admin/statistic";
+    }
+
+    @ResponseBody
+    @GetMapping("/valid-email")
+    public Map<String, Boolean> validateEmail(@RequestParam("email") String email) {
+        boolean isDuplicatedEmail = adminService.isDuplicatedEmail(email);
+        return Collections.singletonMap("email", isDuplicatedEmail);
+    }
+
+    @ResponseBody
+    @GetMapping("/valid-name")
+    public Map<String, Boolean> validateName(@RequestParam("name") String name) {
+        boolean isDuplicatedName = adminService.isDuplicatedUsername(name);
+        return Collections.singletonMap("name", isDuplicatedName);
     }
 
 }
