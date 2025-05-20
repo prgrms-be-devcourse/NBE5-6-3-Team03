@@ -278,7 +278,7 @@
          role="tabpanel">
 
         <div th:each="statusEntry : ${entry.value}" class="mb-5">
-            <h5 th:if="${statusEntry.key.name() == 'PLANNED'}" class="text-warning">📌 계획</h5>
+            <h5 th:if="${statusEntry.key.name() == 'PLANNED'}" class="text-warning"></h5>
             <h5 th:if="${statusEntry.key.name() == 'COMPLETED'}" class="text-success">✅ 완료</h5>
 
             <div class="schedule-container">
@@ -331,7 +331,9 @@
                         <form th:action="@{'/plan/' + ${travelPlanId} + '/schedule/' + ${schedule.travelScheduleId} + '/status'}"
                               method="post">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-                            <button type="submit" class="btn-status">상태변경</button>
+                            <button type="submit" class="btn-status"
+                                    th:text="${schedule.scheduleStatus.name() == 'COMPLETED'} ? '진행중' : '완료'">
+                            </button>
                         </form>
                     </div>
                 </div>
