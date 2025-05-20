@@ -28,10 +28,7 @@ public class ExpenseService {
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
         TravelPlan plan = schedule.getTravelPlan();
-
-        if (getTotalPayedPrice(plan) + request.getPayedPrice() > plan.getPublicMoney()) {
-            throw new IllegalArgumentException("공금이 부족합니다.");
-        }
+        validatePayedPrice(plan, request.getPayedPrice());
 
         Expense expense = request.toEntity(schedule);
         expenseRepository.save(expense);
@@ -43,11 +40,7 @@ public class ExpenseService {
             .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
 
         TravelPlan plan = expense.getTravelSchedule().getTravelPlan();
-
-        int totalSum = getTotalPayedPrice(plan) - expense.getPayedPrice() + request.getPayedPrice();
-        if (totalSum > plan.getPublicMoney()) {
-            throw new IllegalArgumentException("공금이 부족합니다.");
-        }
+        validatePayedPriceForEdit(plan, expense.getPayedPrice(), request.getPayedPrice());
 
         expense.edit(
             request.getExpectPrice(),
@@ -86,5 +79,18 @@ public class ExpenseService {
             .filter(Objects::nonNull)
             .mapToInt(Expense::getPayedPrice)
             .sum();
+    }
+
+    private void validatePayedPrice(TravelPlan plan, int newPayedPrice) {
+        if (getTotalPayedPrice(plan) + newPayedPrice > plan.getPublicMoney()) {
+            throw new IllegalArgumentException("공금이 부족합니다.");
+        }
+    }
+
+    private void validatePayedPriceForEdit(TravelPlan plan, int oldPayedPrice, int newPayedPrice) {
+        int totalSum = getTotalPayedPrice(plan) - oldPayedPrice + newPayedPrice;
+        if (totalSum > plan.getPublicMoney()) {
+            throw new IllegalArgumentException("공금이 부족합니다.");
+        }
     }
 }
