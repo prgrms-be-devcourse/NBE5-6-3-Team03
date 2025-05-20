@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,6 +47,20 @@ public class MapController {
         model.addAttribute("cities", cities);
 
         return "map/map";
+    }
+
+    @GetMapping("/home-redirect")
+    public String redirectBasedOnAuthStatus(Authentication authentication) {
+        if (isNotAnonymous(authentication)) {
+            return "redirect:/users/home";
+        } else {
+            return "redirect:main";
+        }
+    }
+
+    private boolean isNotAnonymous(Authentication authentication) {
+        return authentication != null && authentication.isAuthenticated()
+            && !(authentication instanceof AnonymousAuthenticationToken);
     }
 
     private boolean hasCityRequest(String countryRequest, String cityRequest) {

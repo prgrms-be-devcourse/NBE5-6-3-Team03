@@ -10,6 +10,10 @@
       padding: 0;
     }
 
+    html, body {
+      height: 100%;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f4f6f8;
@@ -80,6 +84,7 @@
       max-width: 1100px;
       margin: 40px auto;
       padding: 20px;
+      padding-bottom: 80px; /* footer와 겹치지 않도록 하단 여백 추가 */
     }
 
     .header {
@@ -134,10 +139,17 @@
     }
 
     .footer {
-      margin-top: 40px;
+      background-color: #ffffff;
       text-align: center;
+      padding: 15px;
+      font-size: 0.9rem;
       color: #777;
-      font-size: 0.9em;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
     }
   </style>
 </head>
@@ -153,7 +165,6 @@
 </header>
 
 <div class="dashboard-container">
-
   <section class="dashboard-grid">
     <div class="card">
       <h2>회원 관리</h2>
@@ -179,10 +190,10 @@
       </form>
     </div>
   </section>
-
-  <footer class="footer">
-    <p>&copy; 2025 관리자 페이지</p>
-  </footer>
 </div>
+
+<footer class="footer">
+  &copy; 2025 여행 일정 관리 서비스
+</footer>
 </body>
 </html>
