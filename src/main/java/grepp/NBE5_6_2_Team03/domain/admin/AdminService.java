@@ -37,7 +37,6 @@ public class AdminService {
             userInfo.getName(),
             userInfo.getPhoneNumber(),
             userInfo.isLocked(),
-            userInfo.isActivated(),
             userInfo.getRole()
         );
     }
@@ -66,11 +65,12 @@ public class AdminService {
     }
 
     @Transactional
-    public void deactivateById(Long id) {
-        if(userRepository.getRoleById(id).equals("ROLE_ADMIN")) {
+    public void deleteById(Long id) {
+        if(userRepository.isAdmin(id)) {
             throw new NotFoundException(Message.ADMIN_NOT_DELETE);
         }
-        userRepository.deactivateById(id);
+        travelPlanRepository.deleteByUserId(id);
+        userRepository.deleteById(id);
     }
 
     public List<MonthlyStatisticResponse> getMonthStatistics() {

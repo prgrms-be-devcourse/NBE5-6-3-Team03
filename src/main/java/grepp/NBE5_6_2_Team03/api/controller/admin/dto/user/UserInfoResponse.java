@@ -13,7 +13,6 @@ public class UserInfoResponse {
     private String name;
     private String phoneNumber;
     private Boolean locked;
-    private Boolean activated;
     private Role role;
 
 }
