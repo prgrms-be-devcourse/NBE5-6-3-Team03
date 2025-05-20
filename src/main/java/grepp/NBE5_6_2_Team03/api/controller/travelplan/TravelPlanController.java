@@ -25,18 +25,16 @@ public class TravelPlanController {
 
     private final TravelPlanService travelPlanService;
 
-    @GetMapping
-    public String listPlans(@AuthenticationPrincipal CustomUserDetails customUser, Model model) {
-        List<TravelPlan> plans = travelPlanService.getPlansByUser(customUser.getId());
-        model.addAttribute("plans", plans);
-        model.addAttribute("user", customUser);
-        return "plan/plan";
-    }
-
     @PostMapping("/create")
-    public String createPlan(@AuthenticationPrincipal CustomUserDetails customUser,@RequestBody TravelPlanRequestDto planDto) {
-        travelPlanService.createPlan(customUser.getId(),planDto);
-        return "redirect:/plan";
+    @ResponseBody
+    public ResponseEntity<String> createPlan(@AuthenticationPrincipal CustomUserDetails customUser,
+        @RequestBody TravelPlanRequestDto planDto) {
+        try {
+            travelPlanService.createPlan(customUser.getId(), planDto);
+            return ResponseEntity.ok("success");
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @GetMapping("/api/{id}")
@@ -46,20 +44,21 @@ public class TravelPlanController {
     }
 
     @PatchMapping("/update/{id}")
+    @ResponseBody
     public ResponseEntity<String> updatePlan(@PathVariable("id") Long id,
         @RequestBody TravelPlanRequestDto planDto) {
         try {
             travelPlanService.updatePlan(id, planDto);
             return ResponseEntity.ok("수정 완료");
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/delete/{id}")
-    public String deletePlan(@PathVariable("id") Long id) {
+    public String deletePlan(@PathVariable Long id) {
         travelPlanService.deletePlan(id);
-        return "redirect:/plan";
+        return "redirect:/users/home";
     }
 
 }
