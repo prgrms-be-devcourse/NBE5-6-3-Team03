@@ -38,6 +38,15 @@
         z-index: 1000;
       }
 
+      footer {
+        background-color: #ffffff;
+        text-align: center;
+        padding: 15px;
+        font-size: 0.9rem;
+        color: #777;
+        box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+      }
+
       /* 헤더 내부 내용 고정 */
       .header-inner {
         display: flex;
@@ -264,10 +273,10 @@
 <header>
     <div class="header-inner">
         <div class="site-title">
-            <a href="/map">여행지 지도 보기</a>
+            <a href="/home-redirect">여행 계획 일정</a>
         </div>
         <div class="nav-links">
-            <a href="/users/home">Home</a>
+            <a href="/home-redirect">Home</a>
         </div>
     </div>
 </header>
@@ -349,8 +358,6 @@
         </div>
     </div>
 
-<!-- TODO : 페이지를 넘겨도 카드 미니 아이템이 추가되도록 하기-->
-<!-- fixme : 현재 위 카드에서 눌러도 카드 미니 아이템은 추가되지않음-->
     <div id="active-cards-container">
         <!-- JS로 활성화된 카드 미니 아이템을 여기 추가 -->
     </div>

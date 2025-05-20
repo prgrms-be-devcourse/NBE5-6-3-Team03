@@ -10,6 +10,10 @@
       padding: 0;
     }
 
+    html, body {
+      height: 100%;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #f4f6f8;
@@ -19,52 +23,60 @@
 
     header {
       background-color: #ffffff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      width: 100%;
-    }
-
-    .header-inner {
+      padding: 20px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 24px;
-      width: 100%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    .site-title a {
-      font-size: 1.2rem;
-      font-weight: 600;
+    .site-title {
+      font-size: 1.4rem;
+      font-weight: bold;
       color: #4a6fa5;
-      text-decoration: none;
-      white-space: nowrap;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
       gap: 12px;
-      white-space: nowrap;
     }
 
     .nav-links span {
-      font-size: 0.95rem;
-      font-weight: 500;
+      font-weight: bold;
       color: #4a6fa5;
+      font-size: 1rem;
     }
 
-    .nav-button {
-      padding: 6px 12px;
-      font-size: 0.85rem;
+    .nav-links a {
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
       background-color: #4a6fa5;
       color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      cursor: pointer;
-      display: inline-block;
-      line-height: 1.2;
+      font-size: 0.9rem;
+      transition: background-color 0.3s;
     }
 
-    .nav-button:hover {
+    .nav-links a:hover {
+      background-color: #3a5f8a;
+    }
+
+    .nav-links form {
+      display: inline;
+    }
+
+    .nav-links button {
+      background-color: #4a6fa5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .nav-links button:hover {
       background-color: #3a5f8a;
     }
 
@@ -72,6 +84,7 @@
       max-width: 1100px;
       margin: 40px auto;
       padding: 20px;
+      padding-bottom: 80px; /* footer와 겹치지 않도록 하단 여백 추가 */
     }
 
     .header {
@@ -126,29 +139,32 @@
     }
 
     .footer {
-      margin-top: 40px;
+      background-color: #ffffff;
       text-align: center;
+      padding: 15px;
+      font-size: 0.9rem;
       color: #777;
-      font-size: 0.9em;
+      box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
     }
   </style>
 </head>
 <body>
-<div class="header-inner">
+<header>
+  <div class="site-title">대시 보드</div>
   <div class="nav-links">
-    <span th:if="${userMyPageResponse != null}" th:text="|${userMyPageResponse.name}님|">테스터님</span>
-    <a href="#" class="nav-button"
-       onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
-    <form id="logoutForm" action="/users/logout" method="post" style="display: none;">
+    <form id="logoutForm" action="/users/logout" method="post" style="display: inline;">
       <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <button type="submit">로그아웃</button>
     </form>
   </div>
-</div>
-<div class="dashboard-container">
-  <header class="header">
-    <h1>관리자 대시보드</h1>
-  </header>
+</header>
 
+<div class="dashboard-container">
   <section class="dashboard-grid">
     <div class="card">
       <h2>회원 관리</h2>
@@ -174,10 +190,10 @@
       </form>
     </div>
   </section>
-
-  <footer class="footer">
-    <p>&copy; 2025 관리자 페이지</p>
-  </footer>
 </div>
+
+<footer class="footer">
+  &copy; 2025 여행 일정 관리 서비스
+</footer>
 </body>
 </html>

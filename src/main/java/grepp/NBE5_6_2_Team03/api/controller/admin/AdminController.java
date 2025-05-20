@@ -12,6 +12,8 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -68,7 +70,7 @@ public class AdminController {
         RedirectAttributes redirectAttributes
     ) {
         try {
-            adminService.lockedById(id);
+            adminService.deleteById(id);
             redirectAttributes.addFlashAttribute("message", "유저를 탈퇴처리 하였습니다.");
         } catch ( NotFoundException e ) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());
