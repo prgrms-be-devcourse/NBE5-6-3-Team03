@@ -7,4 +7,5 @@
 ---
 # System Architecture
 
-![Drawing 2025-05-20 10 52 53 excalidraw](https://github.com/user-attachments/assets/755fb477-1c1e-4eb7-a5ce-d88d5fc7f7d8)
+![image](https://github.com/user-attachments/assets/01c8caad-0270-4364-9dc4-84cfbebbb886)
+
