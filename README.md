@@ -8,3 +8,6 @@
 # 📝 System Architecture
 
 ![image](https://github.com/user-attachments/assets/5f90462d-6e6e-48ea-a825-2eb43b9043a3)
+
+# UI Flow Chart
+![image](https://github.com/user-attachments/assets/19d9bca7-b62f-459b-ad68-f4d330f24e14)
