@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>유저 정보 목록</title>
+  <link rel="stylesheet" href="/static/css/styles.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    header {
+      background-color: #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      width: 100%;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      width: 100%;
+    }
+
+    .site-title a {
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #4a6fa5;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+    }
+
+    .nav-links span {
+      font-size: 0.95rem;
+      font-weight: 500;
+      color: #4a6fa5;
+    }
+
+    .nav-button {
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      background-color: #4a6fa5;
+      color: white;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+      display: inline-block;
+      line-height: 1.2;
+    }
+
+    .nav-button:hover {
+      background-color: #3a5f8a;
+    }
+
+    .user-card {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+    }
+    .user-actions {
+      min-width: 150px;
+    }
+
+    .user-info {
+      flex-grow: 1;
+    }
+
+    .user-id {
+      font-size: 0.85rem;
+      color: #6c757d;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: white;
+      background-color: #dc3545; /* 붉은색 계열 */
+      border-radius: 8px;
+      vertical-align: middle;
+    }
+  </style>
+</head>
+<body class="bg-light">
+<header>
+  <div class="header-inner">
+    <div class="nav-links">
+      <span th:if="${userMyPageResponse != null}" th:text="|${userMyPageResponse.name}님|">테스터님</span>
+      <a href="/admin/dashboard" class="nav-button">대시보드</a>
+      <a href="#" class="nav-button"
+         onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
+      <form id="logoutForm" action="/users/logout" method="post" style="display: none;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      </form>
+    </div>
+  </div>
+</header>
+<div class="container py-5">
+  <h1 class="display-5 text-center text-primary mb-4">👤 등록된 유저 목록</h1>
+
+  <!-- 유저 목록 -->
+  <div class="row g-3" id="userList">
+    <div class="col-12" th:each="user : ${userPage.content}">
+      <div class="card shadow-sm border-0 user-card d-flex flex-row justify-content-between align-items-center p-3">
+        <!-- 유저 정보 -->
+        <div class="user-info">
+          <div class="d-flex align-items-center mb-1">
+            <h5 class="text-primary mb-0 me-2" th:text="${user.name}">유저 이름</h5>
+            <span th:if="${user.locked}" class="badge bg-secondary" style="font-size: 0.75rem; padding: 0.25em 0.5em;">탈퇴</span>
+          </div>
+          <div class="text-muted mb-1" th:text="${user.email}">이메일</div>
+          <div class="mb-1" th:text="${user.phoneNumber}">전화번호</div>
+          <div>현재 권한: <span th:text="${user.role}">ROLE</span></div>
+
+        </div>
+
+        <!-- 버튼 영역 -->
+        <div class="user-actions d-flex flex-column align-items-end gap-2">
+          <!-- 수정 버튼 -->
+          <button type="button"
+                  class="btn btn-outline-primary btn-sm"
+                  data-bs-toggle="modal"
+                  data-bs-target="#editUserModal"
+                  th:attr="data-user-id=${user.id},
+                       data-user-name=${user.name},
+                       data-user-email=${user.email},
+                       data-user-phone=${user.phoneNumber},
+                       data-user-role=${user.role}">
+            수정
+          </button>
+
+          <!-- 삭제 폼 -->
+          <form th:action="@{'/admin/user-info/' + ${user.id} + '/delete'}" method="post">
+            <input type="hidden" name="_method" value="delete" />
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <button type="submit" class="btn btn-outline-danger btn-sm"
+                    onclick="return confirm('정말 삭제하시겠습니까?')">삭제</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 페이지네이션 -->
+  <nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+      <li class="page-item" th:classappend="${userPage.first} ? 'disabled'">
+        <a class="page-link"
+           th:href="@{/admin/user-info(page=${userPage.number > 0 ? userPage.number - 1 : 0}, size=${userPage.size})}">
+          이전
+        </a>
+      </li>
+      <li class="page-item"
+          th:each="i : ${#numbers.sequence(0, userPage.totalPages - 1)}"
+          th:classappend="${i == userPage.number} ? 'active'">
+        <a class="page-link"
+           th:href="@{/admin/user-info(page=${i}, size=${userPage.size})}"
+           th:text="${i + 1}">1</a>
+      </li>
+      <li class="page-item" th:classappend="${userPage.last} ? 'disabled'">
+        <a class="page-link"
+           th:href="@{/admin/user-info(page=${userPage.number + 1 >= userPage.totalPages ? userPage.number : userPage.number + 1}, size=${userPage.size})}">
+          다음
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<!-- 수정 모달 -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="editUserForm" method="post">
+        <input type="hidden" name="_method" value="patch" />
+        <div class="modal-header">
+          <h5 class="modal-title" id="editUserModalLabel">유저 정보 수정</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          <div class="mb-3">
+            <label for="editName" class="form-label">이름</label>
+            <input type="text" class="form-control" id="editName" name="name" required>
+            <div class="d-flex align-items-center mt-2">
+              <button type="button" id="checkNameBtn" class="btn btn-sm btn-outline-secondary me-2">이름 중복 확인</button>
+              <span id="nameCheckResult" class="small"></span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="editEmail" class="form-label">이메일</label>
+            <input type="email" class="form-control" id="editEmail" name="email" required>
+            <!-- 이메일 중복 체크 -->
+            <div class="d-flex align-items-center mt-2">
+              <button type="button" id="checkEmailBtn" class="btn btn-sm btn-outline-secondary me-2">이메일 중복 확인</button>
+              <span id="emailCheckResult" class="small"></span>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="editPhone" class="form-label">전화번호</label>
+            <input type="text" class="form-control" id="editPhone" name="phoneNumber" required>
+          </div>
+          <div class="mb-3">
+            <label for="editRole" class="form-label">권한</label>
+            <input type="text" class="form-control" id="editRole" name="role" readonly>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+          <button type="submit" class="btn btn-primary">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- 부트스트랩 JS 및 모달 스크립트 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const editModal = document.getElementById('editUserModal');
+
+  editModal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget;
+    const id = button.getAttribute('data-user-id');
+    const name = button.getAttribute('data-user-name');
+    const email = button.getAttribute('data-user-email');
+    const phone = button.getAttribute('data-user-phone');
+    const role = button.getAttribute('data-user-role');
+
+    const form = document.getElementById('editUserForm');
+    form.action = `/admin/user-info/${id}/edit`;
+    form.querySelector('#editName').value = name;
+    form.querySelector('#editEmail').value = email;
+    form.querySelector('#editPhone').value = phone;
+    form.querySelector('#editRole').value = role;
+  });
+
+  // 이메일 중복 확인
+  document.getElementById('checkEmailBtn').addEventListener('click', async () => {
+    const email = document.getElementById('editEmail').value;
+    const resultElement = document.getElementById('emailCheckResult');
+
+    if (!email) {
+      alert('이메일을 입력하세요.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/admin/valid-email?email=${encodeURIComponent(email)}`);
+      const result = await response.json();
+
+      if (!result.email) {
+        resultElement.textContent = '사용 가능한 이메일입니다.';
+        resultElement.style.color = 'green';
+      } else {
+        resultElement.textContent = '이미 사용 중인 이메일입니다.';
+        resultElement.style.color = 'red';
+      }
+    } catch (error) {
+      console.error('이메일 확인 중 오류:', error);
+      alert('이메일 확인에 실패했습니다.');
+    }
+  });
+
+  // 이름 중복 확인
+  document.getElementById('checkNameBtn').addEventListener('click', async () => {
+    const name = document.getElementById('editName').value;
+    const resultElement = document.getElementById('nameCheckResult');
+
+    if (!name) {
+      alert('이름을 입력하세요.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`/admin/valid-name?name=${encodeURIComponent(name)}`);
+      const result = await response.json();
+
+      if (!result.name) {
+        resultElement.textContent = '사용 가능한 이름입니다.';
+        resultElement.style.color = 'green';
+      } else {
+        resultElement.textContent = '이미 사용 중인 이름입니다.';
+        resultElement.style.color = 'red';
+      }
+    } catch (error) {
+      console.error('이름 확인 중 오류:', error);
+      alert('이름 확인에 실패했습니다.');
+    }
+  });
+
+  // 이메일 형식 유효성 검사
+  document.getElementById('editEmail').addEventListener('input', () => {
+    const value = document.getElementById('editEmail').value;
+    const resultElement = document.getElementById('emailCheckResult');
+    const emailRegex = /^[A-Za-z0-9]+@[A-Za-z0-9]+\.[A-Za-z]{2,}$/;
+
+    if (emailRegex.test(value)) {
+      resultElement.textContent = '올바른 이메일 형식입니다.';
+      resultElement.style.color = 'green';
+    } else {
+      resultElement.textContent = '올바른 이메일 형식이 아닙니다.';
+      resultElement.style.color = 'red';
+    }
+  });
+
+  // 이름 형식 유효성 검사
+  document.getElementById('editName').addEventListener('input', () => {
+    const value = document.getElementById('editName').value;
+    const resultElement = document.getElementById('nameCheckResult');
+    const nameRegex = /^[A-Za-z가-힣0-9]{2,10}$/;
+
+    if (nameRegex.test(value)) {
+      resultElement.textContent = '올바른 이름 형식입니다.';
+      resultElement.style.color = 'green';
+    } else {
+      resultElement.textContent = '2~10자의 한글, 영문, 숫자만 허용됩니다.';
+      resultElement.style.color = 'red';
+    }
+  });
+
+  // 수정 모달 내 전화번호 유효성 검사
+  document.getElementById('editPhone').addEventListener('input', () => {
+    const value = document.getElementById('editPhone').value;
+    let resultElement = document.getElementById('editPhoneCheckResult');
+
+    // 결과 출력 span이 없으면 새로 만든다
+    if (!resultElement) {
+      resultElement = document.createElement('span');
+      resultElement.id = 'editPhoneCheckResult';
+      resultElement.classList.add('small', 'ms-2');
+      document.getElementById('editPhone').insertAdjacentElement('afterend', resultElement);
+    }
+
+    const phoneRegex = /^01[016789]-\d{3,4}-\d{4}$/;
+    if (phoneRegex.test(value)) {
+      resultElement.textContent = '올바른 휴대폰 번호 형식입니다.';
+      resultElement.style.color = 'green';
+    } else {
+      resultElement.textContent = '형식: 010-1234-5678';
+      resultElement.style.color = 'red';
+    }
+  });
+
+</script>
+<script th:inline="javascript">
+  var msg = [[${message}]];
+  if (msg) alert(msg);
+</script>
+</body>
+</html>
