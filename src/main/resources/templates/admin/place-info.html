@@ -10,82 +10,89 @@
 
     header {
       background-color: #ffffff;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-      width: 100%;
-    }
-
-    .header-inner {
+      padding: 20px 30px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 24px;
-      width: 100%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    .site-title a {
-      font-size: 1.2rem;
-      font-weight: 600;
+    .site-title {
+      font-size: 1.4rem;
+      font-weight: bold;
       color: #4a6fa5;
-      text-decoration: none;
-      white-space: nowrap;
     }
 
     .nav-links {
       display: flex;
       align-items: center;
       gap: 12px;
-      white-space: nowrap;
     }
 
     .nav-links span {
-      font-size: 0.95rem;
-      font-weight: 500;
+      font-weight: bold;
       color: #4a6fa5;
+      font-size: 1rem;
     }
 
-    .nav-button {
-      padding: 6px 12px;
-      font-size: 0.85rem;
+    .nav-links a {
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 6px;
       background-color: #4a6fa5;
       color: white;
-      border-radius: 6px;
-      text-decoration: none;
-      cursor: pointer;
-      display: inline-block;
-      line-height: 1.2;
+      font-size: 0.9rem;
+      transition: background-color 0.3s;
     }
 
-    .nav-button:hover {
+    .nav-links a:hover {
+      background-color: #3a5f8a;
+    }
+
+    .nav-links form {
+      display: inline;
+    }
+
+    .nav-links button {
+      background-color: #4a6fa5;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 14px;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .nav-links button:hover {
       background-color: #3a5f8a;
     }
 
     .place-card {
       display: flex;
-      flex-direction: row;
-      align-items: center;
+      flex-direction: column;
+      align-items: start;
       justify-content: space-between;
-      padding: 1.5rem;
+      padding: 0.75rem;
+      font-size: 0.85rem;
     }
     .place-info {
       flex-grow: 1;
     }
     .place-id {
+      align-self: end;
       font-size: 0.85rem;
     }
   </style>
 </head>
 <body class="bg-light">
 <header>
-  <div class="header-inner">
-    <div class="nav-links">
-      <span th:if="${userMyPageResponse != null}" th:text="|${userMyPageResponse.name}님|">테스터님</span>
-      <a href="/admin/dashboard" class="nav-button">대시보드</a>
-      <a href="#" class="nav-button"
-         onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
-      <form id="logoutForm" action="/users/logout" method="post" style="display: none;">
-        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-      </form>
-    </div>
+  <div class="site-title">등록된 장소 목록</div>
+  <div class="nav-links">
+    <a href="/admin/dashboard">대시보드</a>
+    <form id="logoutForm" action="/users/logout" method="post" style="display: inline;">
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+      <button type="submit">로그아웃</button>
+    </form>
   </div>
 </header>
 
@@ -109,7 +116,7 @@
 
   <!-- 장소 카드 리스트 -->
   <div class="row g-3" id="placeList">
-    <div class="col-12" th:each="place : ${places}"
+    <div class="col-12 col-sm-6 col-md-4 col-lg-3" th:each="place : ${places}"
          th:attr="data-country=${place.country}, data-city=${place.city}">
       <div class="card shadow-sm border-0 place-card">
         <div class="place-info">
@@ -122,7 +129,7 @@
           <div class="mb-1"><strong>경도:</strong> <span th:text="${place.longitude}">lng</span></div>
         </div>
         <div class="text-end text-muted place-id">
-          <div>ID: <span th:text="${place.placeId}">placeId</span></div>
+<!--          <div>ID: <span th:text="${place.placeId}">placeId</span></div>-->
           <div class="mt-2">
             <a href="#" class="btn btn-sm btn-outline-primary me-1 edit-btn"
                th:attr="data-id=${place.placeId},

@@ -12,7 +12,6 @@ import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -66,11 +65,12 @@ public class AdminService {
     }
 
     @Transactional
-    public void lockedById(Long id) {
-        if(userRepository.getRoleById(id).equals("ROLE_ADMIN")) {
+    public void deleteById(Long id) {
+        if(userRepository.isAdmin(id)) {
             throw new NotFoundException(Message.ADMIN_NOT_DELETE);
         }
-        userRepository.lockUser(id);
+        travelPlanRepository.deleteByUserId(id);
+        userRepository.deleteById(id);
     }
 
     public List<MonthlyStatisticResponse> getMonthStatistics() {

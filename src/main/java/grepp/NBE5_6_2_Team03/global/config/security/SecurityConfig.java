@@ -38,15 +38,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (auth) -> auth
-                                .requestMatchers("/", "/users/**", "/users/email/**").permitAll()
-                                .requestMatchers("/css/**", "/assets/**", "/js/**","/api/ai/**","/trip-chat").permitAll()
-                                .requestMatchers("/api/**","mail/send").permitAll()
-                                .requestMatchers("/plan/**").permitAll()
-                                .requestMatchers("/map/**", "/admin/**").permitAll()
-                                .anyRequest().authenticated()
+                            .requestMatchers("/css/**", "/assets/**", "/js/**").permitAll()
+                            .requestMatchers("/","/map/**", "/users/**", "/users/email/**").permitAll()
+                            .requestMatchers("/api/**","/mail/send","/users/home","/plan/**","/users/my-page").hasRole("USER")
+                            .requestMatchers("/admin/**").hasRole("ADMIN")
+                            .anyRequest().authenticated()
                 );
-
-//        http.csrf((auth) -> auth.disable());
 
         http
                 .formLogin(auth -> auth
