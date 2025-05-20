@@ -47,6 +47,7 @@ public class SecurityConfig {
 
         http
                 .formLogin(auth -> auth
+                        .loginPage("/")
                         .loginProcessingUrl("/users/login-process")
                         .usernameParameter("email")
                         .passwordParameter("password")
