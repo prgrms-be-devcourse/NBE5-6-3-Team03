@@ -46,6 +46,6 @@ public class Expense extends BaseEntity {
     public void edit(Integer expectPrice, Integer payedPrice) {
         this.expectPrice = expectPrice;
         this.payedPrice = payedPrice;
-        this.isCompleted = (payedPrice != null);
+        this.isCompleted = (payedPrice != 0);
     }
 }

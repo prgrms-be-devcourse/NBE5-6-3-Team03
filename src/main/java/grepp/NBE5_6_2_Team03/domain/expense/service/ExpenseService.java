@@ -3,6 +3,7 @@ package grepp.NBE5_6_2_Team03.domain.expense.service;
 import grepp.NBE5_6_2_Team03.api.controller.expense.dto.request.ExpenseRequest;
 import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.expense.repository.ExpenseRepository;
+import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.repository.TravelScheduleRepository;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
@@ -11,6 +12,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,6 +27,9 @@ public class ExpenseService {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
+        TravelPlan plan = schedule.getTravelPlan();
+        validatePayedPrice(plan, request.getPayedPrice());
+
         Expense expense = request.toEntity(schedule);
         expenseRepository.save(expense);
     }
@@ -33,6 +38,9 @@ public class ExpenseService {
     public void editExpense(Long expenseId, ExpenseRequest request) {
         Expense expense = expenseRepository.findById(expenseId)
             .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
+
+        TravelPlan plan = expense.getTravelSchedule().getTravelPlan();
+        validatePayedPriceForEdit(plan, expense.getPayedPrice(), request.getPayedPrice());
 
         expense.edit(
             request.getExpectPrice(),
@@ -63,5 +71,26 @@ public class ExpenseService {
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
         return expenseRepository.findByTravelSchedule(schedule);
+    }
+
+    private int getTotalPayedPrice(TravelPlan plan) {
+        return plan.getTravelSchedules().stream()
+            .map(TravelSchedule::getExpense)
+            .filter(Objects::nonNull)
+            .mapToInt(Expense::getPayedPrice)
+            .sum();
+    }
+
+    private void validatePayedPrice(TravelPlan plan, int newPayedPrice) {
+        if (getTotalPayedPrice(plan) + newPayedPrice > plan.getPublicMoney()) {
+            throw new IllegalArgumentException("공금이 부족합니다.");
+        }
+    }
+
+    private void validatePayedPriceForEdit(TravelPlan plan, int oldPayedPrice, int newPayedPrice) {
+        int totalSum = getTotalPayedPrice(plan) - oldPayedPrice + newPayedPrice;
+        if (totalSum > plan.getPublicMoney()) {
+            throw new IllegalArgumentException("공금이 부족합니다.");
+        }
     }
 }
