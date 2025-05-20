@@ -5,7 +5,8 @@
 👉 [Git Commit Convention 바로가기](https://github.com/prgrms-be-devcourse/NBE5-6-2-Team03/wiki/%F0%9F%8C%B1-Git-Commit-Convention)
 
 ---
-# System Architecture
+# 📝 System Architecture
 
-![image](https://github.com/user-attachments/assets/01c8caad-0270-4364-9dc4-84cfbebbb886)
+![image](https://github.com/user-attachments/assets/aee5ab6b-7d29-48f0-9158-f14301a9f094)
+
 
