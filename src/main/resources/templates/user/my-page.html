@@ -5,253 +5,253 @@
     <title>정보 수정</title>
     <style>
         * {
-          box-sizing: border-box;
+            box-sizing: border-box;
         }
 
         body {
-          margin: 0;
-          font-family: "Plus Jakarta Sans", sans-serif;
-          background-color: #f4f6f8;
-          display: flex;
-          flex-direction: column;
-          min-height: 100vh;
+            margin: 0;
+            font-family: "Plus Jakarta Sans", sans-serif;
+            background-color: #f4f6f8;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         header {
-          background-color: #ffffff;
-          box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-          width: 100%;
+            background-color: #ffffff;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .header-inner {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 24px;
-          width: 100%;
+            display: contents;
         }
 
         .site-title a {
-          font-size: 1.2rem;
-          font-weight: 600;
-          color: #4a6fa5;
-          text-decoration: none;
-          white-space: nowrap;
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #4a6fa5;
+            text-decoration: none;
         }
 
         .nav-links {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
 
         .nav-links span {
-          font-size: 0.95rem;
-          font-weight: 500;
-          color: #4a6fa5;
+            font-weight: bold;
+            color: #4a6fa5;
+            font-size: 1rem;
         }
 
-        .nav-button {
-          padding: 6px 12px;
-          font-size: 0.85rem;
-          background-color: #4a6fa5;
-          color: white;
-          border-radius: 6px;
-          text-decoration: none;
-          cursor: pointer;
-          display: inline-block;
-          line-height: 1.2;
+        .nav-links a,
+        .nav-links button {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            background-color: #4a6fa5;
+            color: white;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
         }
 
-        .nav-button:hover {
-          background-color: #3a5f8a;
+        .nav-links a:hover,
+        .nav-links button:hover {
+            background-color: #3a5f8a;
         }
 
         .form-container {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 40px 20px;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
         }
 
         form {
-          background-color: #fff;
-          padding: 40px;
-          border-radius: 16px;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-          width: 440px;
-          display: flex;
-          flex-direction: column;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            width: 440px;
+            display: flex;
+            flex-direction: column;
         }
 
         .profile-image-container {
-          width: 140px;
-          height: 140px;
-          border-radius: 50%;
-          position: relative;
-          overflow: hidden;
-          margin: 0 auto 10px auto;
-          background-color: #e0e0e0;
-          cursor: pointer;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto 10px auto;
+            background-color: #e0e0e0;
+            cursor: pointer;
         }
 
         .profile-image-container img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         .no-image {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          font-size: 14px;
-          color: #666;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
         }
 
         .overlay {
-          position: absolute;
-          bottom: 0;
-          width: 100%;
-          background: rgba(0,0,0,0.5);
-          color: #fff;
-          text-align: center;
-          padding: 6px 0;
-          font-size: 13px;
-          opacity: 0;
-          transition: opacity 0.3s ease;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            text-align: center;
+            padding: 6px 0;
+            font-size: 13px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .profile-image-container:hover .overlay {
-          opacity: 1;
+            opacity: 1;
         }
 
         input[type="text"],
         input[type="email"],
         input[type="tel"],
         input[type="password"] {
-          padding: 10px 12px;
-          font-size: 15px;
-          border-radius: 8px;
-          border: 1px solid #ccc;
-          flex: 1;
-          height: 44px;
+            padding: 10px 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            flex: 1;
+            height: 44px;
         }
 
         input[type="file"] {
-          font-size: 14px;
-          display: none;
+            font-size: 14px;
+            display: none;
         }
 
         label {
-          font-weight: 600;
-          color: #444;
-          margin-bottom: 4px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 4px;
         }
 
         .input-wrapper {
-          display: flex;
-          flex-direction: column;
-          margin-bottom: 12px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 12px;
         }
 
         .input-group {
-          display: flex;
-          gap: 8px;
+            display: flex;
+            gap: 8px;
         }
 
         .input-group button {
-          height: 44px;
-          padding: 0 12px;
-          font-size: 0.9rem;
-          background-color: #2d8cf0;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          cursor: pointer;
+            height: 44px;
+            padding: 0 12px;
+            font-size: 0.9rem;
+            background-color: #2d8cf0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
         }
 
         .input-group button:hover {
-          background-color: #1976d2;
+            background-color: #1976d2;
         }
 
         .check-result {
-          margin: 4px 0 0 4px;
-          font-size: 0.85rem;
-          color: #666;
-          min-height: 18px;
+            margin: 4px 0 0 4px;
+            font-size: 0.85rem;
+            color: #666;
+            min-height: 18px;
         }
 
         .submit-button {
-          margin-top: 20px;
-          padding: 12px;
-          background-color: #2d8cf0;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          font-size: 16px;
-          cursor: pointer;
+            margin-top: 20px;
+            padding: 12px;
+            background-color: #2d8cf0;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
         }
 
         .submit-button:hover {
-          background-color: #1976d2;
+            background-color: #1976d2;
         }
 
         footer {
-          background-color: #ffffff;
-          text-align: center;
-          padding: 15px;
-          font-size: 0.9rem;
-          color: #777;
-          box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+            background-color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: #777;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
         }
+
         .error-message {
             color: red;
             font-size: 0.875rem;
             margin-top: 4px;
         }
+
         .delete-button-wrapper {
-          position: fixed;
-          bottom: 55px;
-          right: 0px;
-          z-index: 100;
+            position: fixed;
+            bottom: 55px;
+            right: 0px;
+            z-index: 100;
         }
 
         .delete-button {
-          padding: 10px 20px;
-          background-color: #e53935;
-          color: white;
-          border: none;
-          border-radius: 8px;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: background-color 0.3s ease;
+            padding: 10px 20px;
+            background-color: #e53935;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         .delete-button:hover {
-          background-color: #c62828;
-          transform: translateY(-1px);
+            background-color: #c62828;
+            transform: translateY(-1px);
         }
     </style>
 </head>
 <body>
 <header>
-    <div class="header-inner">
         <div class="site-title">
-            <a href="/users/home">여행 계획 일정</a>
+        <a href="/users/home">여행 계획 일정</a>
         </div>
         <div class="nav-links">
             <span th:if="${userMyPageResponse != null}" th:text="|${userMyPageResponse.name}님|">테스터님</span>
             <a href="/users/my-page" class="nav-button">내 정보</a>
+            <a href="/map">여행지 보기</a>
             <a href="#" class="nav-button"
                onclick="event.preventDefault(); document.getElementById('logoutForm').submit();">로그아웃</a>
             <form id="logoutForm" action="/users/logout" method="post" style="display: none;">

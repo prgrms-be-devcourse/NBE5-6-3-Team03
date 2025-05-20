@@ -57,6 +57,24 @@
             cursor: pointer;
         }
 
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 30px 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .page-header .title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin: 0 auto;
+        }
+
         main {
             flex: 1;
             padding: 40px;
@@ -178,7 +196,7 @@
             justify-content: flex-end;
             margin-top: 40px;
             margin-right: 40px;
-            gap: 12px; /* 버튼 사이 간격 */
+            gap: 12px;
         }
 
         .goto-buttons a,
@@ -214,7 +232,11 @@
 </header>
 
 <main>
-    <h1>지출 내역</h1>
+    <div class="page-header">
+        <div style="width: 100px;"></div>
+        <div class="title">지출 내역</div>
+        <div class="actions" style="width: 100px;"></div>
+    </div>
 
     <div class="rate-compare" style="text-align: center; font-size: 18px; margin-bottom: 20px;">
         <span th:if="${response.rateCompareResult == 1}" style="color: blue;">📈 최신 환율이 평균보다 높습니다</span>
@@ -284,7 +306,7 @@
 </main>
 
 <footer>
-    &copy; 2025 여행 정산 시스템
+    &copy; 2025 여행 일정 관리 서비스
 </footer>
 
 <script>

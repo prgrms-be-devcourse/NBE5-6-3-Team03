@@ -16,25 +16,47 @@
             color: #333;
         }
 
-        header, footer {
-            width: 100%;
-            padding: 15px;
+        header {
             background-color: #ffffff;
-            color: #555;
-            text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        /* ✅ 헤더 링크 스타일 */
-        .header-link {
-            text-decoration: none;
-            color: #4a6fa5;
+        .site-title a {
+            font-size: 1.4rem;
             font-weight: bold;
-            transition: color 0.3s ease;
+            color: #4a6fa5;
+            text-decoration: none;
         }
 
-        .header-link:hover {
-            color: #3a5f8a;
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-links a,
+        .nav-links button {
+            text-decoration: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            background-color: #4a6fa5;
+            color: white;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+        }
+
+        footer {
+            background-color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+            color: #777;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
         }
 
         .container {
@@ -105,9 +127,12 @@
 <body>
 
 <header>
-    <h2 style="text-align: left; padding-left: 20px;">
-        <a href="/" class="header-link">여행 계획 일정 관리</a>
-    </h2>
+    <div class="site-title">
+        <a href="/">여행 계획 일정</a>
+    </div>
+    <div class="nav-links">
+        <a href="/map">여행지 보기</a>
+    </div>
 </header>
 
 <div class="container">
@@ -142,7 +167,7 @@
 </div>
 
 <footer>
-    &copy; 2025 My Website. All rights reserved.
+    &copy; 2025 여행 일정 관리 서비스
 </footer>
 
 <script>
