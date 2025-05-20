@@ -15,6 +15,11 @@
         min-height: 100vh;
       }
 
+      main {
+        flex: 1;
+      }
+
+
       header {
         background-color: #ffffff;
         padding: 20px 30px;
@@ -115,15 +120,17 @@
         </form>
     </div>
 </header>
-<h2>Country-wise Travel Plans</h2>
-<div class="chart-container">
-    <canvas id="countryChart"></canvas>
-</div>
+<main>
+    <h2>Country-wise Travel Plans</h2>
+    <div class="chart-container">
+        <canvas id="countryChart"></canvas>
+    </div>
 
-<h2>Monthly Travel Plans This Year</h2>
-<div class="chart-container">
-    <canvas id="monthChart"></canvas>
-</div>
+    <h2>Monthly Travel Plans This Year</h2>
+    <div class="chart-container">
+        <canvas id="monthChart"></canvas>
+    </div>
+</main>
 
 <footer>
     &copy; 2025 여행 일정 관리 서비스
