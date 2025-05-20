@@ -7,6 +7,7 @@ import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,8 @@ public class TravelPlanService {
 
         User user = userRepository.findById(userid)
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+
+        validateTravelPlan(planDto.getTravelStartDate(), planDto.getTravelEndDate());
 
         CountryStatus status = CountryStatus.fromCountryName(planDto.getCountry());
 
@@ -65,6 +68,8 @@ public class TravelPlanService {
         TravelPlan existingPlan = travelPlanRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("여행 계획을 찾을 수 없습니다."));
 
+        validateTravelPlan(planDto.getTravelStartDate(), planDto.getTravelEndDate());
+
         CountryStatus status = CountryStatus.fromCountryName(planDto.getCountry());
 
         existingPlan.setCountryStatus(status);
@@ -84,5 +89,13 @@ public class TravelPlanService {
             .orElseThrow(() -> new IllegalArgumentException("해당 계획이 존재하지 않습니다."));
 
         travelPlanRepository.delete(plan);
+    }
+
+
+    private void validateTravelPlan(LocalDate travelStartDate, LocalDate travelEndDate) {
+
+        if (travelStartDate.isAfter(travelEndDate)) {
+            throw new IllegalArgumentException("여행 시작일은 여행 종료일보다 빠르거나 같아야 합니다.");
+        }
     }
 }

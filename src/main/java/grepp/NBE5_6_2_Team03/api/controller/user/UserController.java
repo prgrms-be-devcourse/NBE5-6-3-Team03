@@ -3,9 +3,12 @@ package grepp.NBE5_6_2_Team03.api.controller.user;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.UserMyPageResponse;
+import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -27,6 +30,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final TravelPlanService travelPlanService;
 
     @GetMapping("/sign-up")
     public String signUpForm(Model model){
@@ -47,7 +51,9 @@ public class UserController {
     @GetMapping("/home")
     public String userHomeForm(@AuthenticationPrincipal CustomUserDetails user, Model model){
         model.addAttribute("username", user.getUsername());
-        return "user/home";
+        List<TravelPlan> plans = travelPlanService.getPlansByUser(user.getId());
+        model.addAttribute("plans", plans);
+        return "plan/plan";
     }
 
     @GetMapping("/my-page")

@@ -7,10 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        * {
-            box-sizing: border-box;
-        }
-
+        * { box-sizing: border-box; }
         body {
             background-color: #f4f6f8;
             font-family: 'Arial', sans-serif;
@@ -19,7 +16,6 @@
             flex-direction: column;
             min-height: 100vh;
         }
-
         header {
             background-color: #ffffff;
             padding: 20px 30px;
@@ -35,13 +31,11 @@
             color: #4a6fa5;
             text-decoration: none;
         }
-
         .nav-links {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
         .nav-links span {
             font-weight: bold;
             color: #4a6fa5;
@@ -56,12 +50,23 @@
             background-color: #4a6fa5;
             color: white;
             font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
             transition: background-color 0.3s;
         }
-
-        .nav-links a:hover,
+        .nav-links a:hover {
+            background-color: #3a5f8a;
+        }
+        .nav-links form {
+            display: inline;
+        }
+        .nav-links button {
+            background-color: #4a6fa5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 14px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
         .nav-links button:hover {
             background-color: #3a5f8a;
         }
@@ -89,12 +94,20 @@
         }
 
         .btn-add {
+            display: inline-block;
             background-color: #4a6fa5;
             color: white;
             padding: 8px 14px;
             border-radius: 6px;
-            text-decoration: none;
             font-size: 0.9rem;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.5;
+            text-decoration: none;
+            transition: background-color 0.3s;
+            border: none;
+        }
+        .btn-add:hover {
+            background-color: #3a5f8a;
         }
 
         .schedule-container {

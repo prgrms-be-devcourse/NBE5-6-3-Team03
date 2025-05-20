@@ -16,13 +16,14 @@
         height: 100%;
       }
 
-      /*body {*/
-      /*  overflow: hidden; !* 필요 시 스크롤 막기 *!*/
-      /*}*/
       body {
         padding-top: 60px;
         margin: 0;
+        background-color: #f4f6f8;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        color: #333;
       }
+
 
       /* 헤더 고정 및 스타일 */
       header {
@@ -68,19 +69,21 @@
         color: #4a6fa5;
       }
 
-      .nav-links a, .nav-button {
-        padding: 6px 12px;
-        font-size: 0.85rem;
+      .nav-links a,
+      .nav-links button {
+        padding: 10px 16px;
+        border-radius: 8px;
         background-color: #4a6fa5;
         color: white;
-        border-radius: 6px;
-        text-decoration: none;
+        font-size: 0.95rem;
+        transition: background-color 0.3s ease;
+        border: none;
         cursor: pointer;
-        display: inline-block;
-        line-height: 1.2;
+        text-decoration: none;
       }
 
-      .nav-links a, .nav-button:hover {
+      .nav-links a:hover,
+      .nav-links button:hover {
         background-color: #3a5f8a;
       }
 
@@ -177,17 +180,18 @@
       }
 
       .btn-primary {
-        background-color: var(--bs-primary);
+        background-color: #4a6fa5;
         border: none;
         color: #fff;
-        padding: 0.5rem 1rem;
-        border-radius: var(--bs-border-radius);
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 0.95rem;
         cursor: pointer;
-        transition: background-color 0.2s;
+        transition: background-color 0.3s ease;
       }
 
       .btn-primary:hover {
-        background-color: var(--bs-link-hover-color);
+        background-color: #3a5f8a;
       }
 
       .card {
@@ -263,7 +267,7 @@
             <a href="/map">여행지 지도 보기</a>
         </div>
         <div class="nav-links">
-            <a href="/">Home</a>
+            <a href="/users/home">Home</a>
         </div>
     </div>
 </header>
@@ -303,11 +307,11 @@
                 <p th:text="${place.country}">국가</p>
                 <p th:text="${place.city}">도시</p>
                 <button type="button"
-                        class="select-button"
+                        class="select-button btn btn-outline-primary btn-sm"
                         th:attr="data-id=${place.id},
-                   data-name=${place.placeName},
-                   data-lat=${place.latitude},
-                   data-lng=${place.longitude}">
+                               data-name=${place.placeName},
+                               data-lat=${place.latitude},
+                               data-lng=${place.longitude}">
                     선택
                 </button>
             </div>
