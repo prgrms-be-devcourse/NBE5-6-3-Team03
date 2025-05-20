@@ -19,6 +19,8 @@ public class User extends BaseEntity {
     private String name;
     private String phoneNumber;
     private boolean isLocked;
+    @Column(columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean activated = true;
 
     @Embedded
     private UploadFile uploadFile;

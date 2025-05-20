@@ -68,7 +68,7 @@ public class AdminController {
         RedirectAttributes redirectAttributes
     ) {
         try {
-            adminService.lockedById(id);
+            adminService.deactivateById(id);
             redirectAttributes.addFlashAttribute("message", "유저를 탈퇴처리 하였습니다.");
         } catch ( NotFoundException e ) {
             redirectAttributes.addFlashAttribute("message", e.getMessage());

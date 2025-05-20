@@ -17,4 +17,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("select u.role from User u where u.id = :id")
     String getRoleById(@Param("id") Long id);
+
+    @Modifying
+    @Query("update User u set u.activated = false where u.id = :id")
+    void deactivateById(@Param("id") Long id);
+
 }

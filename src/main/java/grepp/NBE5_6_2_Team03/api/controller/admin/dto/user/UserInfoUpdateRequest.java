@@ -17,6 +17,8 @@ public class UserInfoUpdateRequest {
     private String name;
     @PhoneNumberCheck
     private String phoneNumber;
+    private Boolean locked;
+    private Boolean activated;
 
     private Role role;
 
