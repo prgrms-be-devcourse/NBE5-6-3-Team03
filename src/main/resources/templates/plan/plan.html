@@ -324,13 +324,16 @@
       data.travelEndDate = document.getElementById(
           'editEnd').value;
     }
+
     const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
     const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
     fetch(`/plan/update/${id}`, {
       method: 'PATCH',
-      headers: {'Content-Type': 'application/json',
-        [csrfHeader]: csrfToken},
+      headers: {
+        'Content-Type': 'application/json',
+        [csrfHeader]: csrfToken
+      },
       body: JSON.stringify(data)
     })
     .then(async res => {
