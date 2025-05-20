@@ -23,13 +23,14 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .site-title {
+        .site-title a {
             font-size: 1.4rem;
             font-weight: bold;
             color: #4a6fa5;
+            text-decoration: none;
         }
 
         .nav-links {
@@ -154,7 +155,9 @@
 <body>
 
 <header>
-    <div class="site-title">여행 계획 일정</div>
+    <div class="site-title">
+        <a href="/users/home">여행 계획 일정</a>
+    </div>
     <div class="nav-links">
         <span th:text="|${username}님|">테스터님</span>
         <a href="/users/my-page">내 정보</a>

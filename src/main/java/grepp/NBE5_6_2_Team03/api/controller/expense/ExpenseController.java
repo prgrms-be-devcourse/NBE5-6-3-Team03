@@ -83,7 +83,7 @@ public class ExpenseController {
                               @ModelAttribute ExpenseRequest request,
                               Model model) {
         try {
-            expenseService.editExpense(travelScheduleId, request);
+            expenseService.editExpense(expenseId, request);
         } catch (IllegalArgumentException e) {
             model.addAttribute("errorMessage", e.getMessage());
             model.addAttribute("request", request);

@@ -74,11 +74,7 @@ public class ExpenseService {
     }
 
     private int getTotalPayedPrice(TravelPlan plan) {
-        return plan.getTravelSchedules().stream()
-            .map(TravelSchedule::getExpense)
-            .filter(Objects::nonNull)
-            .mapToInt(Expense::getPayedPrice)
-            .sum();
+        return expenseRepository.sumPayedPriceByPlanId(plan.getTravelPlanId());
     }
 
     private void validatePayedPrice(TravelPlan plan, int newPayedPrice) {
