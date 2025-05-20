@@ -120,22 +120,56 @@
         .summary-section {
             display: none;
             background-color: #ffffff;
-            border: 1px solid #dcdcdc;
-            padding: 20px;
-            border-radius: 8px;
-            max-width: 600px;
+            border-radius: 12px;
+            padding: 30px 40px;
+            max-width: 700px;
             margin: 0 auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .summary-section h3 {
-            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            font-size: 16px;
             color: #333;
         }
 
-        .summary-section p {
-            margin: 8px 0;
+        .summary-section h3 {
+            margin-bottom: 25px;
+            font-size: 1.5rem;
+            color: #2a68c8;
+            border-bottom: 2px solid #dce6f2;
+            padding-bottom: 10px;
+        }
+
+        .summary-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .summary-grid p {
+            margin: 0;
+            padding: 12px 16px;
+            border-bottom: 1px dashed #e2e2e2;
+            display: flex;
+            justify-content: space-between;
             font-size: 16px;
+        }
+
+        .summary-grid strong {
+            color: #555;
+        }
+
+        .summary-grid span.value {
+            font-weight: bold;
+            color: #1a3d7c;
+        }
+
+        .highlight {
+            background-color: #f0f7ff;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            color: #2a68c8;
+            text-align: center;
+            font-weight: bold;
+            margin-top: 20px;
         }
 
         .goto-buttons {
@@ -143,14 +177,12 @@
             justify-content: flex-end;
             margin-top: 40px;
             margin-right: 40px;
+            gap: 12px; /* 버튼 사이 간격 */
         }
 
-        .goto-buttons a {
+        .goto-buttons a,
+        .goto-buttons button {
             text-decoration: none;
-        }
-
-        .goto-buttons a + a {
-            margin-left: 10px;
         }
 
         footer {
@@ -216,16 +248,20 @@
 
     <div class="summary-section" id="settlementInfo">
         <h3>정산 결과</h3>
-        <p><strong>국가:</strong> <span th:text="${response.country}"></span></p>
-        <p><strong>전체 예산:</strong> <span th:text="${response.publicMoney} + ' ' + ${response.curUnit}"></span></p>
-        <p><strong>사용 인원:</strong> <span th:text="${response.count} + ' 명'"></span></p>
-        <p><strong>총 지출:</strong> <span th:text="${response.totalExpense} + ' ' + ${response.curUnit}"></span></p>
-        <p><strong>남은 금액:</strong> <span th:text="${response.remainMoney} + ' ' + ${response.curUnit}"></span></p>
-        <p><strong>1인당 정산금:</strong> <span th:text="${response.personalPrice} + ' ' + ${response.curUnit}"></span></p>
-        <p><strong>최신 환율:</strong> <span th:text="${response.lastestExchangeRate}"></span></p>
-        <p><strong>환산 금액(1인당):</strong>
-            <span th:text="${response.exchangePersonalPrice} + ' 원'"></span>
-        </p>
+        <div class="summary-grid">
+            <p><strong>국가</strong> <span class="value" th:text="${response.country}">일본</span></p>
+            <p><strong>사용 인원</strong> <span class="value" th:text="${response.count} + '명'">2명</span></p>
+            <p><strong>전체 예산</strong> <span class="value" th:text="${response.publicMoney} + ' ' + ${response.curUnit}">10000 JPY(100)</span></p>
+            <p><strong>총 지출</strong> <span class="value" th:text="${response.totalExpense} + ' ' + ${response.curUnit}">200 JPY(100)</span></p>
+            <p><strong>남은 금액</strong> <span class="value" th:text="${response.remainMoney} + ' ' + ${response.curUnit}">9800 JPY(100)</span></p>
+            <p><strong>1인당 정산금</strong> <span class="value" th:text="${response.personalPrice} + ' ' + ${response.curUnit}">4900 JPY(100)</span></p>
+            <p><strong>최신 환율</strong> <span class="value" th:text="${response.lastestExchangeRate}">960</span></p>
+            <p><strong>환산 금액(1인당)</strong> <span class="value" th:text="${response.exchangePersonalPrice} + '원'">47061원</span></p>
+        </div>
+        <div class="highlight">
+            💰 총 <span th:text="${response.personalPrice} + ' ' + ${response.curUnit}">4900 JPY(100)</span>
+            → <span th:text="'인당 ' + ${response.exchangePersonalPrice} + '원'">47061원</span>
+        </div>
     </div>
 
     <form action="/mail/send" method="post" id="mailForm" style="display: none;">

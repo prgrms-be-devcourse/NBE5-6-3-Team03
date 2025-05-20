@@ -4,7 +4,9 @@ import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.service.TravelScheduleService;
+import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
@@ -25,16 +27,22 @@ public class TravelScheduleController {
     private final TravelScheduleService travelScheduleService;
 
     @GetMapping
-    public String list(@PathVariable("travelPlanId") Long travelPlanId, Model model) {
+    public String list(@PathVariable("travelPlanId") Long travelPlanId,
+                       @AuthenticationPrincipal CustomUserDetails customUser,
+                       Model model) {
         Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
         model.addAttribute("groupedSchedules", groupedSchedules);
         model.addAttribute("travelPlanId", travelPlanId);
+        model.addAttribute("username", customUser.getUsername());
         return "schedule/schedule-list";
     }
 
     @GetMapping("/add")
-    public String addForm(@PathVariable("travelPlanId") Long travelPlanId, Model model) {
+    public String addForm(@PathVariable("travelPlanId") Long travelPlanId,
+                          @AuthenticationPrincipal CustomUserDetails customUser,
+                          Model model) {
         model.addAttribute("travelPlanId", travelPlanId);
+        model.addAttribute("username", customUser.getUsername());
         model.addAttribute("request", new TravelScheduleRequest());
         return "schedule/schedule-form";
     }
@@ -59,11 +67,13 @@ public class TravelScheduleController {
     @GetMapping("/{travelScheduleId}/edit")
     public String editForm(@PathVariable("travelPlanId") Long travelPlanId,
                            @PathVariable("travelScheduleId") Long travelScheduleId,
+                           @AuthenticationPrincipal CustomUserDetails customUser,
                            Model model) {
         TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
 
         model.addAttribute("travelPlanId", travelPlanId);
         model.addAttribute("travelScheduleId", travelScheduleId);
+        model.addAttribute("username", customUser.getUsername());
         model.addAttribute("request", TravelScheduleRequest.fromEntity(schedule));
         return "schedule/schedule-form";
     }
