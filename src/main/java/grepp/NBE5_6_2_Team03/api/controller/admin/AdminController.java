@@ -45,82 +45,75 @@ public class AdminController {
         @RequestParam(name = "size", defaultValue = "15") int size
     ) {
         int minPageLimit = Math.max(0, page);
-        Page<UserInfoResponse> userPage = adminService.findAll(PageRequest.of(minPageLimit, size));
-//        model.addAttribute("userPage", userPage);
-//        return "admin/user-info";
-        return ResponseEntity.ok(userPage);
+        return ResponseEntity.ok(adminService.findAll(PageRequest.of(minPageLimit, size)));
     }
 
     @PatchMapping("/user-info/{id}/edit")
-    public ResponseEntity<String> editUserInfo(
+    public ResponseEntity<Map<String, String>> editUserInfo(
         @PathVariable("id") Long id,
-        @RequestBody UserInfoUpdateRequest request,
-        RedirectAttributes redirectAttributes) {
+        @RequestBody UserInfoUpdateRequest request
+    ) {
 
         String message = null;
 
         try {
             adminService.updateUserInfo(id, request);
             message =  "유저 정보가 성공적으로 수정되었습니다.";
-            return ResponseEntity.ok(message);
+            return ResponseEntity.ok(getMessage(message));
         } catch (NotFoundException e) {
             message =  e.getMessage();
-            return ResponseEntity.status(403).body(message);
+            return ResponseEntity.status(403).body(getMessage(message));
         } catch (Exception e) {
             message = "알 수 없는 이유로 취소되었습니다.";
         }
-
-//        return "redirect:/admin/user-info";
-        return ResponseEntity.status(500).body(message);
+        return ResponseEntity.status(500).body(getMessage(message));
     }
 
     @DeleteMapping("/user-info/{id}/delete")
-    public ResponseEntity<String> deleteUserInfo(
-        @PathVariable("id") Long id,
-        RedirectAttributes redirectAttributes
+    public ResponseEntity<Map<String, String>> deleteUserInfo(
+        @PathVariable("id") Long id
     ) {
         String message = null;
         try {
             adminService.deleteById(id);
             message =  "유저를 탈퇴처리 하였습니다.";
-            return ResponseEntity.ok(message);
+            return ResponseEntity.ok(getMessage(message));
         } catch ( NotFoundException e ) {
             message =  e.getMessage();
-            return ResponseEntity.status(403).body(message);
+            return ResponseEntity.status(403).body(getMessage(message));
         } catch (Exception e) {
             message = "알 수 없는 이유로 취소되었습니다.";
         }
-//        return "redirect:/admin/user-info";
-        return ResponseEntity.status(500).body(message);
+        return ResponseEntity.status(500).body(getMessage(message));
+    }
+
+    private static Map<String, String> getMessage(String message) {
+        return Map.of(
+            "message", message,
+            "redirect", "/admin/user-info"
+        );
     }
 
     @GetMapping("/statistic")
     public ResponseEntity<Map<String, List<?>>> statistic() {
         List<CountriesStatisticResponse> countriesStatisticResponses = adminService.getCountriesStatistics();
         List<MonthlyStatisticResponse> monthlyStatisticResponses = adminService.getMonthStatistics();
-//        model.addAttribute("countriesStatisticResponses", countriesStatisticResponses);
-//        model.addAttribute("monthlyStatisticResponses", monthlyStatisticResponses);
         Map<String, List<?>> statistics = new HashMap<>();
         statistics.put("countries", countriesStatisticResponses);
         statistics.put("monthly", monthlyStatisticResponses);
 
-//        return "admin/statistic";
         return ResponseEntity.ok(statistics);
     }
 
-    @ResponseBody
     @GetMapping("/valid-email")
     public ResponseEntity<Map<String, Boolean>> validateEmail(@RequestParam("email") String email) {
         boolean isDuplicatedEmail = adminService.isDuplicatedEmail(email);
-//        return Collections.singletonMap("email", isDuplicatedEmail);
         return ResponseEntity.ok(isDuplicatedEmail ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
     }
 
-    @ResponseBody
     @GetMapping("/valid-name")
     public ResponseEntity<Map<String, Boolean>> validateName(@RequestParam("name") String name) {
         boolean isDuplicatedName = adminService.isDuplicatedUsername(name);
-//        return Collections.singletonMap("name", isDuplicatedName);
         return ResponseEntity.ok(isDuplicatedName ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
     }
 
