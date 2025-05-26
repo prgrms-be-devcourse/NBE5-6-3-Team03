@@ -1,6 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.travelschedule.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleResponse;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
@@ -27,18 +28,18 @@ public class TravelScheduleService {
     private final TravelPlanRepository travelPlanRepository;
 
     @Transactional
-    public void addSchedule(Long travelPlanId, TravelScheduleRequest request) {
+    public TravelSchedule addSchedule(Long travelPlanId, TravelScheduleRequest request) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
         validateTravelSchedule(request.getDeparture(), request.getDestination(), request.getTransportation(), request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
         TravelSchedule schedule = request.toEntity(plan);
-        travelScheduleRepository.save(schedule);
+        return travelScheduleRepository.save(schedule);
     }
 
     @Transactional
-    public Long editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
+    public TravelSchedule editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
@@ -54,7 +55,7 @@ public class TravelScheduleService {
             request.getTravelScheduleDate()
         );
 
-        return schedule.getTravelPlan().getTravelPlanId();
+        return schedule;
     }
 
     @Transactional
@@ -66,19 +67,20 @@ public class TravelScheduleService {
     }
 
     @Transactional
-    public void scheduleStatus(Long travelScheduleId) {
+    public ScheduleStatus scheduleStatus(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
         schedule.toggleStatus();
+        return schedule.getScheduleStatus();
     }
 
-    public Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> getGroupedSchedules(Long travelPlanId) {
+    public Map<LocalDate, Map<ScheduleStatus, List<TravelScheduleResponse>>> getGroupedSchedules(Long travelPlanId) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
 
         List<TravelSchedule> schedules = travelScheduleRepository.findSortedSchedules(plan);
-        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = new LinkedHashMap<>();
+        Map<LocalDate, Map<ScheduleStatus, List<TravelScheduleResponse>>> groupedSchedules = new LinkedHashMap<>();
 
         for (TravelSchedule schedule : schedules) {
             LocalDate date = schedule.getTravelScheduleDate();
@@ -86,7 +88,7 @@ public class TravelScheduleService {
 
             groupedSchedules.putIfAbsent(date, new LinkedHashMap<>());
             groupedSchedules.get(date).putIfAbsent(status, new ArrayList<>());
-            groupedSchedules.get(date).get(status).add(schedule);
+            groupedSchedules.get(date).get(status).add(TravelScheduleResponse.fromEntity(schedule));
         }
 
         return groupedSchedules;
