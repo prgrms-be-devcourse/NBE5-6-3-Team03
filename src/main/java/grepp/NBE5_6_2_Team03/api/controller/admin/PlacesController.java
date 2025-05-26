@@ -3,9 +3,11 @@ package grepp.NBE5_6_2_Team03.api.controller.admin;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
 import grepp.NBE5_6_2_Team03.domain.place.PlaceService;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,29 +22,19 @@ public class PlacesController {
     private final PlaceService placeService;
 
     @GetMapping("/info")
-    public String getPlaces(Model model) {
+    public ResponseEntity<Map<String, Object>> getPlaces() {
         List<PlaceResponse> places = placeService.findAll();
-        List<String> countries = placeService.getCountries();
-        List<String> cities = placeService.getCities();
-        model.addAttribute("places", places);
-        model.addAttribute("countries", countries);
-        model.addAttribute("cities", cities);
-        return "admin/place-info";
+        return ResponseEntity.ok(createPlaceInfoResponse(places));
     }
 
     @GetMapping("/{id}/edit")
-    public String editPlace(Model model, @PathVariable("id") String id) {
+    public ResponseEntity<Map<String, Object>> editPlace(@PathVariable("id") String id) {
         PlaceResponse place = placeService.findById(id);
-        List<String> countries = placeService.getCountries();
-        List<String> cities = placeService.getCities();
-        model.addAttribute("place", place);
-        model.addAttribute("countries", countries);
-        model.addAttribute("cities", cities);
-        return "place-edit";
+        return ResponseEntity.ok(createPlaceInfoResponse(place));
     }
 
     @PostMapping("/{id}/edit")
-    public String editPlace(Model model, @PathVariable("id") String id, PlaceRequest place,
+    public String editPlace(@PathVariable("id") String id, PlaceRequest place,
         RedirectAttributes redirectAttributes) {
         placeService.updatePlace(id, place);
 
@@ -55,6 +47,24 @@ public class PlacesController {
         placeService.deleteById(id);
         redirectAttributes.addFlashAttribute("message", "Place deleted successfully.");
         return "redirect:/place/info";
+    }
+
+    private Map<String, Object> createPlaceInfoResponse(Object obj) {
+        List<String> countries = placeService.getCountries();
+        List<String> cities = placeService.getCities();
+
+        Map<String, Object> body = new HashMap<>();
+
+        if (obj instanceof List<?>) {
+            body.put("places", obj);
+        } else {
+            body.put("place", obj);
+        }
+
+        body.put("countries", countries);
+        body.put("cities", cities);
+
+        return body;
     }
 
 }

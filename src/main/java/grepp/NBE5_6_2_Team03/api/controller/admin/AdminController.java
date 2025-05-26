@@ -11,11 +11,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -23,10 +22,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -42,7 +40,7 @@ public class AdminController {
     @GetMapping("/user-info")
     public ResponseEntity<Page<UserInfoResponse>> userInfos(
         @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "15") int size
+        @RequestParam(name = "size", defaultValue = "16") int size
     ) {
         int minPageLimit = Math.max(0, page);
         return ResponseEntity.ok(adminService.findAll(PageRequest.of(minPageLimit, size)));
@@ -98,9 +96,14 @@ public class AdminController {
     public ResponseEntity<Map<String, List<?>>> statistic() {
         List<CountriesStatisticResponse> countriesStatisticResponses = adminService.getCountriesStatistics();
         List<MonthlyStatisticResponse> monthlyStatisticResponses = adminService.getMonthStatistics();
-        Map<String, List<?>> statistics = new HashMap<>();
-        statistics.put("countries", countriesStatisticResponses);
-        statistics.put("monthly", monthlyStatisticResponses);
+        Map<String, List<?>> statistics = new HashMap<>() {
+            {
+                put("countries", countriesStatisticResponses);
+                put("monthly", monthlyStatisticResponses);
+            }
+        };
+
+        log.info(statistics.toString());
 
         return ResponseEntity.ok(statistics);
     }
