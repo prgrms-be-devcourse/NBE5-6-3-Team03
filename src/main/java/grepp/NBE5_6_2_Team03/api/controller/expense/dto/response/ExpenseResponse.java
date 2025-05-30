@@ -8,24 +8,31 @@ import lombok.Getter;
 public class ExpenseResponse {
 
     private final Long expenseId;
+    private final Long travelPlanId;
+    private final Long travelScheduleId;
     private final int expectPrice;
     private final int payedPrice;
     private final boolean isCompleted;
 
     @Builder
-    public ExpenseResponse(Long expenseId, int expectPrice, int payedPrice, boolean isCompleted) {
+    public ExpenseResponse(Long expenseId, Long travelPlanId, Long travelScheduleId,
+                           int expectPrice, int payedPrice, boolean isCompleted) {
         this.expenseId = expenseId;
+        this.travelPlanId = travelPlanId;
+        this.travelScheduleId = travelScheduleId;
         this.expectPrice = expectPrice;
         this.payedPrice = payedPrice;
         this.isCompleted = isCompleted;
     }
 
     public static ExpenseResponse fromEntity(Expense expense) {
-        return new ExpenseResponse(
-            expense.getExpenseId(),
-            expense.getExpectPrice(),
-            expense.getPayedPrice(),
-            expense.isCompleted()
-        );
+        return ExpenseResponse.builder()
+            .expenseId(expense.getExpenseId())
+            .travelPlanId(expense.getTravelSchedule().getTravelPlan().getTravelPlanId())
+            .travelScheduleId(expense.getTravelSchedule().getTravelScheduleId())
+            .expectPrice(expense.getExpectPrice())
+            .payedPrice(expense.getPayedPrice())
+            .isCompleted(expense.isCompleted())
+            .build();
     }
 }
