@@ -38,6 +38,13 @@ public class TravelScheduleController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{travelScheduleId}")
+    public ResponseEntity<?> findSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+                                          @PathVariable("travelScheduleId") Long travelScheduleId) {
+        TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
+        return ResponseEntity.ok(TravelScheduleResponse.fromEntity(schedule));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<?> addSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                               @RequestBody TravelScheduleRequest request) {
