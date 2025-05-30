@@ -23,7 +23,7 @@ public class ExpenseService {
     private final TravelScheduleRepository travelScheduleRepository;
 
     @Transactional
-    public void addExpense(Long travelScheduleId, ExpenseRequest request) {
+    public Expense addExpense(Long travelScheduleId, ExpenseRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
 
@@ -32,10 +32,12 @@ public class ExpenseService {
 
         Expense expense = request.toEntity(schedule);
         expenseRepository.save(expense);
+
+        return expense;
     }
 
     @Transactional
-    public void editExpense(Long expenseId, ExpenseRequest request) {
+    public Expense editExpense(Long expenseId, ExpenseRequest request) {
         Expense expense = expenseRepository.findById(expenseId)
             .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
 
@@ -46,6 +48,8 @@ public class ExpenseService {
             request.getExpectPrice(),
             request.getPayedPrice()
         );
+
+        return expense;
     }
 
     @Transactional

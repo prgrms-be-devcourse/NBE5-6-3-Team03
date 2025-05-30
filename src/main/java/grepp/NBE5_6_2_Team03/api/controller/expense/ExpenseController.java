@@ -1,16 +1,20 @@
 package grepp.NBE5_6_2_Team03.api.controller.expense;
 
 import grepp.NBE5_6_2_Team03.api.controller.expense.dto.request.ExpenseRequest;
+import grepp.NBE5_6_2_Team03.api.controller.expense.dto.response.ExpenseResponse;
 import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.expense.service.ExpenseService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.HashMap;
+import java.util.Map;
+
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/plan/{travelPlanId}/schedule/{travelScheduleId}/expense")
 public class ExpenseController {
@@ -18,88 +22,53 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @GetMapping
-    public String list(@PathVariable("travelPlanId") Long travelPlanId,
-                       @PathVariable("travelScheduleId") Long travelScheduleId,
-                       @AuthenticationPrincipal CustomUserDetails customUser,
-                       Model model) {
+    public ResponseEntity<?> list(@PathVariable("travelPlanId") Long travelPlanId,
+                                  @PathVariable("travelScheduleId") Long travelScheduleId,
+                                  @AuthenticationPrincipal CustomUserDetails customUser) {
         Expense expense = expenseService.findByScheduleId(travelScheduleId).orElse(null);
-        model.addAttribute("expense", expense);
-        model.addAttribute("travelPlanId", travelPlanId);
-        model.addAttribute("travelScheduleId", travelScheduleId);
-        model.addAttribute("username", customUser.getUsername());
-        return "expense/expense-list";
-    }
 
-    @GetMapping("/add")
-    public String addForm(@PathVariable("travelPlanId") Long travelPlanId,
-                          @PathVariable("travelScheduleId") Long travelScheduleId,
-                          @AuthenticationPrincipal CustomUserDetails customUser,
-                          Model model) {
-        model.addAttribute("travelPlanId", travelPlanId);
-        model.addAttribute("travelScheduleId", travelScheduleId);
-        model.addAttribute("username", customUser.getUsername());
-        model.addAttribute("request", new ExpenseRequest());
-        return "expense/expense-form";
+        Map<String, Object> response = new HashMap<>();
+        response.put("expense", expense != null ? ExpenseResponse.fromEntity(expense) : null);
+        response.put("travelPlanId", travelPlanId);
+        response.put("travelScheduleId", travelScheduleId);
+        response.put("username", customUser.getUsername());
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/add")
-    public String addExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<?> addExpense(@PathVariable("travelPlanId") Long travelPlanId,
                              @PathVariable("travelScheduleId") Long travelScheduleId,
-                             @ModelAttribute ExpenseRequest request,
-                             Model model) {
+                             @RequestBody ExpenseRequest request) {
         try {
-            expenseService.addExpense(travelScheduleId, request);
+            Expense expense = expenseService.addExpense(travelScheduleId, request);
+            return ResponseEntity.ok(ExpenseResponse.fromEntity(expense));
         } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("request", request);
-            model.addAttribute("travelPlanId", travelPlanId);
-            model.addAttribute("travelScheduleId", travelScheduleId);
-            return "expense/expense-form";
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
-
-        return "redirect:/plan/" + travelPlanId + "/schedule/" + travelScheduleId + "/expense";
-    }
-
-    @GetMapping("/{expenseId}/edit")
-    public String editForm(@PathVariable("travelPlanId") Long travelPlanId,
-                           @PathVariable("travelScheduleId") Long travelScheduleId,
-                           @PathVariable("expenseId") Long expenseId,
-                           @AuthenticationPrincipal CustomUserDetails customUser,
-                           Model model) {
-        Expense expense = expenseService.findById(expenseId);
-
-        model.addAttribute("travelPlanId", travelPlanId);
-        model.addAttribute("travelScheduleId", travelScheduleId);
-        model.addAttribute("expenseId", expenseId);
-        model.addAttribute("username", customUser.getUsername());
-        model.addAttribute("request", ExpenseRequest.fromEntity(expense));
-        return "expense/expense-form";
     }
 
     @PostMapping("/{expenseId}/edit")
-    public String editExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<?> editExpense(@PathVariable("travelPlanId") Long travelPlanId,
                               @PathVariable("travelScheduleId") Long travelScheduleId,
                               @PathVariable("expenseId") Long expenseId,
-                              @ModelAttribute ExpenseRequest request,
-                              Model model) {
+                              @RequestBody ExpenseRequest request) {
         try {
-            expenseService.editExpense(expenseId, request);
+            Expense expense = expenseService.editExpense(expenseId, request);
+            return ResponseEntity.ok(ExpenseResponse.fromEntity(expense));
         } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("request", request);
-            model.addAttribute("travelPlanId", travelPlanId);
-            model.addAttribute("travelScheduleId", travelScheduleId);
-            model.addAttribute("expenseId", expenseId);
-            return "expense/expense-form";
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
-        return "redirect:/plan/" + travelPlanId + "/schedule/" + travelScheduleId + "/expense";
     }
 
     @PostMapping("/{expenseId}/delete")
-    public String deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<?> deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
                                 @PathVariable("travelScheduleId") Long travelScheduleId,
                                 @PathVariable("expenseId") Long expenseId) {
         expenseService.deleteExpense(expenseId);
-        return "redirect:/plan/" + travelPlanId + "/schedule/" + travelScheduleId + "/expense";
+        return ResponseEntity.ok(Map.of(
+            "expenseId", expenseId,
+            "message", "지출이 삭제되었습니다."
+        ));
     }
 }
