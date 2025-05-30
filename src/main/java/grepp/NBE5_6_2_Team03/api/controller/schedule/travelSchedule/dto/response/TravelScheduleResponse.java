@@ -16,6 +16,7 @@ import java.time.LocalDate;
 public class TravelScheduleResponse {
 
     private final Long travelScheduleId;
+    private final Long travelPlanId;
     private final String content;
     private final String placeName;
     private final String status;
@@ -25,9 +26,10 @@ public class TravelScheduleResponse {
     private final String transportation;
 
     @Builder
-    public TravelScheduleResponse(Long travelScheduleId, String content, String placeName, String status,
+    public TravelScheduleResponse(Long travelScheduleId, Long travelPlanId, String content, String placeName, String status,
                                   LocalDate travelDate, String departure, String destination, String transportation) {
         this.travelScheduleId = travelScheduleId;
+        this.travelPlanId = travelPlanId;
         this.content = content;
         this.placeName = placeName;
         this.status = status;
@@ -40,6 +42,7 @@ public class TravelScheduleResponse {
     public static TravelScheduleResponse fromEntity(TravelSchedule schedule) {
         return TravelScheduleResponse.builder()
             .travelScheduleId(schedule.getTravelScheduleId())
+            .travelPlanId(schedule.getTravelPlan().getTravelPlanId())
             .content(schedule.getContent())
             .placeName(schedule.getPlaceName())
             .status(schedule.getScheduleStatus().name())
