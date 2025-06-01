@@ -1,9 +1,9 @@
-package grepp.NBE5_6_2_Team03.api.controller.admin;
+package grepp.NBE5_6_2_Team03.global.exception.handler;
 
+import grepp.NBE5_6_2_Team03.api.controller.admin.AdminController;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
