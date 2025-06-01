@@ -51,38 +51,18 @@ public class AdminController {
         @PathVariable("id") Long id,
         @RequestBody UserInfoUpdateRequest request
     ) {
-
         String message = null;
 
-        try {
-            adminService.updateUserInfo(id, request);
-            message =  "유저 정보가 성공적으로 수정되었습니다.";
-            return ResponseEntity.ok(getMessage(message));
-        } catch (NotFoundException e) {
-            message =  e.getMessage();
-            return ResponseEntity.status(403).body(getMessage(message));
-        } catch (Exception e) {
-            message = "알 수 없는 이유로 취소되었습니다.";
-        }
-        return ResponseEntity.status(500).body(getMessage(message));
+        adminService.updateUserInfo(id, request);
+        return ResponseEntity.ok(createSuccessMessage("유저 정보가 성공적으로 수정되었습니다."));
     }
 
     @DeleteMapping("/user-info/{id}/delete")
     public ResponseEntity<Map<String, String>> deleteUserInfo(
         @PathVariable("id") Long id
     ) {
-        String message = null;
-        try {
-            adminService.deleteById(id);
-            message =  "유저를 탈퇴처리 하였습니다.";
-            return ResponseEntity.ok(getMessage(message));
-        } catch ( NotFoundException e ) {
-            message =  e.getMessage();
-            return ResponseEntity.status(403).body(getMessage(message));
-        } catch (Exception e) {
-            message = "알 수 없는 이유로 취소되었습니다.";
-        }
-        return ResponseEntity.status(500).body(getMessage(message));
+        adminService.deleteById(id);
+        return ResponseEntity.ok(createSuccessMessage("유저를 탈퇴처리 하였습니다."));
     }
 
     private static Map<String, String> getMessage(String message) {
@@ -118,6 +98,13 @@ public class AdminController {
     public ResponseEntity<Map<String, Boolean>> validateName(@RequestParam("name") String name) {
         boolean isDuplicatedName = adminService.isDuplicatedUsername(name);
         return ResponseEntity.ok(isDuplicatedName ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
+    }
+
+    private Map<String, String> createSuccessMessage(String message) {
+        return Map.of(
+            "message", message,
+            "redirect", "/admin/user-info"
+        );
     }
 
 }
