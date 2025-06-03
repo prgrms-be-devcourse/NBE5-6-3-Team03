@@ -1,21 +1,20 @@
 package grepp.NBE5_6_2_Team03.domain.place;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
 import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceRepository;
 import java.util.List;
 import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class PlaceService {
-    private final PlaceRepository placeRepository;
 
-    public PlaceService(PlaceRepository placeRepository) {
-        this.placeRepository = placeRepository;
-    }
+    private final PlaceRepository placeRepository;
 
     public List<PlaceResponse> findAll() {
         List<Place> places =  placeRepository.findAll();
