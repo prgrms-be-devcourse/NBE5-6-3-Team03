@@ -65,14 +65,13 @@ public class PlaceService {
     }
 
     private PlaceResponse convertToDto(Place place) {
-        return new PlaceResponse(
+        return PlaceResponse.fromEntity(
             place.getPlaceId(),
             place.getCountry(),
             place.getCity(),
             place.getPlaceName(),
             place.getLatitude(),
-            place.getLongitude()
-        );
+            place.getLongitude());
     }
 
 }
