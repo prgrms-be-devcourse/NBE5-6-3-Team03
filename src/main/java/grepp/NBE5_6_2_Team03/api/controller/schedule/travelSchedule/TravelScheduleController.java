@@ -38,14 +38,14 @@ public class TravelScheduleController {
     }
 
     @GetMapping("/{travelScheduleId}")
-    public ResponseEntity<?> findSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<TravelScheduleResponse> findSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                           @PathVariable("travelScheduleId") Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
         return ResponseEntity.ok(TravelScheduleResponse.fromEntity(schedule));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<Object> addSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                               @RequestBody TravelScheduleRequest request) {
         try {
             TravelSchedule travelSchedule =  travelScheduleService.addSchedule(travelPlanId, request);
@@ -56,7 +56,7 @@ public class TravelScheduleController {
     }
 
     @PostMapping("/{travelScheduleId}/edit")
-    public ResponseEntity<?> editSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<Object> editSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                @PathVariable("travelScheduleId") Long travelScheduleId,
                                @RequestBody TravelScheduleRequest request) {
         try {
@@ -68,7 +68,7 @@ public class TravelScheduleController {
     }
 
     @PostMapping("/{travelScheduleId}/delete")
-    public ResponseEntity<?> deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<Map<String, Object>> deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                  @PathVariable("travelScheduleId") Long travelScheduleId) {
         travelScheduleService.deleteSchedule(travelScheduleId);
         return ResponseEntity.ok(Map.of(
@@ -78,7 +78,7 @@ public class TravelScheduleController {
     }
 
     @PostMapping("/{travelScheduleId}/status")
-    public ResponseEntity<?> scheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<Map<String, Object>> scheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
                                  @PathVariable("travelScheduleId") Long travelScheduleId) {
         ScheduleStatus scheduleStatus =  travelScheduleService.scheduleStatus(travelScheduleId);
         return ResponseEntity.ok(Map.of(

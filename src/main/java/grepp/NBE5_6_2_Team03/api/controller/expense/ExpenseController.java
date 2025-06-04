@@ -21,7 +21,7 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @GetMapping
-    public ResponseEntity<?> list(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<Map<String, Object>> list(@PathVariable("travelPlanId") Long travelPlanId,
                                   @PathVariable("travelScheduleId") Long travelScheduleId,
                                   @AuthenticationPrincipal CustomUserDetails customUser) {
         Expense expense = expenseService.findByScheduleId(travelScheduleId).orElse(null);
@@ -36,7 +36,7 @@ public class ExpenseController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<Object> addExpense(@PathVariable("travelPlanId") Long travelPlanId,
                              @PathVariable("travelScheduleId") Long travelScheduleId,
                              @RequestBody ExpenseRequest request) {
         try {
@@ -48,7 +48,7 @@ public class ExpenseController {
     }
 
     @PostMapping("/{expenseId}/edit")
-    public ResponseEntity<?> editExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<Object> editExpense(@PathVariable("travelPlanId") Long travelPlanId,
                               @PathVariable("travelScheduleId") Long travelScheduleId,
                               @PathVariable("expenseId") Long expenseId,
                               @RequestBody ExpenseRequest request) {
@@ -61,7 +61,7 @@ public class ExpenseController {
     }
 
     @PostMapping("/{expenseId}/delete")
-    public ResponseEntity<?> deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ResponseEntity<Map<String, Object>> deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
                                 @PathVariable("travelScheduleId") Long travelScheduleId,
                                 @PathVariable("expenseId") Long expenseId) {
         expenseService.deleteExpense(expenseId);
