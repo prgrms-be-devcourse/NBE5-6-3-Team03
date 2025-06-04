@@ -24,7 +24,7 @@ public class TravelSchedule extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private TravelPlan travelPlan;
 
-    @OneToOne(mappedBy = "travelSchedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "travelSchedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Expense expense;
 
     @Embedded
