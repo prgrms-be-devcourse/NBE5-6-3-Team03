@@ -12,6 +12,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
     Optional<Expense> findByTravelSchedule(TravelSchedule travelSchedule);
 
-    @Query("select coalesce(sum(e.payedPrice), 0) from Expense e where e.travelSchedule.travelPlan.travelPlanId = :travelPlanId")
+    @Query("select sum(e.payedPrice) from Expense e where e.travelSchedule.travelPlan.travelPlanId = :travelPlanId")
     int sumPayedPriceByPlanId(@Param("travelPlanId") Long travelPlanId);
 }
