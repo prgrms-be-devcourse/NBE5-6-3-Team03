@@ -2,11 +2,13 @@ package grepp.NBE5_6_2_Team03.api.controller.admin;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.place.PlaceService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +24,10 @@ public class PlacesController {
     private final PlaceService placeService;
 
     @GetMapping("/info")
-    public ResponseEntity<Map<String, Object>> getPlaces() {
-        List<PlaceResponse> places = placeService.findAll();
+    public ResponseEntity<Map<String, Object>> getPlaces(PlaceSearchRequest searchRequest ) {
+//        List<PlaceResponse> places = placeService.findAll();
+        Page<PlaceResponse> result = placeService.searchPlaces(request);
+
         return ResponseEntity.ok(createPlaceInfoResponse(places));
     }
 
