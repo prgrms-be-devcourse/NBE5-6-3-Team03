@@ -35,6 +35,14 @@ public class ExpenseController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/{expenseId}")
+    public ResponseEntity<ExpenseResponse> findExpense(@PathVariable("travelPlanId") Long travelPlanId,
+                                                       @PathVariable("travelScheduleId") Long travelScheduleId,
+                                                       @PathVariable("expenseId") Long expenseId) {
+        Expense expense = expenseService.findById(expenseId);
+        return ResponseEntity.ok(ExpenseResponse.fromEntity(expense));
+    }
+
     @PostMapping("/add")
     public ResponseEntity<Object> addExpense(@PathVariable("travelPlanId") Long travelPlanId,
                              @PathVariable("travelScheduleId") Long travelScheduleId,
