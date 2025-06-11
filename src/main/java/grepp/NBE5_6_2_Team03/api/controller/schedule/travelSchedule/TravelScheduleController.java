@@ -55,7 +55,7 @@ public class TravelScheduleController {
         }
     }
 
-    @PostMapping("/{travelScheduleId}/edit")
+    @PutMapping("/{travelScheduleId}/edit")
     public ResponseEntity<Object> editSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                @PathVariable("travelScheduleId") Long travelScheduleId,
                                @RequestBody TravelScheduleRequest request) {
@@ -67,17 +67,14 @@ public class TravelScheduleController {
         }
     }
 
-    @PostMapping("/{travelScheduleId}/delete")
+    @DeleteMapping("/{travelScheduleId}/delete")
     public ResponseEntity<Map<String, Object>> deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                  @PathVariable("travelScheduleId") Long travelScheduleId) {
         travelScheduleService.deleteSchedule(travelScheduleId);
-        return ResponseEntity.ok(Map.of(
-            "travelScheduleId", travelScheduleId,
-            "message", "일정이 삭제되었습니다."
-        ));
+        return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/{travelScheduleId}/status")
+    @PatchMapping("/{travelScheduleId}/status")
     public ResponseEntity<Map<String, Object>> scheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
                                  @PathVariable("travelScheduleId") Long travelScheduleId) {
         ScheduleStatus scheduleStatus =  travelScheduleService.scheduleStatus(travelScheduleId);

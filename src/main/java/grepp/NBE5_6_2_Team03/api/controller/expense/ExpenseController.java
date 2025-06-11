@@ -47,7 +47,7 @@ public class ExpenseController {
         }
     }
 
-    @PostMapping("/{expenseId}/edit")
+    @PutMapping("/{expenseId}/edit")
     public ResponseEntity<Object> editExpense(@PathVariable("travelPlanId") Long travelPlanId,
                               @PathVariable("travelScheduleId") Long travelScheduleId,
                               @PathVariable("expenseId") Long expenseId,
@@ -60,14 +60,11 @@ public class ExpenseController {
         }
     }
 
-    @PostMapping("/{expenseId}/delete")
+    @DeleteMapping("/{expenseId}/delete")
     public ResponseEntity<Map<String, Object>> deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
                                 @PathVariable("travelScheduleId") Long travelScheduleId,
                                 @PathVariable("expenseId") Long expenseId) {
         expenseService.deleteExpense(expenseId);
-        return ResponseEntity.ok(Map.of(
-            "expenseId", expenseId,
-            "message", "지출이 삭제되었습니다."
-        ));
+        return ResponseEntity.noContent().build();
     }
 }
