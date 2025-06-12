@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.admin;
 
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import java.util.Optional;
