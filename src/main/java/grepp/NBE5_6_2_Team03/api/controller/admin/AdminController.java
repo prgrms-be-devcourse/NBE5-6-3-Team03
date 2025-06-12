@@ -50,8 +50,6 @@ public class AdminController {
         @PathVariable("id") Long id,
         @RequestBody UserInfoUpdateRequest request
     ) {
-        String message = null;
-
         adminService.updateUserInfo(id, request);
         return ApiResponse.success(createSuccessMessage("유저 정보가 성공적으로 수정되었습니다."));
     }
@@ -62,13 +60,6 @@ public class AdminController {
     ) {
         adminService.deleteById(id);
         return ApiResponse.success(createSuccessMessage("유저를 탈퇴처리 하였습니다."));
-    }
-
-    private static Map<String, String> getMessage(String message) {
-        return Map.of(
-            "message", message,
-            "redirect", "/admin/user-info"
-        );
     }
 
     @GetMapping("/statistic")
