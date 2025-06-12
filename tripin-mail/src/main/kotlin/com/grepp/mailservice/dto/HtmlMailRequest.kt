@@ -1,6 +1,6 @@
 package com.grepp.mailservice.dto
 
-data class SettlementMailRequest(
+data class HtmlMailRequest(
     val to: String,
     val subject: String,
     val templateName: String,

@@ -1,16 +1,11 @@
-package grepp.NBE5_6_2_Team03.api.controller.user;
+package grepp.NBE5_6_2_Team03.api.controller.mail;
 
-import grepp.NBE5_6_2_Team03.domain.user.service.UserMailService;
+import grepp.NBE5_6_2_Team03.domain.mail.service.UserMailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.Duration;
-import java.util.Collections;
 import java.util.Map;
-
-import static grepp.NBE5_6_2_Team03.domain.user.mail.CodeType.*;
 
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -27,7 +22,7 @@ public class UserMailController {
     @ResponseBody
     @PostMapping("/email/{email}/send-mail")
     public Map<String, Boolean> sendCodeToMail(@PathVariable("email") String email){
-        return userMailService.sendTemporaryPassword(PASSWORD, email);
+        return userMailService.sendTemporaryPassword(email);
     }
 
 }

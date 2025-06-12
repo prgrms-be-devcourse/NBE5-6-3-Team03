@@ -38,6 +38,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(
                         (auth) -> auth
+                            .requestMatchers("/users/email/**", "/mail/send").permitAll()
                             .requestMatchers("/css/**", "/assets/**", "/js/**").permitAll()
                             .requestMatchers("/","/map/**", "/users/**", "/users/email/**").permitAll()
                             .requestMatchers("/api/**","/mail/send","/users/home","/plan/**","/users/my-page").hasRole("USER")

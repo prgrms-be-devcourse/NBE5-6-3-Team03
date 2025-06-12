@@ -1,7 +1,8 @@
-package grepp.NBE5_6_2_Team03.domain.user.service;
+package grepp.NBE5_6_2_Team03.domain.mail.service;
 
+import grepp.NBE5_6_2_Team03.domain.mail.dto.CodeMailResponse;
+import grepp.NBE5_6_2_Team03.domain.mail.dto.CodeType;
 import grepp.NBE5_6_2_Team03.domain.user.User;
-import grepp.NBE5_6_2_Team03.domain.user.mail.CodeType;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
@@ -22,11 +23,11 @@ public class UserMailService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final MailService mailService;
     private final StringRedisTemplate redisTemplate;
+    private final MailServiceClient mailServiceClient;
 
     @Transactional
-    public Map<String, Boolean> sendTemporaryPassword(CodeType codeType, String email) {
+    public Map<String, Boolean> sendTemporaryPassword(String email) {
         String key = "tempPw:" + email;
         String value = "requested";
 
@@ -39,11 +40,17 @@ public class UserMailService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
 
-        String code = mailService.sendCodeToEmail(codeType, email);
-        String encodedPassword = passwordEncoder.encode(code);
+        CodeMailResponse response = mailServiceClient.sendCode(email, CodeType.PASSWORD).block();
 
-        user.modifyPassword(encodedPassword);
-        user.updateIsLocked(false);
-        return Collections.singletonMap("success", true);
+        if(response != null && response.code() != null){
+            String temporaryPassword = response.code();
+
+            user.modifyPassword(passwordEncoder.encode(temporaryPassword));
+            user.updateIsLocked(false);
+            userRepository.save(user);
+            return Collections.singletonMap("success", true);
+        }else{
+            return Collections.singletonMap("success", false);
+        }
     }
 }
