@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+// FIXME : @WebMvcTest(PlaceController.class) 사용한 테스트로 변경
 @SpringBootTest
 @AutoConfigureMockMvc
 class PlacesControllerTest {
@@ -26,6 +27,7 @@ class PlacesControllerTest {
     @Autowired
     private PlacesController placesController; // You might not even need this if you're only testing via mockMvc
 
+    // FIXME : AssertJ 로 변경
     @Test
     @DisplayName("여행지 페이지 페이지네이션 메서드 동작 테스트")
     void getPlaceInfoPage() throws JsonProcessingException, JsonProcessingException {
@@ -39,6 +41,7 @@ class PlacesControllerTest {
         }
     }
 
+    // FIXME : AssertJ 로 변경
     @Test
     @DisplayName("여행지 페이지 페이지네이션 WebMvc 테스트")
     void getPlaceInfoPage_webMvc() throws Exception {
