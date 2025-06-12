@@ -7,12 +7,13 @@ import org.springframework.data.domain.Pageable;
 
 @Getter
 @Builder
-public class UserSearchResponse {
+public class UserSearchRequest {
     private boolean locked;
     private int page;
     private int size;
 
-    public UserSearchResponse(boolean locked, int page, int size) {
+    public UserSearchRequest(boolean locked, int page, int size) {
+        this.locked = locked;
         this.page = page;
         this.size = size;
     }

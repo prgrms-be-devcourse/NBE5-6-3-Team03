@@ -4,8 +4,8 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatist
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
-import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.Collections;
 import java.util.HashMap;
@@ -14,10 +14,10 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,14 +38,11 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-    // FIXME QueryDSL 페이지네이션 적용
     @GetMapping("/user-info")
     public ApiResponse<Page<UserInfoResponse>> userInfos(
-        @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "16") int size
+        @ModelAttribute UserSearchRequest request
     ) {
-        int minPageLimit = Math.max(0, page);
-        return ApiResponse.success(adminService.findAll(PageRequest.of(minPageLimit, size)));
+        return ApiResponse.success(adminService.findUsersPage(request));
     }
 
     @PatchMapping("/user-info/{id}/edit")

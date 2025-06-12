@@ -24,6 +24,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PlacesController {
     private final PlaceService placeService;
 
+    // STUDY ModelAttribute 어노테이션 공부
     @GetMapping("/info")
     public ApiResponse<Map<String, Object>> getPlaces(@ModelAttribute PlaceSearchRequest searchRequest ) {
         Page<PlaceResponse> places = placeService.findPlacesPageable(searchRequest);
