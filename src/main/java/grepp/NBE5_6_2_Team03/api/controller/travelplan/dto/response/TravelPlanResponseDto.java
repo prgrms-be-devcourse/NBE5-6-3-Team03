@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class TravelPlanResponseDto {
-
+ 
     private final Long travelPlanId;
     private final String country;
     private final String name;
