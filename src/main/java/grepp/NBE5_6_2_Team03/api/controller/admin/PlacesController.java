@@ -39,19 +39,23 @@ public class PlacesController {
     }
 
     @PostMapping("/{id}/edit")
-    public String editPlace(@PathVariable("id") String id, PlaceRequest place,
+    public ApiResponse<Map<String, String>> editPlace(@PathVariable("id") String id, PlaceRequest place,
         RedirectAttributes redirectAttributes) {
         placeService.updatePlace(id, place);
-
-        redirectAttributes.addFlashAttribute("message", "Place updated successfully.");
-        return "redirect:/place/info";
+        return ApiResponse.success(createSuccessMessage("성공적으로 변경되었습니다."));
     }
 
     @PostMapping("/{id}/delete")
-    public String deletePlace(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
+    public ApiResponse<Map<String, String>>  deletePlace(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         placeService.deleteById(id);
-        redirectAttributes.addFlashAttribute("message", "Place deleted successfully.");
-        return "redirect:/place/info";
+        return ApiResponse.success(createSuccessMessage("성공적으로 삭제되었습니다."));
+    }
+
+    private Map<String, String> createSuccessMessage(String message) {
+        return Map.of(
+            "message", message,
+            "redirect", "/place/info"
+        );
     }
 
     private Map<String, Object> createPlaceInfoResponse(Object obj) {

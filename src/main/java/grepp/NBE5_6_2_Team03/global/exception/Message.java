@@ -6,6 +6,7 @@ public enum Message {
     USER_NOT_MATCH_PASSWORD("회원의 비밀번호가 일치하지 않습니다."),
     ADMIN_NOT_DELETE("관리자 계정은 삭제할 수 없습니다"),
     PLANNED_NOT_FOUND("해당 여행 계획이 존재하지 않습니다."),
+    PLACE_NOT_FOUND("해당 장소가 존재하지 않습니다."),
     SCHEDULE_NOT_FOUND("해당 일정이 존재하지 않습니다."),
     EXPENSE_NOT_FOUND("해당 지출이 존재하지 않습니다.");
 

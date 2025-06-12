@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface PlaceRepository extends JpaRepository<Place, String>, PlaceRepositoryCustom {
 
-    Place findByPlaceId(String placeId);
+    Optional<Place> findByPlaceId(String placeId);
 
     @Query("select distinct p.country from Place p order by p.country")
     List<String> findDistinctCountries();

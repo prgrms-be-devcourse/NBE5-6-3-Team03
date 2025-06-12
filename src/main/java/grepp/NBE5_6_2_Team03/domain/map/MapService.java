@@ -4,6 +4,8 @@ import grepp.NBE5_6_2_Team03.api.controller.map.dto.MapResponse;
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
 import grepp.NBE5_6_2_Team03.domain.place.repository.CountryRepository;
 import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceRepository;
+import grepp.NBE5_6_2_Team03.global.exception.Message;
+import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,8 @@ public class MapService {
     }
 
     public MapResponse getPlace(String placeId) {
-        Place place = placeRepository.findByPlaceId(placeId);
+        Place place = placeRepository.findByPlaceId(placeId)
+            .orElseThrow(() -> new NotFoundException(Message.PLACE_NOT_FOUND));
         return convertToResponse(place);
     }
 
