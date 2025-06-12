@@ -63,7 +63,7 @@ public class AdminController {
     }
 
     @GetMapping("/statistic")
-    public ResponseEntity<Map<String, List<?>>> statistic() {
+    public ApiResponse<Map<String, List<?>>> statistic() {
         List<CountriesStatisticResponse> countriesStatisticResponses = adminService.getCountriesStatistics();
         List<MonthlyStatisticResponse> monthlyStatisticResponses = adminService.getMonthStatistics();
         Map<String, List<?>> statistics = new HashMap<>() {
@@ -75,19 +75,19 @@ public class AdminController {
 
         log.info(statistics.toString());
 
-        return ResponseEntity.ok(statistics);
+        return ApiResponse.success(statistics);
     }
 
     @GetMapping("/valid-email")
-    public ResponseEntity<Map<String, Boolean>> validateEmail(@RequestParam("email") String email) {
+    public ApiResponse<Map<String, Boolean>> validateEmail(@RequestParam("email") String email) {
         boolean isDuplicatedEmail = adminService.isDuplicatedEmail(email);
-        return ResponseEntity.ok(isDuplicatedEmail ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
+        return ApiResponse.success(isDuplicatedEmail ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
     }
 
     @GetMapping("/valid-name")
-    public ResponseEntity<Map<String, Boolean>> validateName(@RequestParam("name") String name) {
+    public ApiResponse<Map<String, Boolean>> validateName(@RequestParam("name") String name) {
         boolean isDuplicatedName = adminService.isDuplicatedUsername(name);
-        return ResponseEntity.ok(isDuplicatedName ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
+        return ApiResponse.success(isDuplicatedName ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
     }
 
     private Map<String, String> createSuccessMessage(String message) {
