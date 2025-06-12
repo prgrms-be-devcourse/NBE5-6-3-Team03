@@ -26,7 +26,6 @@ public class PlacesController {
 
     @GetMapping("/info")
     public ApiResponse<Map<String, Object>> getPlaces(@ModelAttribute PlaceSearchRequest searchRequest ) {
-//        List<PlaceResponse> places = placeService.findAll();
         Page<PlaceResponse> places = placeService.findPlacesPageable(searchRequest);
 
         return ApiResponse.success(createPlaceInfoResponse(places));
