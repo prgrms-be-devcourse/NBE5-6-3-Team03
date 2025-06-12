@@ -4,6 +4,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.place.PlaceService;
+import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,17 +25,17 @@ public class PlacesController {
     private final PlaceService placeService;
 
     @GetMapping("/info")
-    public ResponseEntity<Map<String, Object>> getPlaces(PlaceSearchRequest searchRequest ) {
+    public ApiResponse<Map<String, Object>> getPlaces(PlaceSearchRequest searchRequest ) {
 //        List<PlaceResponse> places = placeService.findAll();
         Page<PlaceResponse> result = placeService.searchPlaces(request);
 
-        return ResponseEntity.ok(createPlaceInfoResponse(places));
+        return ApiResponse.success(createPlaceInfoResponse(places));
     }
 
     @GetMapping("/{id}/edit")
-    public ResponseEntity<Map<String, Object>> editPlace(@PathVariable("id") String id) {
+    public ApiResponse<Map<String, Object>> editPlace(@PathVariable("id") String id) {
         PlaceResponse place = placeService.findById(id);
-        return ResponseEntity.ok(createPlaceInfoResponse(place));
+        return ApiResponse.success(createPlaceInfoResponse(place));
     }
 
     @PostMapping("/{id}/edit")

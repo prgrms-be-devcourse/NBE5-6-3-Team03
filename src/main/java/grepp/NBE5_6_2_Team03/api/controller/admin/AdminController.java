@@ -6,6 +6,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
+import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -38,31 +39,31 @@ public class AdminController {
     }
 
     @GetMapping("/user-info")
-    public ResponseEntity<Page<UserInfoResponse>> userInfos(
+    public ApiResponse<Page<UserInfoResponse>> userInfos(
         @RequestParam(name = "page", defaultValue = "0") int page,
         @RequestParam(name = "size", defaultValue = "16") int size
     ) {
         int minPageLimit = Math.max(0, page);
-        return ResponseEntity.ok(adminService.findAll(PageRequest.of(minPageLimit, size)));
+        return ApiResponse.success(adminService.findAll(PageRequest.of(minPageLimit, size)));
     }
 
     @PatchMapping("/user-info/{id}/edit")
-    public ResponseEntity<Map<String, String>> editUserInfo(
+    public ApiResponse<Map<String, String>> editUserInfo(
         @PathVariable("id") Long id,
         @RequestBody UserInfoUpdateRequest request
     ) {
         String message = null;
 
         adminService.updateUserInfo(id, request);
-        return ResponseEntity.ok(createSuccessMessage("유저 정보가 성공적으로 수정되었습니다."));
+        return ApiResponse.success(createSuccessMessage("유저 정보가 성공적으로 수정되었습니다."));
     }
 
     @DeleteMapping("/user-info/{id}/delete")
-    public ResponseEntity<Map<String, String>> deleteUserInfo(
+    public ApiResponse<Map<String, String>> deleteUserInfo(
         @PathVariable("id") Long id
     ) {
         adminService.deleteById(id);
-        return ResponseEntity.ok(createSuccessMessage("유저를 탈퇴처리 하였습니다."));
+        return ApiResponse.success(createSuccessMessage("유저를 탈퇴처리 하였습니다."));
     }
 
     private static Map<String, String> getMessage(String message) {
