@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +25,9 @@ public class PlacesController {
     private final PlaceService placeService;
 
     @GetMapping("/info")
-    public ApiResponse<Map<String, Object>> getPlaces(PlaceSearchRequest searchRequest ) {
+    public ApiResponse<Map<String, Object>> getPlaces(@ModelAttribute PlaceSearchRequest searchRequest ) {
 //        List<PlaceResponse> places = placeService.findAll();
-        Page<PlaceResponse> result = placeService.searchPlaces(request);
+        Page<PlaceResponse> places = placeService.findPlacesPageable(searchRequest);
 
         return ApiResponse.success(createPlaceInfoResponse(places));
     }

@@ -2,16 +2,21 @@ package grepp.NBE5_6_2_Team03.domain.place;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
 import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
@@ -19,6 +24,12 @@ public class PlaceService {
     public List<PlaceResponse> findAll() {
         List<Place> places =  placeRepository.findAll();
         return places.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+    public Page<PlaceResponse> findPlacesPageable(PlaceSearchRequest req) {
+        Page<Place> places = placeRepository.findPaged(req.getCountry(), req.getCity(), req.getPageable());
+        log.debug("Found {} places", places.getTotalElements());
+        return places.map(this::convertToDto);
     }
 
     public PlaceResponse findById(String id) {
