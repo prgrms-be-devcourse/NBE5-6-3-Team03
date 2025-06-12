@@ -4,6 +4,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatist
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchResponse;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
@@ -62,6 +63,28 @@ public class AdminService {
 
     public boolean isDuplicatedUsername(String username) {
         return userRepository.findByName(username).isPresent();
+    }
+
+    public Page<UserInfoResponse> findLockedUsers(UserSearchResponse userSearchResponse) {
+        boolean isLocked = userSearchResponse.isLocked();
+        Pageable pageable = userSearchResponse.getPageable();
+
+        Page<User> lockedUserInfos = userRepository.findByIsLocked(isLocked, pageable);
+        return lockedUserInfos.map(this::convertToResponse);
+    }
+
+    @Transactional
+    public void lockUser(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
+        user.updateIsLocked(true);
+    }
+
+    @Transactional
+    public void unLockUser(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
+        user.updateIsLocked(false);
     }
 
     @Transactional

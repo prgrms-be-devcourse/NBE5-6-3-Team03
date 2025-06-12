@@ -38,6 +38,7 @@ public class AdminController {
         return "admin/dashboard";
     }
 
+    // FIXME QueryDSL 페이지네이션 적용
     @GetMapping("/user-info")
     public ApiResponse<Page<UserInfoResponse>> userInfos(
         @RequestParam(name = "page", defaultValue = "0") int page,
