@@ -1,24 +1,20 @@
 package grepp.NBE5_6_2_Team03.global.config.security;
 
-import grepp.NBE5_6_2_Team03.domain.user.Role;
+import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 @Component
 public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final RedisTemplate redisTemplate;
-
-    private static final String ADMIN_REDIRECT_URL = "/admin/dashboard";
-    private static final String USER_REDIRECT_URL = "/users/home";
-    private static final String DEFAULT_REDIRECT_URL = "/";
 
     public CustomLoginSuccessHandler(@Qualifier("redisTemplate") RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -32,22 +28,14 @@ public class CustomLoginSuccessHandler implements AuthenticationSuccessHandler {
         String key = "login:fail:" + email;
         redisTemplate.delete(key);
 
-        if (hasRole(authentication, Role.ROLE_ADMIN)) {
-           response.sendRedirect(ADMIN_REDIRECT_URL);
-           return;
-        }
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        if(hasRole(authentication, Role.ROLE_USER)){
-            response.sendRedirect(USER_REDIRECT_URL);
-            return;
-        }
+        String name = ((CustomUserDetails) authentication.getPrincipal()).getUsername();
 
-        response.sendRedirect(DEFAULT_REDIRECT_URL);
+        String json = String.format("{\"name\": \"%s\"}", name);
+        response.getWriter().write(json);
 
-    }
-
-    private boolean hasRole(Authentication auth, Role role) {
-        return auth.getAuthorities().stream()
-                .anyMatch(a -> role.isSameRoleName(a.getAuthority()));
     }
 }
