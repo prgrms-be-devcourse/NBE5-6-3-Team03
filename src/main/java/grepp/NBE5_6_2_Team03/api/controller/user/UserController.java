@@ -1,9 +1,11 @@
 package grepp.NBE5_6_2_Team03.api.controller.user;
 
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanHomeResponseDto;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanResponseDto;
+import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.UserMyPageResponse;
-import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
@@ -48,12 +50,13 @@ public class UserController {
         return new ApiResponse<>(HttpStatus.CREATED.name(), "성공", userService.signup(request));
     }
 
+    @ResponseBody
     @GetMapping("/home")
-    public String userHomeForm(@AuthenticationPrincipal CustomUserDetails user, Model model) {
-        model.addAttribute("username", user.getUsername());
-        List<TravelPlan> plans = travelPlanService.getPlansByUser(user.getId());
-        model.addAttribute("plans", plans);
-        return "plan/plan";
+    public ApiResponse<TravelPlanHomeResponseDto> userHomeForm(@AuthenticationPrincipal CustomUserDetails user, Model model){
+        String username = user.getUsername();
+        List<TravelPlanResponseDto> plans = travelPlanService.getPlansByUser(user.getId());
+        TravelPlanHomeResponseDto dto = new TravelPlanHomeResponseDto(username, plans);
+        return ApiResponse.success(dto);
     }
 
     @GetMapping("/my-page")
