@@ -6,6 +6,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
+import grepp.NBE5_6_2_Team03.domain.admin.code.LockStatus;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.Collections;
 import java.util.HashMap;
@@ -52,6 +53,22 @@ public class AdminController {
     ) {
         adminService.updateUserInfo(id, request);
         return ApiResponse.success(createSuccessMessage("유저 정보가 성공적으로 수정되었습니다."));
+    }
+
+    @PatchMapping("/user-info/{id}/lock")
+    public ApiResponse<Map<String, String>> lockUser(
+        @PathVariable("id") Long id
+    ) {
+        LockStatus status = LockStatus.valueOf(adminService.changeLockStatus(id));
+        String message = getLockMessage(status);
+        return ApiResponse.success(createSuccessMessage(message));
+    }
+
+    private String getLockMessage(LockStatus status) {
+        return switch (status) {
+            case LOCKED -> "유저가 잠금처리되었습니다.";
+            case UNLOCKED -> "유저가 잠금해제되었습니다.";
+        };
     }
 
     @DeleteMapping("/user-info/{id}/delete")

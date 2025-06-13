@@ -5,5 +5,5 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface UserCustomRepository {
-    Page<User> findByIsLocked(boolean isLocked, Pageable pageable);
+    Page<User> findUserWithOption(boolean isLocked, Pageable pageable);
 }

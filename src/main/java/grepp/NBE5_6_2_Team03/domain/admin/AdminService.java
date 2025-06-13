@@ -5,9 +5,11 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatistic
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
+import grepp.NBE5_6_2_Team03.domain.admin.code.LockStatus;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
+import grepp.NBE5_6_2_Team03.global.exception.CannotModifyAdminException;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.util.ArrayList;
@@ -69,7 +71,7 @@ public class AdminService {
         boolean isLocked = userSearchRequest.isLocked();
         Pageable pageable = userSearchRequest.getPageable();
 
-        Page<User> lockedUserInfos = userRepository.findByIsLocked(isLocked, pageable);
+        Page<User> lockedUserInfos = userRepository.findUserWithOption(isLocked, pageable);
         return lockedUserInfos.map(this::convertToResponse);
     }
 
@@ -118,4 +120,19 @@ public class AdminService {
         return countriesStatisticResponses;
     }
 
+    public String changeLockStatus(Long id) {
+        if (userRepository.isAdmin(id)) throw new CannotModifyAdminException(Message.ADMIN_NOT_MODIFIED);
+
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
+
+        if (user.isLocked()) {
+            unLockUser(id);
+            return LockStatus.UNLOCKED.name();
+        }
+        else {
+            lockUser(id);
+            return LockStatus.LOCKED.name();
+        }
+    }
 }

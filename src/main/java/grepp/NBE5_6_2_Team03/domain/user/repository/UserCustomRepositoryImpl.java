@@ -17,7 +17,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     private final QUser user = QUser.user;
 
     @Override
-    public Page<User> findByIsLocked(boolean isLocked, Pageable pageable) {
+    public Page<User> findUserWithOption(boolean isLocked, Pageable pageable) {
 
         BooleanBuilder builder = new BooleanBuilder();
 
