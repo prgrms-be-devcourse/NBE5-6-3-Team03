@@ -1,6 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.travelplan.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanRequestDto;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanResponseDto;
 import grepp.NBE5_6_2_Team03.domain.travelplan.CountryStatus;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
@@ -9,6 +10,7 @@ import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +21,12 @@ public class TravelPlanService {
     private final TravelPlanRepository travelPlanRepository;
     private final UserRepository userRepository;
 
-    public List<TravelPlan> getPlansByUser(Long userid) {
+    public List<TravelPlanResponseDto> getPlansByUser(Long userid) {
 
         List<TravelPlan> plans = travelPlanRepository.findByUserId(userid);
-        return plans;
+        return plans.stream()
+            .map(TravelPlanResponseDto::new)
+            .collect(Collectors.toList());
     }
 
     @Transactional
