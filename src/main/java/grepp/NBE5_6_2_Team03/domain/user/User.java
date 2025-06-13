@@ -57,4 +57,8 @@ public class User extends BaseEntity {
     public void updateIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
     }
+
+    public boolean isAdmin() {
+        return this.role == Role.ROLE_ADMIN;
+    }
 }

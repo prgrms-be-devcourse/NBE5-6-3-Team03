@@ -59,7 +59,7 @@ public class AdminController {
         @PathVariable("id") Long userId
     ) {
         adminService.lockUser(userId);
-        return ApiResponse.success(createSuccessMessage(LockStatus.LOCKED.name()));
+        return ApiResponse.success(createSuccessMessage("유저를 잠금처리하였습니다."));
     }
 
     @PatchMapping("/user-info/{id}/unlock")
@@ -67,14 +67,7 @@ public class AdminController {
         @PathVariable("id") Long userId
     ) {
         adminService.unlockUser(userId);
-        return ApiResponse.success(createSuccessMessage(LockStatus.LOCKED.name()));
-    }
-
-    private String getLockMessage(LockStatus status) {
-        return switch (status) {
-            case LOCKED -> "유저가 잠금처리되었습니다.";
-            case UNLOCKED -> "유저가 잠금해제되었습니다.";
-        };
+        return ApiResponse.success(createSuccessMessage("유저를 잠금해제하였습니다."));
     }
 
     @DeleteMapping("/user-info/{id}/delete")
@@ -82,35 +75,32 @@ public class AdminController {
         @PathVariable("id") Long id
     ) {
         adminService.deleteById(id);
-        return ApiResponse.success(createSuccessMessage("유저를 탈퇴처리 하였습니다."));
+        return ApiResponse.success(createSuccessMessage("유저를 탈퇴처리하였습니다."));
     }
 
     @GetMapping("/statistic")
     public ApiResponse<Map<String, List<?>>> statistic() {
         List<CountriesStatisticResponse> countriesStatisticResponses = adminService.getCountriesStatistics();
         List<MonthlyStatisticResponse> monthlyStatisticResponses = adminService.getMonthStatistics();
-        Map<String, List<?>> statistics = new HashMap<>() {
-            {
-                put("countries", countriesStatisticResponses);
-                put("monthly", monthlyStatisticResponses);
-            }
-        };
 
-        log.info(statistics.toString());
-
-        return ApiResponse.success(statistics);
+        return ApiResponse.success(Map.of(
+            "countries", countriesStatisticResponses,
+            "monthly", monthlyStatisticResponses
+        ));
     }
 
     @GetMapping("/valid-email")
     public ApiResponse<Map<String, Boolean>> validateEmail(@RequestParam("email") String email) {
         boolean isDuplicatedEmail = adminService.isDuplicatedEmail(email);
-        return ApiResponse.success(isDuplicatedEmail ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
+        return ApiResponse.success(isDuplicatedEmail ?
+            Collections.singletonMap("duplicated", true) : Collections.singletonMap("duplicated", false));
     }
 
     @GetMapping("/valid-name")
     public ApiResponse<Map<String, Boolean>> validateName(@RequestParam("name") String name) {
         boolean isDuplicatedName = adminService.isDuplicatedUsername(name);
-        return ApiResponse.success(isDuplicatedName ? Collections.singletonMap("duplicated", true) : Collections.emptyMap());
+        return ApiResponse.success(isDuplicatedName ?
+            Collections.singletonMap("duplicated", true) : Collections.singletonMap("duplicated", false));
     }
 
     private Map<String, String> createSuccessMessage(String message) {

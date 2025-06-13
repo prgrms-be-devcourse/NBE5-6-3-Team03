@@ -30,20 +30,11 @@ public class AdminService {
     private final UserQueryRepository userQueryRepository;
     private final TravelPlanRepository travelPlanRepository;
 
-    public Page<UserInfoResponse> findAll(Pageable pageable) {
-        Page<User> userInfos = userRepository.findAll(pageable);
-        return userInfos.map(this::convertToResponse);
-    }
-
-    public UserInfoResponse convertToResponse(User userInfo) {
-        return new UserInfoResponse(
-            userInfo.getId(),
-            userInfo.getEmail(),
-            userInfo.getName(),
-            userInfo.getPhoneNumber(),
-            userInfo.isLocked(),
-            userInfo.getRole()
-        );
+    public Page<UserInfoResponse> findUsersPage(UserSearchRequest userSearchRequest) {
+        boolean isLocked = userSearchRequest.isLocked();
+        Pageable pageable = userSearchRequest.getPageable();
+        Page<User> lockedUserInfos = userQueryRepository.findUsersByLockStatus(isLocked, pageable);
+        return lockedUserInfos.map(UserInfoResponse::of);
     }
 
     @Transactional
@@ -58,7 +49,6 @@ public class AdminService {
             request.getPhoneNumber(),
             null
         );
-
     }
 
     public boolean isDuplicatedEmail(String email) {
@@ -69,41 +59,32 @@ public class AdminService {
         return userRepository.findByName(username).isPresent();
     }
 
-    public Page<UserInfoResponse> findUsersPage(UserSearchRequest userSearchRequest) {
-        boolean isLocked = userSearchRequest.isLocked();
-        Pageable pageable = userSearchRequest.getPageable();
-
-        Page<User> lockedUserInfos = userQueryRepository.findUsersByLockStatus(isLocked, pageable);
-        return lockedUserInfos.map(this::convertToResponse);
-    }
-
     @Transactional
     public void lockUser(Long userId) {
-        User user = userRepository.findById(userId)
-            .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
-        if(user.getRole() == Role.ROLE_ADMIN) {
-            throw new CannotModifyAdminException(Message.ADMIN_NOT_MODIFIED);
-        }
-            user.updateIsLocked(true);
+        User user = findUserAndCheckAdminRole(userId);
+        user.updateIsLocked(true);
     }
 
     @Transactional
     public void unlockUser(Long userId) {
+        User user = findUserAndCheckAdminRole(userId);
+        user.updateIsLocked(false);
+    }
+
+    @Transactional
+    public void deleteById(Long userId) {
+        User user = findUserAndCheckAdminRole(userId);
+        travelPlanRepository.deleteByUserId(userId);
+        userRepository.deleteById(userId);
+    }
+
+    private User findUserAndCheckAdminRole(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
         if(user.getRole() == Role.ROLE_ADMIN) {
             throw new CannotModifyAdminException(Message.ADMIN_NOT_MODIFIED);
         }
-        user.updateIsLocked(false);
-    }
-
-    @Transactional
-    public void deleteById(Long id) {
-        if(userRepository.isAdmin(id)) {
-            throw new NotFoundException(Message.ADMIN_NOT_DELETE);
-        }
-        travelPlanRepository.deleteByUserId(id);
-        userRepository.deleteById(id);
+        return user;
     }
 
     public List<MonthlyStatisticResponse> getMonthStatistics() {

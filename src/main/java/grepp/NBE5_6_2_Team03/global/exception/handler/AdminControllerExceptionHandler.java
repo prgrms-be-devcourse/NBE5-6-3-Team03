@@ -1,6 +1,7 @@
 package grepp.NBE5_6_2_Team03.global.exception.handler;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.AdminController;
+import grepp.NBE5_6_2_Team03.global.exception.CannotModifyAdminException;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import grepp.NBE5_6_2_Team03.global.response.ResponseCode;
@@ -16,13 +17,13 @@ public class AdminControllerExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ApiResponse<Map<String, String>> handleNotFoundException(NotFoundException e) {
         log.warn("NotFoundException occurred: {}", e.getMessage());
-        return ApiResponse.error(ResponseCode.INTERNAL_SERVER_ERROR, createErrorMessage(e.getMessage()));
+        return ApiResponse.error(ResponseCode.NOT_FOUND, createErrorMessage(e.getMessage()));
     }
 
-    @ExceptionHandler(Exception.class)
-    public ApiResponse<Map<String, String>> handleGeneralException(Exception e) {
-        log.error("Unexpected exception occurred", e);
-        return ApiResponse.error(ResponseCode.BAD_REQUEST, createErrorMessage("알 수 없는 이유로 취소되었습니다."));
+    @ExceptionHandler(CannotModifyAdminException.class)
+    public ApiResponse<Map<String, String>> handleCannotModifyAdminException(CannotModifyAdminException e) {
+        log.warn("CannotModifyAdminException occurred: {}", e.getMessage());
+        return ApiResponse.error(ResponseCode.FORBIDDEN, createErrorMessage(e.getMessage()));
     }
 
     private Map<String, String> createErrorMessage(String message) {

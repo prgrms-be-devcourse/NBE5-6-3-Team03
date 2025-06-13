@@ -1,6 +1,5 @@
 package grepp.NBE5_6_2_Team03.domain.admin;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import java.util.Optional;
@@ -39,7 +38,7 @@ class AdminServiceTest {
         assertTrue(user.isPresent());
         adminService.lockUser(user.get().getId());
         assertTrue(user.get().isLocked());
-        adminService.unLockUser(user.get().getId());
+        adminService.unlockUser(user.get().getId());
         assertFalse(user.get().isLocked());
     }
 
