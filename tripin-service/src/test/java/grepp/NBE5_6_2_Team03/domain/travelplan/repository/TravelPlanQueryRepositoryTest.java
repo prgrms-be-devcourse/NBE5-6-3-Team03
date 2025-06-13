@@ -48,8 +48,8 @@ class TravelPlanQueryRepositoryTest {
         TravelSchedule travelSchedule3 = createTravelSchedule(travelPlan, travelRoute, "일정 내용3", "장소 이름3");
         travelScheduleRepository.saveAll(List.of(travelSchedule, travelSchedule2, travelSchedule3));
 
-        Expense expense = createExpense(travelSchedule, 1000);
-        Expense expense2 = createExpense(travelSchedule2, 2000);
+        Expense expense = createExpense(travelSchedule, 1000,0);
+        Expense expense2 = createExpense(travelSchedule2, 2000,0);
         expenseRepository.saveAll(List.of(expense, expense2));
 
         //when
@@ -88,9 +88,10 @@ class TravelPlanQueryRepositoryTest {
                 .build();
     }
 
-    private Expense createExpense(TravelSchedule travelSchedule, int payedPrice){
+    private Expense createExpense(TravelSchedule travelSchedule, int expectedPrice, int payedPrice){
         return Expense.builder()
                 .travelSchedule(travelSchedule)
+                .expectPrice(expectedPrice)
                 .payedPrice(payedPrice)
                 .build();
     }

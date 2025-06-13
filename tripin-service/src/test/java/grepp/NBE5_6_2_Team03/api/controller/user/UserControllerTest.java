@@ -2,6 +2,7 @@ package grepp.NBE5_6_2_Team03.api.controller.user;
 
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
+import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.file.FileStore;
@@ -39,6 +40,9 @@ class UserControllerTest {
 
     @MockitoBean
     private UserService userService;
+
+    @MockitoBean
+    private TravelPlanService travelPlanService;
 
     @MockitoBean
     private SecurityContextUpdater updater;
