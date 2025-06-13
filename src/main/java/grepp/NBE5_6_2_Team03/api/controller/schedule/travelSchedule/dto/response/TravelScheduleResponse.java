@@ -14,7 +14,7 @@ public class TravelScheduleResponse {
     private final String content;
     private final String placeName;
     private final String status;
-    private final LocalDate travelDate;
+    private final LocalDate travelScheduleDate;
     private final String departure;
     private final String destination;
     private final String transportation;
@@ -27,7 +27,7 @@ public class TravelScheduleResponse {
         this.content = content;
         this.placeName = placeName;
         this.status = status;
-        this.travelDate = travelDate;
+        this.travelScheduleDate = travelDate;
         this.departure = departure;
         this.destination = destination;
         this.transportation = transportation;

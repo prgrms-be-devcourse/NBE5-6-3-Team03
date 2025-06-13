@@ -6,8 +6,9 @@ import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.service.TravelScheduleService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
+import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
+import grepp.NBE5_6_2_Team03.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import java.time.LocalDate;
@@ -25,8 +26,8 @@ public class TravelScheduleController {
     private final TravelScheduleService travelScheduleService;
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> list(@PathVariable("travelPlanId") Long travelPlanId,
-                               @AuthenticationPrincipal CustomUserDetails customUser) {
+    public ApiResponse<Map<String, Object>> list(@PathVariable("travelPlanId") Long travelPlanId,
+                                                 @AuthenticationPrincipal CustomUserDetails customUser) {
         Map<LocalDate, Map<ScheduleStatus, List<TravelScheduleResponse>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
 
         Map<String, Object> response = new HashMap<>();
@@ -34,51 +35,51 @@ public class TravelScheduleController {
         response.put("travelPlanId", travelPlanId);
         response.put("username", customUser.getUsername());
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.success(response);
     }
 
     @GetMapping("/{travelScheduleId}")
-    public ResponseEntity<TravelScheduleResponse> findSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<TravelScheduleResponse> findSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                           @PathVariable("travelScheduleId") Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
-        return ResponseEntity.ok(TravelScheduleResponse.fromEntity(schedule));
+        return ApiResponse.success(TravelScheduleResponse.fromEntity(schedule));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Object> addSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<Object> addSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                               @RequestBody TravelScheduleRequest request) {
         try {
             TravelSchedule travelSchedule =  travelScheduleService.addSchedule(travelPlanId, request);
-            return ResponseEntity.ok(TravelScheduleResponse.fromEntity(travelSchedule));
+            return ApiResponse.success(TravelScheduleResponse.fromEntity(travelSchedule));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
     }
 
     @PutMapping("/{travelScheduleId}/edit")
-    public ResponseEntity<Object> editSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<Object> editSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                @PathVariable("travelScheduleId") Long travelScheduleId,
                                @RequestBody TravelScheduleRequest request) {
         try {
             TravelSchedule travelSchedule =  travelScheduleService.editSchedule(travelScheduleId, request);
-            return ResponseEntity.ok(TravelScheduleResponse.fromEntity(travelSchedule));
+            return ApiResponse.success(TravelScheduleResponse.fromEntity(travelSchedule));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
     }
 
     @DeleteMapping("/{travelScheduleId}/delete")
-    public ResponseEntity<Map<String, Object>> deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<Map<String, Object>> deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                  @PathVariable("travelScheduleId") Long travelScheduleId) {
         travelScheduleService.deleteSchedule(travelScheduleId);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.noContent();
     }
 
     @PatchMapping("/{travelScheduleId}/status")
-    public ResponseEntity<Map<String, Object>> scheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<Map<String, Object>> scheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
                                  @PathVariable("travelScheduleId") Long travelScheduleId) {
         ScheduleStatus scheduleStatus =  travelScheduleService.scheduleStatus(travelScheduleId);
-        return ResponseEntity.ok(Map.of(
+        return ApiResponse.success(Map.of(
             "travelScheduleId", travelScheduleId,
             "scheduleStatus", scheduleStatus.name(),
             "message", "일정 상태가 변경되었습니다."

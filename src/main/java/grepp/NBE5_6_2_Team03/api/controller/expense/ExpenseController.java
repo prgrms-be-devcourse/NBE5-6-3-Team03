@@ -5,8 +5,9 @@ import grepp.NBE5_6_2_Team03.api.controller.expense.dto.response.ExpenseResponse
 import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.expense.service.ExpenseService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
+import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
+import grepp.NBE5_6_2_Team03.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @GetMapping
-    public ResponseEntity<Map<String, Object>> list(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<Map<String, Object>> list(@PathVariable("travelPlanId") Long travelPlanId,
                                   @PathVariable("travelScheduleId") Long travelScheduleId,
                                   @AuthenticationPrincipal CustomUserDetails customUser) {
         Expense expense = expenseService.findByScheduleId(travelScheduleId).orElse(null);
@@ -32,47 +33,47 @@ public class ExpenseController {
         response.put("travelScheduleId", travelScheduleId);
         response.put("username", customUser.getUsername());
 
-        return ResponseEntity.ok(response);
+        return ApiResponse.success(response);
     }
 
     @GetMapping("/{expenseId}")
-    public ResponseEntity<ExpenseResponse> findExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<ExpenseResponse> findExpense(@PathVariable("travelPlanId") Long travelPlanId,
                                                        @PathVariable("travelScheduleId") Long travelScheduleId,
                                                        @PathVariable("expenseId") Long expenseId) {
         Expense expense = expenseService.findById(expenseId);
-        return ResponseEntity.ok(ExpenseResponse.fromEntity(expense));
+        return ApiResponse.success(ExpenseResponse.fromEntity(expense));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Object> addExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<Object> addExpense(@PathVariable("travelPlanId") Long travelPlanId,
                              @PathVariable("travelScheduleId") Long travelScheduleId,
                              @RequestBody ExpenseRequest request) {
         try {
             Expense expense = expenseService.addExpense(travelScheduleId, request);
-            return ResponseEntity.ok(ExpenseResponse.fromEntity(expense));
+            return ApiResponse.success(ExpenseResponse.fromEntity(expense));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
     }
 
     @PutMapping("/{expenseId}/edit")
-    public ResponseEntity<Object> editExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<Object> editExpense(@PathVariable("travelPlanId") Long travelPlanId,
                               @PathVariable("travelScheduleId") Long travelScheduleId,
                               @PathVariable("expenseId") Long expenseId,
                               @RequestBody ExpenseRequest request) {
         try {
             Expense expense = expenseService.editExpense(expenseId, request);
-            return ResponseEntity.ok(ExpenseResponse.fromEntity(expense));
+            return ApiResponse.success(ExpenseResponse.fromEntity(expense));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+            return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
     }
 
     @DeleteMapping("/{expenseId}/delete")
-    public ResponseEntity<Map<String, Object>> deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
+    public ApiResponse<Map<String, Object>> deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
                                 @PathVariable("travelScheduleId") Long travelScheduleId,
                                 @PathVariable("expenseId") Long expenseId) {
         expenseService.deleteExpense(expenseId);
-        return ResponseEntity.noContent().build();
+        return ApiResponse.noContent();
     }
 }
