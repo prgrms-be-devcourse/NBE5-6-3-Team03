@@ -4,6 +4,7 @@ import com.grepp.mailservice.dto.CodeMailRequest
 import com.grepp.mailservice.dto.CodeMailResponse
 import com.grepp.mailservice.dto.HtmlMailRequest
 import com.grepp.mailservice.service.MailSendService
+import com.grepp.response.ApiResponse
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -15,15 +16,15 @@ import org.springframework.web.bind.annotation.RestController
 class MailController(private val mailSendService: MailSendService) {
 
     @PostMapping("/send-code")
-    fun sendSimpleMail(@RequestBody request: CodeMailRequest): ResponseEntity<CodeMailResponse> {
+    fun sendSimpleMail(@RequestBody request: CodeMailRequest): ResponseEntity<ApiResponse<CodeMailResponse>> {
         val code = mailSendService.sendCodeMail(request.to, request.codeType)
-        return ResponseEntity.ok(CodeMailResponse(request.to, code))
+        return ResponseEntity.ok(ApiResponse.success(CodeMailResponse(request.to, code)))
     }
 
     @PostMapping("/send-html")
-    fun sendSettlementMail(@RequestBody request: HtmlMailRequest): ResponseEntity<Unit> {
+    fun sendSettlementMail(@RequestBody request: HtmlMailRequest): ResponseEntity<ApiResponse<Void>> {
         mailSendService.sendHtmlMail(request)
-        return ResponseEntity.ok().build()
+        return ResponseEntity.ok(ApiResponse.noContent())
     }
 
 }
