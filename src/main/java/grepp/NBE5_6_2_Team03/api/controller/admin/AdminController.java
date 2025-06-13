@@ -15,7 +15,6 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -57,11 +56,18 @@ public class AdminController {
 
     @PatchMapping("/user-info/{id}/lock")
     public ApiResponse<Map<String, String>> lockUser(
-        @PathVariable("id") Long id
+        @PathVariable("id") Long userId
     ) {
-        LockStatus status = LockStatus.valueOf(adminService.changeLockStatus(id));
-        String message = getLockMessage(status);
-        return ApiResponse.success(createSuccessMessage(message));
+        adminService.lockUser(userId);
+        return ApiResponse.success(createSuccessMessage(LockStatus.LOCKED.name()));
+    }
+
+    @PatchMapping("/user-info/{id}/unlock")
+    public ApiResponse<Map<String, String>> unlockUser(
+        @PathVariable("id") Long userId
+    ) {
+        adminService.unlockUser(userId);
+        return ApiResponse.success(createSuccessMessage(LockStatus.LOCKED.name()));
     }
 
     private String getLockMessage(LockStatus status) {

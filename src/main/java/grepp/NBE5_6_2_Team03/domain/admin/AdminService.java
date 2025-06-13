@@ -5,9 +5,10 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatistic
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
-import grepp.NBE5_6_2_Team03.domain.admin.code.LockStatus;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
+import grepp.NBE5_6_2_Team03.domain.user.Role;
 import grepp.NBE5_6_2_Team03.domain.user.User;
+import grepp.NBE5_6_2_Team03.domain.user.repository.UserQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import grepp.NBE5_6_2_Team03.global.exception.CannotModifyAdminException;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AdminService {
 
     private final UserRepository userRepository;
+    private final UserQueryRepository userQueryRepository;
     private final TravelPlanRepository travelPlanRepository;
 
     public Page<UserInfoResponse> findAll(Pageable pageable) {
@@ -71,7 +73,7 @@ public class AdminService {
         boolean isLocked = userSearchRequest.isLocked();
         Pageable pageable = userSearchRequest.getPageable();
 
-        Page<User> lockedUserInfos = userRepository.findUserWithOption(isLocked, pageable);
+        Page<User> lockedUserInfos = userQueryRepository.findUsersByLockStatus(isLocked, pageable);
         return lockedUserInfos.map(this::convertToResponse);
     }
 
@@ -79,13 +81,19 @@ public class AdminService {
     public void lockUser(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
-        user.updateIsLocked(true);
+        if(user.getRole() == Role.ROLE_ADMIN) {
+            throw new CannotModifyAdminException(Message.ADMIN_NOT_MODIFIED);
+        }
+            user.updateIsLocked(true);
     }
 
     @Transactional
-    public void unLockUser(Long userId) {
+    public void unlockUser(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
+        if(user.getRole() == Role.ROLE_ADMIN) {
+            throw new CannotModifyAdminException(Message.ADMIN_NOT_MODIFIED);
+        }
         user.updateIsLocked(false);
     }
 
@@ -120,19 +128,4 @@ public class AdminService {
         return countriesStatisticResponses;
     }
 
-    public String changeLockStatus(Long id) {
-        if (userRepository.isAdmin(id)) throw new CannotModifyAdminException(Message.ADMIN_NOT_MODIFIED);
-
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
-
-        if (user.isLocked()) {
-            unLockUser(id);
-            return LockStatus.UNLOCKED.name();
-        }
-        else {
-            lockUser(id);
-            return LockStatus.LOCKED.name();
-        }
-    }
 }
