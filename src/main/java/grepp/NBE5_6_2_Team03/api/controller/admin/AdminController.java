@@ -4,7 +4,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.StatisticRespons
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.code.AdminResponseMessage;
+import grepp.NBE5_6_2_Team03.api.controller.admin.message.AdminResponseMessage;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.Collections;

@@ -3,6 +3,7 @@ package grepp.NBE5_6_2_Team03.api.controller.admin;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.message.AdminResponseMessage;
 import grepp.NBE5_6_2_Team03.domain.place.PlaceService;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.HashMap;
@@ -24,7 +25,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class PlacesController {
     private final PlaceService placeService;
 
-    // STUDY ModelAttribute 어노테이션 공부
     @GetMapping("/info")
     public ApiResponse<Map<String, Object>> getPlaces(@ModelAttribute PlaceSearchRequest searchRequest ) {
         Page<PlaceResponse> places = placeService.findPlacesPageable(searchRequest);
@@ -39,23 +39,16 @@ public class PlacesController {
     }
 
     @PostMapping("/{id}/edit")
-    public ApiResponse<Map<String, String>> editPlace(@PathVariable("id") String id, PlaceRequest place,
+    public ApiResponse<AdminResponseMessage> editPlace(@PathVariable("id") String id, PlaceRequest place,
         RedirectAttributes redirectAttributes) {
         placeService.updatePlace(id, place);
-        return ApiResponse.success(createSuccessMessage("성공적으로 변경되었습니다."));
+        return ApiResponse.success(AdminResponseMessage.PLACE_UPDATED);
     }
 
     @PostMapping("/{id}/delete")
-    public ApiResponse<Map<String, String>>  deletePlace(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
+    public ApiResponse<AdminResponseMessage>  deletePlace(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         placeService.deleteById(id);
-        return ApiResponse.success(createSuccessMessage("성공적으로 삭제되었습니다."));
-    }
-
-    private Map<String, String> createSuccessMessage(String message) {
-        return Map.of(
-            "message", message,
-            "redirect", "/place/info"
-        );
+        return ApiResponse.success(AdminResponseMessage.PLACE_DELETED);
     }
 
     private Map<String, Object> createPlaceInfoResponse(Object obj) {
@@ -64,11 +57,8 @@ public class PlacesController {
 
         Map<String, Object> body = new HashMap<>();
 
-        if (obj instanceof List<?>) {
-            body.put("places", obj);
-        } else {
-            body.put("place", obj);
-        }
+        String placeKey = (obj instanceof List<?>) ? "places": "place";
+        body.put(placeKey, obj);
 
         body.put("countries", countries);
         body.put("cities", cities);

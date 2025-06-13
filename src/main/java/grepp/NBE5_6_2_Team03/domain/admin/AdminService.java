@@ -6,16 +6,15 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatistic
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
+import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.Role;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import grepp.NBE5_6_2_Team03.global.exception.CannotModifyAdminException;
-import grepp.NBE5_6_2_Team03.global.exception.CannotUpdateException;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +31,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
     private final TravelPlanRepository travelPlanRepository;
+    private final TravelPlanQueryRepository travelPlanQueryRepository;
 
     public Page<UserInfoResponse> findUsersPage(UserSearchRequest userSearchRequest) {
         boolean isLocked = userSearchRequest.isLocked();
@@ -84,21 +84,22 @@ public class AdminService {
     private User findUserAndCheckAdminRole(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
-        if(user.getRole() == Role.ROLE_ADMIN) {
+        if(user.isAdmin()) {
             throw new CannotModifyAdminException(Message.ADMIN_NOT_MODIFIED);
         }
         return user;
     }
 
+    // TODO 테스트 코드 만들기
     public List<MonthlyStatisticResponse> getMonthStatistics() {
-        List<MonthlyStatisticProjection> projections = travelPlanRepository.getMonthStatistics();
+        List<MonthlyStatisticProjection> projections = travelPlanQueryRepository.getMonthStatistics();
         return projections.stream()
             .map(p -> new MonthlyStatisticResponse(p.getMonth(), p.getCount()))
             .collect(Collectors.toList());
     }
 
     public List<CountriesStatisticResponse> getCountriesStatistics() {
-        return travelPlanRepository.getCountriesStatistics();
+        return travelPlanQueryRepository.getCountriesStatistics();
     }
 
 }
