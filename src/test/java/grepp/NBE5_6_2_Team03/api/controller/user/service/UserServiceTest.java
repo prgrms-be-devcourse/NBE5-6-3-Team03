@@ -4,9 +4,9 @@ import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.UserMyPageResponse;
 import grepp.NBE5_6_2_Team03.domain.user.User;
+import grepp.NBE5_6_2_Team03.domain.user.exception.UserSignUpException;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
-import grepp.NBE5_6_2_Team03.domain.user.exception.UserSignUpException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @ActiveProfiles("test")
 @Transactional
@@ -96,16 +97,16 @@ class UserServiceTest {
         assertThat(response.getName()).isEqualTo("테스터hi");
     }
 
-    private UserSignUpRequest createSignUpRequest(String email, String name){
+    private UserSignUpRequest createSignUpRequest(String email, String name) {
         return UserSignUpRequest.builder()
                 .email(email)
                 .name(name)
                 .password("tempPassword")
-                .phoneNumber("010-1234-5678")
+                .phone("010-1234-5678")
                 .build();
     }
 
-    private UserEditRequest createUserEditRequest(String email, String rawPassword, String name){
+    private UserEditRequest createUserEditRequest(String email, String rawPassword, String name) {
         return UserEditRequest.builder()
                 .email(email)
                 .rawPassword(rawPassword)
@@ -114,7 +115,7 @@ class UserServiceTest {
                 .build();
     }
 
-    private User createUser(String email, String password, String name){
+    private User createUser(String email, String password, String name) {
         return User.builder()
                 .email(email)
                 .name(name)
