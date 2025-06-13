@@ -7,10 +7,10 @@ import lombok.Getter;
 
 @Getter
 public class CountryResponse {
-    private String city;
-    private Double latitude;
-    private Double longitude;
-    private int radius;
+    private final String city;
+    private final Double latitude;
+    private final Double longitude;
+    private final int radius;
 
     public CountryResponse(String city, Double latitude, Double longitude, int radius) {
         this.city = city;

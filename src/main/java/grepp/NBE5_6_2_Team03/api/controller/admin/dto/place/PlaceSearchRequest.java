@@ -21,27 +21,12 @@ public class PlaceSearchRequest {
     public PlaceSearchRequest(String country, String city, Integer page, Integer size) {
         this.country = country;
         this.city = city;
-        this.page = page != null ? Math.max(0, page) : 0;
-        this.size = size != null ? Math.min(Math.max(1, size), 15) : 15;
+        this.page = page;
+        this.size = size;
     }
 
     public Pageable getPageable() {
         return PageRequest.of(this.page, this.size);
     }
 
-    public boolean hasCountryOnly() {
-        return hasValidString(country) && !hasValidString(city);
-    }
-
-    public boolean hasCityOnly() {
-        return hasValidString(city) && !hasValidString(country);
-    }
-
-    public boolean hasNoFilter() {
-        return !hasValidString(country) && !hasValidString(city);
-    }
-
-    private boolean hasValidString(String str) {
-        return str != null && !str.trim().isEmpty();
-    }
 }

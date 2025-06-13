@@ -43,6 +43,7 @@ public class AdminService {
             () -> new NotFoundException(Message.USER_NOT_FOUND)
         );
 
+        // fixme Builder 패턴 적용
         user.updateProfile(
             request.getEmail(),
             request.getName(),
@@ -78,6 +79,7 @@ public class AdminService {
         userRepository.deleteById(userId);
     }
 
+    // fixme 단일 책임 원칙을 약화시킬 가능성이 있음 생각필요
     private User findUserAndCheckAdminRole(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
@@ -88,6 +90,8 @@ public class AdminService {
     }
 
     public List<MonthlyStatisticResponse> getMonthStatistics() {
+
+        // fixme aliasing 적용
         List<Object[]> monthlyStatsRaw = travelPlanRepository.getMonthStatistics();
         List<MonthlyStatisticResponse> monthlyStatisticResponses = new ArrayList<>();
         for(Object[] obj : monthlyStatsRaw) {
@@ -99,6 +103,8 @@ public class AdminService {
     }
 
     public List<CountriesStatisticResponse> getCountriesStatistics() {
+
+        // fixme aliasing 적용
         List<Object[]> monthlyStatisticsMap = travelPlanRepository.getCountriesStatistics();
         List<CountriesStatisticResponse> countriesStatisticResponses = new ArrayList<>();
         for(Object[] obj : monthlyStatisticsMap) {

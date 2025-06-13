@@ -5,9 +5,8 @@ import grepp.NBE5_6_2_Team03.global.validation.annotation.EmailCheck;
 import grepp.NBE5_6_2_Team03.global.validation.annotation.NameCheck;
 import grepp.NBE5_6_2_Team03.global.validation.annotation.PhoneNumberCheck;
 import lombok.Getter;
-import lombok.Setter;
 
-@Getter @Setter
+@Getter
 public class UserInfoUpdateRequest {
 
     private Long id;

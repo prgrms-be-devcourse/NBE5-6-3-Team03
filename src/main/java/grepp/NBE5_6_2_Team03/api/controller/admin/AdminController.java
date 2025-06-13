@@ -1,16 +1,14 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatisticResponse;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.StatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserUpdateResultResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.code.AdminResponseMessage;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
-import grepp.NBE5_6_2_Team03.domain.admin.code.LockStatus;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,47 +44,63 @@ public class AdminController {
     }
 
     @PatchMapping("/user-info/{id}/edit")
-    public ApiResponse<Map<String, String>> editUserInfo(
+    public ApiResponse<UserUpdateResultResponse> editUserInfo(
         @PathVariable("id") Long id,
         @RequestBody UserInfoUpdateRequest request
     ) {
         adminService.updateUserInfo(id, request);
-        return ApiResponse.success(createSuccessMessage("유저 정보가 성공적으로 수정되었습니다."));
+        UserUpdateResultResponse res =  UserUpdateResultResponse.builder()
+            .message(AdminResponseMessage.USER_INFO_UPDATED.getMessage())
+            .redirect("/admin/user-info")
+            .build();
+
+        return ApiResponse.success(res);
     }
 
     @PatchMapping("/user-info/{id}/lock")
-    public ApiResponse<Map<String, String>> lockUser(
+    public ApiResponse<UserUpdateResultResponse> lockUser(
         @PathVariable("id") Long userId
     ) {
         adminService.lockUser(userId);
-        return ApiResponse.success(createSuccessMessage("유저를 잠금처리하였습니다."));
+        UserUpdateResultResponse res =  UserUpdateResultResponse.builder()
+            .message(AdminResponseMessage.USER_LOCKED.getMessage())
+            .redirect("/admin/user-info")
+            .build();
+        return ApiResponse.success(res);
     }
 
     @PatchMapping("/user-info/{id}/unlock")
-    public ApiResponse<Map<String, String>> unlockUser(
+    public ApiResponse<UserUpdateResultResponse> unlockUser(
         @PathVariable("id") Long userId
     ) {
         adminService.unlockUser(userId);
-        return ApiResponse.success(createSuccessMessage("유저를 잠금해제하였습니다."));
+        UserUpdateResultResponse res =  UserUpdateResultResponse.builder()
+            .message(AdminResponseMessage.USER_UNLOCKED.getMessage())
+            .redirect("/admin/user-info")
+            .build();
+        return ApiResponse.success(res);
     }
 
     @DeleteMapping("/user-info/{id}/delete")
-    public ApiResponse<Map<String, String>> deleteUserInfo(
+    public ApiResponse<UserUpdateResultResponse> deleteUserInfo(
         @PathVariable("id") Long id
     ) {
         adminService.deleteById(id);
-        return ApiResponse.success(createSuccessMessage("유저를 탈퇴처리하였습니다."));
+        UserUpdateResultResponse res =  UserUpdateResultResponse.builder()
+            .message(AdminResponseMessage.USER_DELETED.getMessage())
+            .redirect("/admin/user-info")
+            .build();
+        return ApiResponse.success(res);
     }
 
     @GetMapping("/statistic")
-    public ApiResponse<Map<String, List<?>>> statistic() {
-        List<CountriesStatisticResponse> countriesStatisticResponses = adminService.getCountriesStatistics();
-        List<MonthlyStatisticResponse> monthlyStatisticResponses = adminService.getMonthStatistics();
-
-        return ApiResponse.success(Map.of(
-            "countries", countriesStatisticResponses,
-            "monthly", monthlyStatisticResponses
-        ));
+    public ApiResponse<StatisticResponse> statistic() {
+        StatisticResponse statisticResponse = StatisticResponse
+            .builder()
+            .countries(adminService.getCountriesStatistics())
+            .monthly(adminService.getMonthStatistics())
+            .build();
+        return ApiResponse.success(statisticResponse);
     }
 
     @GetMapping("/valid-email")
@@ -101,13 +115,6 @@ public class AdminController {
         boolean isDuplicatedName = adminService.isDuplicatedUsername(name);
         return ApiResponse.success(isDuplicatedName ?
             Collections.singletonMap("duplicated", true) : Collections.singletonMap("duplicated", false));
-    }
-
-    private Map<String, String> createSuccessMessage(String message) {
-        return Map.of(
-            "message", message,
-            "redirect", "/admin/user-info"
-        );
     }
 
 }
