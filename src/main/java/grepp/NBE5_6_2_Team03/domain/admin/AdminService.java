@@ -1,6 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.admin;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatisticResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticProjection;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
@@ -16,6 +17,7 @@ import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,7 +46,6 @@ public class AdminService {
             () -> new NotFoundException(Message.USER_NOT_FOUND)
         );
 
-        // fixme Builder 패턴 적용
         user.updateProfile(
             request.getEmail(),
             request.getName(),
@@ -64,19 +65,13 @@ public class AdminService {
     @Transactional
     public void lockUser(Long userId) {
         User user = findUserAndCheckAdminRole(userId);
-        if (user.isLocked()) {
-            throw new CannotUpdateException(Message.ALREADY_LOCKED.getDescription());
-        }
-        user.updateIsLocked(true);
+        user.lock();
     }
 
     @Transactional
     public void unlockUser(Long userId) {
         User user = findUserAndCheckAdminRole(userId);
-        if (user.isLocked() == false) {
-            throw new CannotUpdateException(Message.ALREADY_UNLOCKED.getDescription());
-        }
-        user.updateIsLocked(false);
+        user.unlock();
     }
 
     @Transactional
@@ -86,7 +81,6 @@ public class AdminService {
         userRepository.deleteById(userId);
     }
 
-    // fixme 단일 책임 원칙을 약화시킬 가능성이 있음 생각필요
     private User findUserAndCheckAdminRole(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
@@ -97,29 +91,14 @@ public class AdminService {
     }
 
     public List<MonthlyStatisticResponse> getMonthStatistics() {
-
-        // fixme aliasing 적용
-        List<Object[]> monthlyStatsRaw = travelPlanRepository.getMonthStatistics();
-        List<MonthlyStatisticResponse> monthlyStatisticResponses = new ArrayList<>();
-        for(Object[] obj : monthlyStatsRaw) {
-            int month = (Integer) obj[0];
-            long count = (Long) obj[1];
-            monthlyStatisticResponses.add(new MonthlyStatisticResponse(month, count));
-        }
-        return monthlyStatisticResponses;
+        List<MonthlyStatisticProjection> projections = travelPlanRepository.getMonthStatistics();
+        return projections.stream()
+            .map(p -> new MonthlyStatisticResponse(p.getMonth(), p.getCount()))
+            .collect(Collectors.toList());
     }
 
     public List<CountriesStatisticResponse> getCountriesStatistics() {
-
-        // fixme aliasing 적용
-        List<Object[]> monthlyStatisticsMap = travelPlanRepository.getCountriesStatistics();
-        List<CountriesStatisticResponse> countriesStatisticResponses = new ArrayList<>();
-        for(Object[] obj : monthlyStatisticsMap) {
-            String country = (String) obj[0];
-            long count = (Long) obj[1];
-            countriesStatisticResponses.add(new CountriesStatisticResponse(country, count));
-        }
-        return countriesStatisticResponses;
+        return travelPlanRepository.getCountriesStatistics();
     }
 
 }

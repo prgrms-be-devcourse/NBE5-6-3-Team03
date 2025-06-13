@@ -4,6 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
+import grepp.NBE5_6_2_Team03.global.exception.CannotUpdateException;
+import grepp.NBE5_6_2_Team03.global.exception.Message;
+import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class AdminControllerTest {
@@ -75,8 +79,8 @@ class AdminControllerTest {
     @Test
     @Transactional
     @DisplayName("유저 잠금 처리")
-    void lockedUsers() throws JsonProcessingException {
-        ApiResponse<String> result = adminController.lockUser(17L);
+    void lockedUserLock() throws JsonProcessingException {
+        ApiResponse<String> result = adminController.lockUser(13L);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResult = objectMapper.writerWithDefaultPrettyPrinter()
             .writeValueAsString(result);
@@ -85,13 +89,66 @@ class AdminControllerTest {
 
     @Test
     @Transactional
-    @DisplayName("유저 잠금 해제")
-    void unlockedUsers() throws JsonProcessingException {
+    @DisplayName("이미 잠금된 유저 잠금 처리 시 CannotUpdateException 발생")
+    void unlockedUserLock(){
+        // given
+        Long alreadyLockedUserId = 17L;
+
+        // when and then
+        assertThatThrownBy(() -> adminController.lockUser(alreadyLockedUserId))
+            .isInstanceOf(CannotUpdateException.class)
+            .hasMessage(Message.ALREADY_LOCKED.getDescription());
+
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 유저 잠금 처리 시 NotFoundException 발생")
+    void lockNonExistingUserThrowsNotFoundException() {
+        // given
+        Long nonExistingUserId = 9999L; // 존재하지 않는 ID
+
+        // when and then
+        assertThatThrownBy(() -> adminController.lockUser(nonExistingUserId))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage(Message.USER_NOT_FOUND.getDescription());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("유저 잠금해제 처리")
+    void lockedUserUnlock() throws JsonProcessingException {
         ApiResponse<String> result = adminController.unlockUser(17L);
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResult = objectMapper.writerWithDefaultPrettyPrinter()
             .writeValueAsString(result);
         System.out.println(jsonResult);
     }
+
+    @Test
+    @Transactional
+    @DisplayName("잠금되지 않은 유저 잠금해제처리 시 CannotUpdateException 발생")
+    void unlockedUserUnlock(){
+        // given
+        Long alreadyLockedUserId = 13L;
+
+        // when and then
+        assertThatThrownBy(() -> adminController.unlockUser(alreadyLockedUserId))
+            .isInstanceOf(CannotUpdateException.class)
+            .hasMessage(Message.ALREADY_UNLOCKED.getDescription());
+
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 유저 잠금 해제처리 시 NotFoundException 발생")
+    void unlockNonExistingUserThrowsNotFoundException() {
+        // given
+        Long nonExistingUserId = 9999L; // 존재하지 않는 ID
+
+        // when and then
+        assertThatThrownBy(() -> adminController.unlockUser(nonExistingUserId))
+            .isInstanceOf(NotFoundException.class)
+            .hasMessage(Message.USER_NOT_FOUND.getDescription());
+    }
+
 
 }

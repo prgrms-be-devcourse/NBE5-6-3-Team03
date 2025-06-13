@@ -27,7 +27,7 @@ public class AdminControllerExceptionHandler {
     }
 
     @ExceptionHandler(CannotUpdateException.class)
-    public ApiResponse<String> handleCannotUpdateException(CannotModifyAdminException e) {
+    public ApiResponse<String> handleCannotUpdateException(CannotUpdateException e) {
         log.warn("CannotUpdateException occurred: {}", e.getMessage());
         return ApiResponse.error(ResponseCode.FORBIDDEN, e.getMessage());
     }
