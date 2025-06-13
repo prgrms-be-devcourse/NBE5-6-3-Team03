@@ -1,18 +1,16 @@
 package grepp.NBE5_6_2_Team03.api.controller.user.dto.request;
 
-import grepp.NBE5_6_2_Team03.global.validation.annotation.EmailCheck;
 import grepp.NBE5_6_2_Team03.domain.user.User;
+import grepp.NBE5_6_2_Team03.global.validation.annotation.EmailCheck;
 import grepp.NBE5_6_2_Team03.global.validation.annotation.NameCheck;
 import grepp.NBE5_6_2_Team03.global.validation.annotation.PasswordCheck;
 import grepp.NBE5_6_2_Team03.global.validation.annotation.PhoneNumberCheck;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import static grepp.NBE5_6_2_Team03.domain.user.Role.*;
 
 @Getter
-@Setter
 public class UserSignUpRequest {
 
     @EmailCheck
@@ -25,17 +23,17 @@ public class UserSignUpRequest {
     private String name;
 
     @PhoneNumberCheck
-    private String phoneNumber;
+    private String phone;
 
     public UserSignUpRequest() {
     }
 
     @Builder
-    private UserSignUpRequest(String email, String password, String name, String phoneNumber) {
+    private UserSignUpRequest(String email, String password, String name, String phone) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.phoneNumber = phoneNumber;
+        this.phone = phone;
     }
 
     public User toEntity(String password) {
@@ -43,7 +41,7 @@ public class UserSignUpRequest {
                 .email(email)
                 .password(password)
                 .name(name)
-                .phoneNumber(phoneNumber)
+                .phoneNumber(phone)
                 .role(ROLE_USER)
                 .build();
     }
