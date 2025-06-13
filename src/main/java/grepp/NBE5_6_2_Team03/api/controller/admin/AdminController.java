@@ -4,7 +4,6 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.StatisticRespons
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserUpdateResultResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.code.AdminResponseMessage;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
@@ -44,53 +43,36 @@ public class AdminController {
     }
 
     @PatchMapping("/user-info/{id}/edit")
-    public ApiResponse<UserUpdateResultResponse> editUserInfo(
+    public ApiResponse<String> editUserInfo(
         @PathVariable("id") Long id,
         @RequestBody UserInfoUpdateRequest request
     ) {
         adminService.updateUserInfo(id, request);
-        UserUpdateResultResponse res =  UserUpdateResultResponse.builder()
-            .message(AdminResponseMessage.USER_INFO_UPDATED.getMessage())
-            .redirect("/admin/user-info")
-            .build();
-
-        return ApiResponse.success(res);
+        return ApiResponse.success(AdminResponseMessage.USER_INFO_UPDATED.getMessage());
     }
 
     @PatchMapping("/user-info/{id}/lock")
-    public ApiResponse<UserUpdateResultResponse> lockUser(
+    public ApiResponse<String> lockUser(
         @PathVariable("id") Long userId
     ) {
         adminService.lockUser(userId);
-        UserUpdateResultResponse res =  UserUpdateResultResponse.builder()
-            .message(AdminResponseMessage.USER_LOCKED.getMessage())
-            .redirect("/admin/user-info")
-            .build();
-        return ApiResponse.success(res);
+        return ApiResponse.success(AdminResponseMessage.USER_LOCKED.getMessage());
     }
 
     @PatchMapping("/user-info/{id}/unlock")
-    public ApiResponse<UserUpdateResultResponse> unlockUser(
+    public ApiResponse<String> unlockUser(
         @PathVariable("id") Long userId
     ) {
         adminService.unlockUser(userId);
-        UserUpdateResultResponse res =  UserUpdateResultResponse.builder()
-            .message(AdminResponseMessage.USER_UNLOCKED.getMessage())
-            .redirect("/admin/user-info")
-            .build();
-        return ApiResponse.success(res);
+        return ApiResponse.success(AdminResponseMessage.USER_UNLOCKED.getMessage());
     }
 
     @DeleteMapping("/user-info/{id}/delete")
-    public ApiResponse<UserUpdateResultResponse> deleteUserInfo(
+    public ApiResponse<String> deleteUserInfo(
         @PathVariable("id") Long id
     ) {
         adminService.deleteById(id);
-        UserUpdateResultResponse res =  UserUpdateResultResponse.builder()
-            .message(AdminResponseMessage.USER_DELETED.getMessage())
-            .redirect("/admin/user-info")
-            .build();
-        return ApiResponse.success(res);
+        return ApiResponse.success(AdminResponseMessage.USER_DELETED.getMessage());
     }
 
     @GetMapping("/statistic")

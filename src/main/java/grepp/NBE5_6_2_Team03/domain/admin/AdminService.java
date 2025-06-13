@@ -11,6 +11,7 @@ import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
 import grepp.NBE5_6_2_Team03.global.exception.CannotModifyAdminException;
+import grepp.NBE5_6_2_Team03.global.exception.CannotUpdateException;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.util.ArrayList;
@@ -63,12 +64,18 @@ public class AdminService {
     @Transactional
     public void lockUser(Long userId) {
         User user = findUserAndCheckAdminRole(userId);
+        if (user.isLocked()) {
+            throw new CannotUpdateException(Message.ALREADY_LOCKED.getDescription());
+        }
         user.updateIsLocked(true);
     }
 
     @Transactional
     public void unlockUser(Long userId) {
         User user = findUserAndCheckAdminRole(userId);
+        if (user.isLocked() == false) {
+            throw new CannotUpdateException(Message.ALREADY_UNLOCKED.getDescription());
+        }
         user.updateIsLocked(false);
     }
 

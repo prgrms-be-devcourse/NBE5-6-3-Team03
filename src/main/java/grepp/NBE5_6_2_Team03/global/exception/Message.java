@@ -8,7 +8,9 @@ public enum Message {
     PLANNED_NOT_FOUND("해당 여행 계획이 존재하지 않습니다."),
     PLACE_NOT_FOUND("해당 장소가 존재하지 않습니다."),
     SCHEDULE_NOT_FOUND("해당 일정이 존재하지 않습니다."),
-    EXPENSE_NOT_FOUND("해당 지출이 존재하지 않습니다.");
+    EXPENSE_NOT_FOUND("해당 지출이 존재하지 않습니다."),
+    ALREADY_UNLOCKED("해당 유저는 이미 잠금해제되었습니다."),
+    ALREADY_LOCKED("해당 유저는 이미 잠금처리되었습니다.");
 
     private final String description;
 

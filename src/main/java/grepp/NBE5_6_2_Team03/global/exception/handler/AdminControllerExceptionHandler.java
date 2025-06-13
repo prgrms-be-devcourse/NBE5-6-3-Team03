@@ -2,10 +2,10 @@ package grepp.NBE5_6_2_Team03.global.exception.handler;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.AdminController;
 import grepp.NBE5_6_2_Team03.global.exception.CannotModifyAdminException;
+import grepp.NBE5_6_2_Team03.global.exception.CannotUpdateException;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import grepp.NBE5_6_2_Team03.global.response.ResponseCode;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,21 +15,20 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class AdminControllerExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public ApiResponse<Map<String, String>> handleNotFoundException(NotFoundException e) {
+    public ApiResponse<String> handleNotFoundException(NotFoundException e) {
         log.warn("NotFoundException occurred: {}", e.getMessage());
-        return ApiResponse.error(ResponseCode.NOT_FOUND, createErrorMessage(e.getMessage()));
+        return ApiResponse.error(ResponseCode.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler(CannotModifyAdminException.class)
-    public ApiResponse<Map<String, String>> handleCannotModifyAdminException(CannotModifyAdminException e) {
+    public ApiResponse<String> handleCannotModifyAdminException(CannotModifyAdminException e) {
         log.warn("CannotModifyAdminException occurred: {}", e.getMessage());
-        return ApiResponse.error(ResponseCode.FORBIDDEN, createErrorMessage(e.getMessage()));
+        return ApiResponse.error(ResponseCode.FORBIDDEN, e.getMessage());
     }
 
-    private Map<String, String> createErrorMessage(String message) {
-        return Map.of(
-            "message", message,
-            "redirect", "/admin/user-info"
-        );
+    @ExceptionHandler(CannotUpdateException.class)
+    public ApiResponse<String> handleCannotUpdateException(CannotModifyAdminException e) {
+        log.warn("CannotUpdateException occurred: {}", e.getMessage());
+        return ApiResponse.error(ResponseCode.FORBIDDEN, e.getMessage());
     }
 }
