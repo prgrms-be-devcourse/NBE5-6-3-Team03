@@ -12,8 +12,6 @@ import java.util.List;
 import lombok.*;
 
 @Getter
-@Setter
-@Table(name = "travel_plan")
 @Entity
 public class TravelPlan extends BaseEntity {
 
@@ -25,16 +23,19 @@ public class TravelPlan extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "travelPlan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+
+    @OneToMany(mappedBy = "travelPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TravelSchedule> travelSchedules = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private CountryStatus countryStatus;
-
-    private String country;
+    private Country country;
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    private CurrentUnit currentUnit;
+  
     private int publicMoney;
-    private int count;
+    private int applicants;
 
     private LocalDate travelStartDate;
     private LocalDate travelEndDate;
@@ -42,14 +43,27 @@ public class TravelPlan extends BaseEntity {
     protected TravelPlan() {}
 
     @Builder
-    private TravelPlan(User user, CountryStatus countryStatus, String country, String name,
-                      int publicMoney, int count, LocalDate travelStartDate, LocalDate travelEndDate) {
+    private TravelPlan(User user, Country country, String name, CurrentUnit currentUnit,
+                       int publicMoney, int applicants, LocalDate travelStartDate, LocalDate travelEndDate) {
         this.user = user;
-        this.countryStatus = countryStatus;
         this.country = country;
         this.name = name;
+        this.currentUnit = currentUnit;
         this.publicMoney = publicMoney;
-        this.count = count;
+        this.applicants = applicants;
+        this.travelStartDate = travelStartDate;
+        this.travelEndDate = travelEndDate;
+    }
+
+    public void modify(String name, Country country, int applicants,
+                       CurrentUnit currentUnit, int publicMoney,
+                       LocalDate travelStartDate, LocalDate travelEndDate) {
+
+        this.name = name;
+        this.country = country;
+        this.applicants = applicants;
+        this.currentUnit = currentUnit;
+        this.publicMoney = publicMoney;
         this.travelStartDate = travelStartDate;
         this.travelEndDate = travelEndDate;
     }

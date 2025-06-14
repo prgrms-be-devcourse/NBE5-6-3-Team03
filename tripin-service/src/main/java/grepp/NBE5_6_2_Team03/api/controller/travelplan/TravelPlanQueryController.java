@@ -3,6 +3,7 @@ package grepp.NBE5_6_2_Team03.api.controller.travelplan;
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanQueryService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
+
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
