@@ -1,56 +1,47 @@
 package grepp.NBE5_6_2_Team03.api.controller.travelplan;
 
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanRequestDto;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanEditRequest;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanSaveRequest;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanInfo;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlansResponse;
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/travel-plans")
 @RequiredArgsConstructor
 public class TravelPlanController {
 
     private final TravelPlanService travelPlanService;
 
-    @PostMapping("/create")
-    public ResponseEntity<String> createPlan(@AuthenticationPrincipal CustomUserDetails customUser,
-        @RequestBody TravelPlanRequestDto planDto) {
-        try {
-            travelPlanService.createPlan(customUser.getId(), planDto);
-            return ResponseEntity.ok("success");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping("/{id}")
+    public ApiResponse<TravelPlanInfo> getTravelPlan(@PathVariable("id") Long travelPlanId) {
+        return ApiResponse.success(travelPlanService.getMyPlan(travelPlanId));
     }
 
-    @GetMapping("/api/{id}")
-    public TravelPlanRequestDto getPlan(@PathVariable("id") Long id) {
-        return travelPlanService.getPlan(id);
+    @GetMapping
+    public ApiResponse<TravelPlansResponse> getTravelPlans(@AuthenticationPrincipal CustomUserDetails user) {
+        return ApiResponse.success(travelPlanService.getMyPlans(user.getId(), user.getUsername()));
     }
 
-    @PatchMapping("/update/{id}")
-    public ResponseEntity<String> updatePlan(@PathVariable("id") Long id,
-        @RequestBody TravelPlanRequestDto planDto) {
-        try {
-            travelPlanService.updatePlan(id, planDto);
-            return ResponseEntity.ok("수정 완료");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/new")
+    public ApiResponse<Long> create(@RequestBody TravelPlanSaveRequest request,
+                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ApiResponse.success(travelPlanService.create(request, userDetails.getId()));
     }
 
-    @PostMapping("/delete/{id}")
-    public ApiResponse<Void> deletePlan(@PathVariable Long id) {
+    @PatchMapping("/{id}")
+    public ApiResponse<Long> modifyPlan(@RequestBody TravelPlanEditRequest request,
+                                        @PathVariable("id") Long id) {
+        return ApiResponse.success(travelPlanService.modifyPlan(request, id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deletePlan(@PathVariable("id") Long id) {
         travelPlanService.deletePlan(id);
         return ApiResponse.noContent();
     }
