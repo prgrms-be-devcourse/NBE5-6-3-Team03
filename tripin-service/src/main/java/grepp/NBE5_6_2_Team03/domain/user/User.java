@@ -2,6 +2,8 @@ package grepp.NBE5_6_2_Team03.domain.user;
 
 import grepp.NBE5_6_2_Team03.domain.BaseEntity;
 import grepp.NBE5_6_2_Team03.domain.user.file.UploadFile;
+import grepp.NBE5_6_2_Team03.global.exception.CannotUpdateException;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,5 +58,23 @@ public class User extends BaseEntity {
 
     public void updateIsLocked(boolean isLocked) {
         this.isLocked = isLocked;
+    }
+
+    public void unlock() {
+        if (!this.isLocked) {
+            throw new CannotUpdateException(ExceptionMessage.ALREADY_UNLOCKED.getDescription());
+        }
+        this.isLocked = false;
+    }
+
+    public void lock() {
+        if (this.isLocked) {
+            throw new CannotUpdateException(ExceptionMessage.ALREADY_LOCKED.getDescription());
+        }
+        this.isLocked = true;
+    }
+
+    public boolean isAdmin() {
+        return this.role == Role.ROLE_ADMIN;
     }
 }

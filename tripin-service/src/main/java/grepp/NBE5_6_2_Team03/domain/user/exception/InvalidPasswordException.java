@@ -1,12 +1,12 @@
 package grepp.NBE5_6_2_Team03.domain.user.exception;
 
-import grepp.NBE5_6_2_Team03.global.exception.Message;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 
 public class InvalidPasswordException extends RuntimeException{
 
-    private final Message message;
+    private final ExceptionMessage message;
 
-    public InvalidPasswordException(Message message) {
+    public InvalidPasswordException(ExceptionMessage message) {
         super(message.getDescription());
         this.message = message;
     }

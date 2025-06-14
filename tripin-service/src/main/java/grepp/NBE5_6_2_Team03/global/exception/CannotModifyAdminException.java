@@ -4,13 +4,10 @@ import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(value = HttpStatus.BAD_REQUEST)
-public class NotFoundException extends RuntimeException{
+@ResponseStatus(value = HttpStatus.FORBIDDEN)
+public class CannotModifyAdminException extends BusinessException {
 
-    private final ExceptionMessage message;
-
-    public NotFoundException(ExceptionMessage message) {
+    public CannotModifyAdminException(ExceptionMessage message) {
         super(message.getDescription());
-        this.message = message;
     }
 }
