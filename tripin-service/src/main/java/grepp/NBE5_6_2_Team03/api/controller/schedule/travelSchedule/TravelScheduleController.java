@@ -28,7 +28,7 @@ public class TravelScheduleController {
     @GetMapping
     public ApiResponse<Map<String, Object>> list(@RequestParam("travelPlanId") Long travelPlanId,
                                                  @AuthenticationPrincipal CustomUserDetails customUser) {
-        Map<LocalDate, Map<ScheduleStatus, List<TravelScheduleResponse>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
+        Map<LocalDate, List<TravelScheduleResponse>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
 
         Map<String, Object> response = new HashMap<>();
         response.put("groupedSchedules", groupedSchedules);

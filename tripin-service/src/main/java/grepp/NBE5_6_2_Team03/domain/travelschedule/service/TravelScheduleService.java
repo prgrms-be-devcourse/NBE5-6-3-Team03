@@ -15,10 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -76,23 +74,21 @@ public class TravelScheduleService {
         return schedule.getScheduleStatus();
     }
 
-    public Map<LocalDate, Map<ScheduleStatus, List<TravelScheduleResponse>>> getGroupedSchedules(Long travelPlanId) {
+    public Map<LocalDate, List<TravelScheduleResponse>> getGroupedSchedules(Long travelPlanId) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLANNED_NOT_FOUND));
 
         List<TravelSchedule> schedules = travelScheduleRepository.findSortedSchedules(plan);
-        Map<LocalDate, Map<ScheduleStatus, List<TravelScheduleResponse>>> groupedSchedules = new LinkedHashMap<>();
 
-        for (TravelSchedule schedule : schedules) {
-            LocalDate date = schedule.getTravelScheduleDate();
-            ScheduleStatus status = schedule.getScheduleStatus();
-
-            groupedSchedules.putIfAbsent(date, new LinkedHashMap<>());
-            groupedSchedules.get(date).putIfAbsent(status, new ArrayList<>());
-            groupedSchedules.get(date).get(status).add(TravelScheduleResponse.fromEntity(schedule));
-        }
-
-        return groupedSchedules;
+        return schedules.stream()
+            .collect(Collectors.groupingBy(
+                TravelSchedule::getTravelScheduleDate,
+                LinkedHashMap::new,
+                Collectors.mapping(
+                    TravelScheduleResponse::fromEntity,
+                    Collectors.toList()
+                )
+            ));
     }
 
     public TravelSchedule findById(Long travelScheduleId) {
