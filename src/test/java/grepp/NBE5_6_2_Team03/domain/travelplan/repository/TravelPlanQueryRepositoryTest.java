@@ -2,6 +2,7 @@ package grepp.NBE5_6_2_Team03.domain.travelplan.repository;
 
 import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.expense.repository.ExpenseRepository;
+import grepp.NBE5_6_2_Team03.domain.travelplan.Country;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
@@ -39,7 +40,7 @@ class TravelPlanQueryRepositoryTest {
     @Test
     void getTravelPlanFetchScheduleAndExpense() {
         //given
-        TravelPlan travelPlan = createTravelPlan("일본", "여행 계획", 10000, 2);
+        TravelPlan travelPlan = createTravelPlan(Country.JAPAN, "여행 계획", 10000, 2);
         travelPlanRepository.save(travelPlan);
 
         TravelRoute travelRoute = createTravelRoute();
@@ -70,12 +71,12 @@ class TravelPlanQueryRepositoryTest {
         return new TravelRoute("출발지", "목적지", "이동수단");
     }
 
-    private TravelPlan createTravelPlan(String country, String name, int publicMoney, int count){
+    private TravelPlan createTravelPlan(Country country, String name, int publicMoney, int applicants){
         return TravelPlan.builder()
                 .country(country)
                 .name(name)
                 .publicMoney(publicMoney)
-                .count(count)
+                .applicants(applicants)
                 .build();
     }
 
