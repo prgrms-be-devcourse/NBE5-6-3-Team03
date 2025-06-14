@@ -80,7 +80,6 @@ public class TravelPlanService {
         );
     }
 
-
     private void validateTravelPlan(LocalDate travelStartDate, LocalDate travelEndDate) {
         if (travelStartDate.isAfter(travelEndDate)) {
             throw new IllegalArgumentException("여행 시작일은 여행 종료일보다 빠르거나 같아야 합니다.");

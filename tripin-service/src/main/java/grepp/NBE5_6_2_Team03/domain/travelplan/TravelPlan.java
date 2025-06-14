@@ -23,6 +23,7 @@ public class TravelPlan extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+
     @OneToMany(mappedBy = "travelPlan", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TravelSchedule> travelSchedules = new ArrayList<>();
 
@@ -32,8 +33,8 @@ public class TravelPlan extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private CurrentUnit currentUnit;
+  
     private int publicMoney;
-
     private int applicants;
 
     private LocalDate travelStartDate;
@@ -66,4 +67,5 @@ public class TravelPlan extends BaseEntity {
         this.travelStartDate = travelStartDate;
         this.travelEndDate = travelEndDate;
     }
+
 }
