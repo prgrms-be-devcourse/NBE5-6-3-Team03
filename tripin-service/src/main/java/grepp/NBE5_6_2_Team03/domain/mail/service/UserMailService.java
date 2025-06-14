@@ -4,7 +4,7 @@ import grepp.NBE5_6_2_Team03.domain.mail.dto.CodeMailResponse;
 import grepp.NBE5_6_2_Team03.domain.mail.dto.CodeType;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
-import grepp.NBE5_6_2_Team03.global.exception.Message;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import java.time.Duration;
 import java.util.Collections;
@@ -38,7 +38,7 @@ public class UserMailService {
         redisTemplate.opsForValue().set(key, value, Duration.ofMinutes(5));
 
         User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND));
 
         CodeMailResponse response = mailServiceClient.sendCode(email, CodeType.PASSWORD).block();
         boolean result = Optional.ofNullable(response)

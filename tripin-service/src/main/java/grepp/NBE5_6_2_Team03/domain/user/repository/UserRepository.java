@@ -9,7 +9,4 @@ import org.springframework.data.repository.query.Param;
 public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByName(String name);
-
-    @Query("select case when u.role = 'ROLE_ADMIN' then true else false end from User u where u.id = :id")
-    boolean isAdmin(@Param("id") Long id);
 }

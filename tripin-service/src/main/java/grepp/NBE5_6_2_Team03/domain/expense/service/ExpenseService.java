@@ -6,7 +6,7 @@ import grepp.NBE5_6_2_Team03.domain.expense.repository.ExpenseRepository;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.repository.TravelScheduleRepository;
-import grepp.NBE5_6_2_Team03.global.exception.Message;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ExpenseService {
     @Transactional
     public Expense addExpense(Long travelScheduleId, ExpenseRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
 
         TravelPlan plan = schedule.getTravelPlan();
         validatePayedPrice(plan, request.getPayedPrice());
@@ -37,7 +37,7 @@ public class ExpenseService {
     @Transactional
     public Expense editExpense(Long expenseId, ExpenseRequest request) {
         Expense expense = expenseRepository.findById(expenseId)
-            .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.EXPENSE_NOT_FOUND));
 
         TravelPlan plan = expense.getTravelSchedule().getTravelPlan();
         validatePayedPriceForEdit(plan, expense.getPayedPrice(), request.getPayedPrice());
@@ -53,7 +53,7 @@ public class ExpenseService {
     @Transactional
     public void deleteExpense(Long expenseId) {
         Expense expense = expenseRepository.findById(expenseId)
-            .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.EXPENSE_NOT_FOUND));
 
         TravelSchedule schedule = expense.getTravelSchedule();
         if (schedule != null) {
@@ -65,7 +65,7 @@ public class ExpenseService {
 
     public Expense findById(Long expenseId) {
         return expenseRepository.findById(expenseId)
-            .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.EXPENSE_NOT_FOUND));
     }
 
     private int getTotalPayedPrice(TravelPlan plan) {

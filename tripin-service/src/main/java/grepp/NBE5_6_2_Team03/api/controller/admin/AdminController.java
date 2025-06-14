@@ -1,36 +1,35 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatisticResponse;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.StatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
+
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
-import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
+import grepp.NBE5_6_2_Team03.global.message.AdminSuccessMessage;
+import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.Collections;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@Slf4j
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
-
+    // TODO 해당 url들이 restful인지 확인하기
+    // 해당 반환값들이 정말 필요한지 확인해보기
     private final AdminService adminService;
 
     @GetMapping("/dashboard")
@@ -39,67 +38,67 @@ public class AdminController {
     }
 
     @GetMapping("/user-info")
-    public String userInfos(
-        @RequestParam(name = "page", defaultValue = "0") int page,
-        @RequestParam(name = "size", defaultValue = "15") int size,
-        Model model) {
-        int minPageLimit = Math.max(0, page);
-        Page<UserInfoResponse> userPage = adminService.findAll(PageRequest.of(minPageLimit, size));
-        model.addAttribute("userPage", userPage);
-        return "admin/user-info";
+    public ApiResponse<Page<UserInfoResponse>> userInfos(
+        @ModelAttribute UserSearchRequest request
+    ) {
+        return ApiResponse.success(adminService.findUsersPage(request));
     }
 
     @PatchMapping("/user-info/{id}/edit")
-    public String editUserInfo(
+    public ApiResponse<String> editUserInfo(
         @PathVariable("id") Long id,
-        UserInfoUpdateRequest request,
-        RedirectAttributes redirectAttributes) {
+        @RequestBody UserInfoUpdateRequest request
+    ) {
+        adminService.updateUserInfo(id, request);
+        return ApiResponse.success(AdminSuccessMessage.USER_INFO_UPDATED.getMessage());
+    }
 
-        try {
-            adminService.updateUserInfo(id, request);
-            redirectAttributes.addFlashAttribute("message", "유저 정보가 성공적으로 수정되었습니다.");
-        } catch (NotFoundException e) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
-        }
+    @PatchMapping("/user-info/{id}/lock")
+    public ApiResponse<String> lockUser(
+        @PathVariable("id") Long userId
+    ) {
+        adminService.lockUser(userId);
+        return ApiResponse.success(AdminSuccessMessage.USER_LOCKED.getMessage());
+    }
 
-        return "redirect:/admin/user-info";
+    @PatchMapping("/user-info/{id}/unlock")
+    public ApiResponse<String> unlockUser(
+        @PathVariable("id") Long userId
+    ) {
+        adminService.unlockUser(userId);
+        return ApiResponse.success(AdminSuccessMessage.USER_UNLOCKED.getMessage());
     }
 
     @DeleteMapping("/user-info/{id}/delete")
-    public String deleteUserInfo(
-        @PathVariable("id") Long id,
-        RedirectAttributes redirectAttributes
+    public ApiResponse<String> deleteUserInfo(
+        @PathVariable("id") Long id
     ) {
-        try {
-            adminService.deleteById(id);
-            redirectAttributes.addFlashAttribute("message", "유저를 탈퇴처리 하였습니다.");
-        } catch ( NotFoundException e ) {
-            redirectAttributes.addFlashAttribute("message", e.getMessage());
-        }
-        return "redirect:/admin/user-info";
+        adminService.deleteById(id);
+        return ApiResponse.success(AdminSuccessMessage.USER_DELETED.getMessage());
     }
 
     @GetMapping("/statistic")
-    public String statistic(Model model) {
-        List<CountriesStatisticResponse> countriesStatisticResponses = adminService.getCountriesStatistics();
-        List<MonthlyStatisticResponse> monthlyStatisticResponses = adminService.getMonthStatistics();
-        model.addAttribute("countriesStatisticResponses", countriesStatisticResponses);
-        model.addAttribute("monthlyStatisticResponses", monthlyStatisticResponses);
-        return "admin/statistic";
+    public ApiResponse<StatisticResponse> statistic() {
+        StatisticResponse statisticResponse = StatisticResponse
+            .builder()
+            .countries(adminService.getCountriesStatistics())
+            .monthly(adminService.getMonthStatistics())
+            .build();
+        return ApiResponse.success(statisticResponse);
     }
 
-    @ResponseBody
     @GetMapping("/valid-email")
-    public Map<String, Boolean> validateEmail(@RequestParam("email") String email) {
+    public ApiResponse<Map<String, Boolean>> validateEmail(@RequestParam("email") String email) {
         boolean isDuplicatedEmail = adminService.isDuplicatedEmail(email);
-        return Collections.singletonMap("email", isDuplicatedEmail);
+        return ApiResponse.success(isDuplicatedEmail ?
+            Collections.singletonMap("duplicated", true) : Collections.singletonMap("duplicated", false));
     }
 
-    @ResponseBody
     @GetMapping("/valid-name")
-    public Map<String, Boolean> validateName(@RequestParam("name") String name) {
+    public ApiResponse<Map<String, Boolean>> validateName(@RequestParam("name") String name) {
         boolean isDuplicatedName = adminService.isDuplicatedUsername(name);
-        return Collections.singletonMap("name", isDuplicatedName);
+        return ApiResponse.success(isDuplicatedName ?
+            Collections.singletonMap("duplicated", true) : Collections.singletonMap("duplicated", false));
     }
 
 }

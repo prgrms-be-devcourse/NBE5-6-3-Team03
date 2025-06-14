@@ -11,6 +11,8 @@ public enum ResponseCode {
     BAD_REQUEST("4000", HttpStatus.BAD_REQUEST,"bad request"),
     UNAUTHORIZED("4001", HttpStatus.UNAUTHORIZED, "unAuthorized"),
     INVALID_TOKEN("4002", HttpStatus.UNAUTHORIZED, "invalid token"),
+    FORBIDDEN("4030", HttpStatus.FORBIDDEN, "forbidden"),
+    NOT_FOUND("4040", HttpStatus.NOT_FOUND, "not found"),
     INTERNAL_SERVER_ERROR("5000", HttpStatus.INTERNAL_SERVER_ERROR, "server error");
 
     private final String code;

@@ -27,7 +27,7 @@ public class TravelPlanQueryService {
         List<TravelSchedule> travelSchedules = travelPlan.getTravelSchedules();
         List<Expense> expenses = findNotNullExpense(travelSchedules);
 
-        String curUnit = travelPlan.getCountryStatus().getCode();
+        String curUnit = travelPlan.getCountry().getCode();
         int remainMoney = getRemainMoney(travelPlan.getPublicMoney(), expenses);
         int personalPrice = getPersonalPrice(remainMoney, travelPlan.getApplicants());
         int rateCompareResult = exchangeService.compareLatestRateToAverageRate(curUnit);
