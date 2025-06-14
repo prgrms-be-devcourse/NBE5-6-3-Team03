@@ -3,8 +3,9 @@ package grepp.NBE5_6_2_Team03.api.controller.admin;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
-import grepp.NBE5_6_2_Team03.api.controller.admin.message.AdminResponseMessage;
+
 import grepp.NBE5_6_2_Team03.domain.place.PlaceService;
+import grepp.NBE5_6_2_Team03.global.message.AdminSuccessResponseMessage;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.HashMap;
 import java.util.List;
@@ -39,16 +40,15 @@ public class PlacesController {
     }
 
     @PostMapping("/{id}/edit")
-    public ApiResponse<AdminResponseMessage> editPlace(@PathVariable("id") String id, PlaceRequest place,
-        RedirectAttributes redirectAttributes) {
+    public ApiResponse<AdminSuccessResponseMessage> editPlace(@PathVariable("id") String id, PlaceRequest place) {
         placeService.updatePlace(id, place);
-        return ApiResponse.success(AdminResponseMessage.PLACE_UPDATED);
+        return ApiResponse.success(AdminSuccessResponseMessage.PLACE_UPDATED);
     }
 
     @PostMapping("/{id}/delete")
-    public ApiResponse<AdminResponseMessage>  deletePlace(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
+    public ApiResponse<AdminSuccessResponseMessage>  deletePlace(@PathVariable("id") String id) {
         placeService.deleteById(id);
-        return ApiResponse.success(AdminResponseMessage.PLACE_DELETED);
+        return ApiResponse.success(AdminSuccessResponseMessage.PLACE_DELETED);
     }
 
     private Map<String, Object> createPlaceInfoResponse(Object obj) {

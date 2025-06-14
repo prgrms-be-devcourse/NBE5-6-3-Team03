@@ -3,7 +3,7 @@ package grepp.NBE5_6_2_Team03.domain.place.repository;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
-//import grepp.NBE5_6_2_Team03.domain.place.entity.QPlace;
+import grepp.NBE5_6_2_Team03.domain.place.entity.QPlace;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
