@@ -24,7 +24,7 @@ public class TravelPlan extends BaseEntity {
     private User user;
 
 
-    @OneToMany(mappedBy = "travelPlan", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "travelPlan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TravelSchedule> travelSchedules = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

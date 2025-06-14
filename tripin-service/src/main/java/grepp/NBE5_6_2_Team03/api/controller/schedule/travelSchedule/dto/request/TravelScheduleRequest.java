@@ -51,15 +51,4 @@ public class TravelScheduleRequest {
             .travelScheduleDate(this.travelScheduleDate)
             .build();
     }
-
-    public static TravelScheduleRequest fromEntity(TravelSchedule schedule) {
-        return TravelScheduleRequest.builder()
-            .departure(schedule.getTravelRoute().getDeparture())
-            .destination(schedule.getTravelRoute().getDestination())
-            .transportation(schedule.getTravelRoute().getTransportation())
-            .content(schedule.getContent())
-            .placeName(schedule.getPlaceName())
-            .travelScheduleDate(schedule.getTravelScheduleDate())
-            .build();
-    }
 }

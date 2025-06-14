@@ -30,11 +30,4 @@ public class ExpenseRequest {
             .expenseDate(schedule.getTravelScheduleDate())
             .build();
     }
-
-    public static ExpenseRequest fromEntity(Expense expense) {
-        return new ExpenseRequest(
-            expense.getExpectPrice(),
-            expense.getPayedPrice()
-        );
-    }
 }
