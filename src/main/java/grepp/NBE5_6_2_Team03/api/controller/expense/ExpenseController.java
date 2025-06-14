@@ -16,38 +16,20 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/plan/{travelPlanId}/schedule/{travelScheduleId}/expense")
+@RequestMapping("/expense")
 public class ExpenseController {
 
     private final ExpenseService expenseService;
 
-    @GetMapping
-    public ApiResponse<Map<String, Object>> list(@PathVariable("travelPlanId") Long travelPlanId,
-                                  @PathVariable("travelScheduleId") Long travelScheduleId,
-                                  @AuthenticationPrincipal CustomUserDetails customUser) {
-        Expense expense = expenseService.findByScheduleId(travelScheduleId).orElse(null);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("expense", expense != null ? ExpenseResponse.fromEntity(expense) : null);
-        response.put("travelPlanId", travelPlanId);
-        response.put("travelScheduleId", travelScheduleId);
-        response.put("username", customUser.getUsername());
-
-        return ApiResponse.success(response);
-    }
-
     @GetMapping("/{expenseId}")
-    public ApiResponse<ExpenseResponse> findExpense(@PathVariable("travelPlanId") Long travelPlanId,
-                                                       @PathVariable("travelScheduleId") Long travelScheduleId,
-                                                       @PathVariable("expenseId") Long expenseId) {
+    public ApiResponse<ExpenseResponse> findExpense(@PathVariable("expenseId") Long expenseId) {
         Expense expense = expenseService.findById(expenseId);
         return ApiResponse.success(ExpenseResponse.fromEntity(expense));
     }
 
     @PostMapping("/add")
-    public ApiResponse<Object> addExpense(@PathVariable("travelPlanId") Long travelPlanId,
-                             @PathVariable("travelScheduleId") Long travelScheduleId,
-                             @RequestBody ExpenseRequest request) {
+    public ApiResponse<Object> addExpense(@RequestParam("travelScheduleId") Long travelScheduleId,
+                                          @RequestBody ExpenseRequest request) {
         try {
             Expense expense = expenseService.addExpense(travelScheduleId, request);
             return ApiResponse.success(ExpenseResponse.fromEntity(expense));
@@ -57,10 +39,8 @@ public class ExpenseController {
     }
 
     @PutMapping("/{expenseId}/edit")
-    public ApiResponse<Object> editExpense(@PathVariable("travelPlanId") Long travelPlanId,
-                              @PathVariable("travelScheduleId") Long travelScheduleId,
-                              @PathVariable("expenseId") Long expenseId,
-                              @RequestBody ExpenseRequest request) {
+    public ApiResponse<Object> editExpense(@PathVariable("expenseId") Long expenseId,
+                                           @RequestBody ExpenseRequest request) {
         try {
             Expense expense = expenseService.editExpense(expenseId, request);
             return ApiResponse.success(ExpenseResponse.fromEntity(expense));
@@ -70,9 +50,7 @@ public class ExpenseController {
     }
 
     @DeleteMapping("/{expenseId}/delete")
-    public ApiResponse<Map<String, Object>> deleteExpense(@PathVariable("travelPlanId") Long travelPlanId,
-                                @PathVariable("travelScheduleId") Long travelScheduleId,
-                                @PathVariable("expenseId") Long expenseId) {
+    public ApiResponse<Map<String, Object>> deleteExpense(@PathVariable("expenseId") Long expenseId) {
         expenseService.deleteExpense(expenseId);
         return ApiResponse.noContent();
     }

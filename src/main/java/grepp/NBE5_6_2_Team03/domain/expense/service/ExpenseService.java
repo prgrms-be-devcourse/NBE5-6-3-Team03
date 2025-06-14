@@ -12,8 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Transactional
 @RequiredArgsConstructor
 @Service
@@ -66,14 +64,6 @@ public class ExpenseService {
     public Expense findById(Long expenseId) {
         return expenseRepository.findById(expenseId)
             .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<Expense> findByScheduleId(Long scheduleId) {
-        TravelSchedule schedule = travelScheduleRepository.findById(scheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
-
-        return expenseRepository.findByTravelSchedule(schedule);
     }
 
     private int getTotalPayedPrice(TravelPlan plan) {
