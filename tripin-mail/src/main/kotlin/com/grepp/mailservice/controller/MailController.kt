@@ -16,15 +16,15 @@ import org.springframework.web.bind.annotation.RestController
 class MailController(private val mailSendService: MailSendService) {
 
     @PostMapping("/send-code")
-    fun sendSimpleMail(@RequestBody request: CodeMailRequest): ResponseEntity<ApiResponse<CodeMailResponse>> {
+    fun sendSimpleMail(@RequestBody request: CodeMailRequest): ApiResponse<CodeMailResponse> {
         val code = mailSendService.sendCodeMail(request.to, request.codeType)
-        return ResponseEntity.ok(ApiResponse.success(CodeMailResponse(request.to, code)))
+        return ApiResponse.success(CodeMailResponse(request.to, code))
     }
 
     @PostMapping("/send-html")
-    fun sendSettlementMail(@RequestBody request: HtmlMailRequest): ResponseEntity<ApiResponse<Void>> {
+    fun sendSettlementMail(@RequestBody request: HtmlMailRequest): ApiResponse<Void> {
         mailSendService.sendHtmlMail(request)
-        return ResponseEntity.ok(ApiResponse.noContent())
+        return (ApiResponse.noContent())
     }
 
 }
