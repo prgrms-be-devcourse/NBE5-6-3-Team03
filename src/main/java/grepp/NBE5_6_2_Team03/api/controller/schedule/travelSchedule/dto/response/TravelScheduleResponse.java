@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @Getter
 public class TravelScheduleResponse {
 
+    private final String username;
     private final Long travelScheduleId;
     private final Long travelPlanId;
     private final String content;
@@ -20,8 +21,9 @@ public class TravelScheduleResponse {
     private final String transportation;
 
     @Builder
-    public TravelScheduleResponse(Long travelScheduleId, Long travelPlanId, String content, String placeName, String status,
-                                  LocalDate travelDate, String departure, String destination, String transportation) {
+    public TravelScheduleResponse(String username, Long travelScheduleId, Long travelPlanId, String content, String placeName,
+                                  String status, LocalDate travelDate, String departure, String destination, String transportation) {
+        this.username = username;
         this.travelScheduleId = travelScheduleId;
         this.travelPlanId = travelPlanId;
         this.content = content;
@@ -34,7 +36,12 @@ public class TravelScheduleResponse {
     }
 
     public static TravelScheduleResponse fromEntity(TravelSchedule schedule) {
+        return fromEntity(null, schedule);
+    }
+
+    public static TravelScheduleResponse fromEntity(String username, TravelSchedule schedule) {
         return TravelScheduleResponse.builder()
+            .username(username)
             .travelScheduleId(schedule.getTravelScheduleId())
             .travelPlanId(schedule.getTravelPlan().getTravelPlanId())
             .content(schedule.getContent())

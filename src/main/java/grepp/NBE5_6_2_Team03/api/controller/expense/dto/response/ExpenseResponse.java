@@ -7,6 +7,7 @@ import lombok.Getter;
 @Getter
 public class ExpenseResponse {
 
+    private final String username;
     private final Long expenseId;
     private final Long travelPlanId;
     private final Long travelScheduleId;
@@ -15,8 +16,9 @@ public class ExpenseResponse {
     private final boolean isCompleted;
 
     @Builder
-    public ExpenseResponse(Long expenseId, Long travelPlanId, Long travelScheduleId,
+    public ExpenseResponse(String username, Long expenseId, Long travelPlanId, Long travelScheduleId,
                            int expectPrice, int payedPrice, boolean isCompleted) {
+        this.username = username;
         this.expenseId = expenseId;
         this.travelPlanId = travelPlanId;
         this.travelScheduleId = travelScheduleId;
@@ -25,8 +27,9 @@ public class ExpenseResponse {
         this.isCompleted = isCompleted;
     }
 
-    public static ExpenseResponse fromEntity(Expense expense) {
+    public static ExpenseResponse fromEntity(String username, Expense expense) {
         return ExpenseResponse.builder()
+            .username(username)
             .expenseId(expense.getExpenseId())
             .travelPlanId(expense.getTravelSchedule().getTravelPlan().getTravelPlanId())
             .travelScheduleId(expense.getTravelSchedule().getTravelScheduleId())

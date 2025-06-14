@@ -39,17 +39,19 @@ public class TravelScheduleController {
     }
 
     @GetMapping("/{travelScheduleId}")
-    public ApiResponse<TravelScheduleResponse> findSchedule(@PathVariable("travelScheduleId") Long travelScheduleId) {
+    public ApiResponse<TravelScheduleResponse> findSchedule(@PathVariable("travelScheduleId") Long travelScheduleId,
+                                                            @AuthenticationPrincipal CustomUserDetails customUser) {
         TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
-        return ApiResponse.success(TravelScheduleResponse.fromEntity(schedule));
+        return ApiResponse.success(TravelScheduleResponse.fromEntity(customUser.getUsername(), schedule));
     }
 
     @PostMapping("/add")
     public ApiResponse<Object> addSchedule(@RequestParam("travelPlanId") Long travelPlanId,
-                                           @RequestBody TravelScheduleRequest request) {
+                                           @RequestBody TravelScheduleRequest request,
+                                           @AuthenticationPrincipal CustomUserDetails customUser) {
         try {
             TravelSchedule travelSchedule =  travelScheduleService.addSchedule(travelPlanId, request);
-            return ApiResponse.success(TravelScheduleResponse.fromEntity(travelSchedule));
+            return ApiResponse.success(TravelScheduleResponse.fromEntity(customUser.getUsername(), travelSchedule));
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
@@ -57,10 +59,11 @@ public class TravelScheduleController {
 
     @PutMapping("/{travelScheduleId}/edit")
     public ApiResponse<Object> editSchedule(@PathVariable("travelScheduleId") Long travelScheduleId,
-                                            @RequestBody TravelScheduleRequest request) {
+                                            @RequestBody TravelScheduleRequest request,
+                                            @AuthenticationPrincipal CustomUserDetails customUser) {
         try {
             TravelSchedule travelSchedule =  travelScheduleService.editSchedule(travelScheduleId, request);
-            return ApiResponse.success(TravelScheduleResponse.fromEntity(travelSchedule));
+            return ApiResponse.success(TravelScheduleResponse.fromEntity(customUser.getUsername(), travelSchedule));
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }

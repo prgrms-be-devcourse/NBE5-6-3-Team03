@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -22,17 +21,19 @@ public class ExpenseController {
     private final ExpenseService expenseService;
 
     @GetMapping("/{expenseId}")
-    public ApiResponse<ExpenseResponse> findExpense(@PathVariable("expenseId") Long expenseId) {
+    public ApiResponse<ExpenseResponse> findExpense(@PathVariable("expenseId") Long expenseId,
+                                                    @AuthenticationPrincipal CustomUserDetails customUser) {
         Expense expense = expenseService.findById(expenseId);
-        return ApiResponse.success(ExpenseResponse.fromEntity(expense));
+        return ApiResponse.success(ExpenseResponse.fromEntity(customUser.getUsername(), expense));
     }
 
     @PostMapping("/add")
     public ApiResponse<Object> addExpense(@RequestParam("travelScheduleId") Long travelScheduleId,
-                                          @RequestBody ExpenseRequest request) {
+                                          @RequestBody ExpenseRequest request,
+                                          @AuthenticationPrincipal CustomUserDetails customUser) {
         try {
             Expense expense = expenseService.addExpense(travelScheduleId, request);
-            return ApiResponse.success(ExpenseResponse.fromEntity(expense));
+            return ApiResponse.success(ExpenseResponse.fromEntity(customUser.getUsername(), expense));
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
@@ -40,10 +41,11 @@ public class ExpenseController {
 
     @PutMapping("/{expenseId}/edit")
     public ApiResponse<Object> editExpense(@PathVariable("expenseId") Long expenseId,
-                                           @RequestBody ExpenseRequest request) {
+                                           @RequestBody ExpenseRequest request,
+                                           @AuthenticationPrincipal CustomUserDetails customUser) {
         try {
             Expense expense = expenseService.editExpense(expenseId, request);
-            return ApiResponse.success(ExpenseResponse.fromEntity(expense));
+            return ApiResponse.success(ExpenseResponse.fromEntity(customUser.getUsername(), expense));
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
