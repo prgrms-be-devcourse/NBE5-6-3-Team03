@@ -8,20 +8,20 @@ import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.repository.TravelScheduleRepository;
 import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Service
+@Transactional
 @RequiredArgsConstructor
+@Service
 public class ExpenseService {
 
     private final ExpenseRepository expenseRepository;
     private final TravelScheduleRepository travelScheduleRepository;
 
-    @Transactional
     public Expense addExpense(Long travelScheduleId, ExpenseRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
@@ -35,7 +35,6 @@ public class ExpenseService {
         return expense;
     }
 
-    @Transactional
     public Expense editExpense(Long expenseId, ExpenseRequest request) {
         Expense expense = expenseRepository.findById(expenseId)
             .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
@@ -51,7 +50,6 @@ public class ExpenseService {
         return expense;
     }
 
-    @Transactional
     public void deleteExpense(Long expenseId) {
         Expense expense = expenseRepository.findById(expenseId)
             .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
@@ -64,11 +62,13 @@ public class ExpenseService {
         expenseRepository.delete(expense);
     }
 
+    @Transactional(readOnly = true)
     public Expense findById(Long expenseId) {
         return expenseRepository.findById(expenseId)
             .orElseThrow(() -> new NotFoundException(Message.EXPENSE_NOT_FOUND));
     }
 
+    @Transactional(readOnly = true)
     public Optional<Expense> findByScheduleId(Long scheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(scheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
