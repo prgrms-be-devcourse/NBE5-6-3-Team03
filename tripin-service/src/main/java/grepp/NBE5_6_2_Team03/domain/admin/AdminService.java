@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AdminService {
-    // TODO 메서드 명 고치기
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
     private final TravelPlanRepository travelPlanRepository;
@@ -62,24 +61,24 @@ public class AdminService {
 
     @Transactional
     public void lockUser(Long userId) {
-        User user = findUserAndCheckAdminRole(userId);
+        User user = getModifiableUser(userId);
         user.lock();
     }
 
     @Transactional
     public void unlockUser(Long userId) {
-        User user = findUserAndCheckAdminRole(userId);
+        User user = getModifiableUser(userId);
         user.unlock();
     }
 
     @Transactional
-    public void deleteById(Long userId) {
-        User user = findUserAndCheckAdminRole(userId);
+    public void deleteUserById(Long userId) {
+        User user = getModifiableUser(userId);
         travelPlanRepository.deleteByUserId(userId);
         userRepository.delete(user);
     }
 
-    private User findUserAndCheckAdminRole(Long userId) {
+    private User getModifiableUser(Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND));
         if(user.isAdmin()) {
