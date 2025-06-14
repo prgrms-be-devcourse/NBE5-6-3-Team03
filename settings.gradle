@@ -1,1 +1,3 @@
-rootProject.name = 'NBE5-6-2-Team03'
+rootProject.name = 'tripin'
+include 'tripin-service'
+include 'tripin-mail'
