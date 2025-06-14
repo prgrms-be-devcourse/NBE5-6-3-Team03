@@ -1,7 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.admin;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatisticResponse;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticProjection;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest;
@@ -26,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class AdminService {
-
+    // TODO 메서드 명 고치기
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
     private final TravelPlanRepository travelPlanRepository;
@@ -77,7 +76,7 @@ public class AdminService {
     public void deleteById(Long userId) {
         User user = findUserAndCheckAdminRole(userId);
         travelPlanRepository.deleteByUserId(userId);
-        userRepository.deleteById(userId);
+        userRepository.delete(user);
     }
 
     private User findUserAndCheckAdminRole(Long userId) {
@@ -89,9 +88,8 @@ public class AdminService {
         return user;
     }
 
-    // TODO 테스트 코드 만들기
     public List<MonthlyStatisticResponse> getMonthStatistics() {
-        List<MonthlyStatisticProjection> projections = travelPlanQueryRepository.getMonthStatistics();
+        List<MonthlyStatisticResponse> projections = travelPlanQueryRepository.getMonthStatistics();
         return projections.stream()
             .map(p -> new MonthlyStatisticResponse(p.getMonth(), p.getCount()))
             .collect(Collectors.toList());

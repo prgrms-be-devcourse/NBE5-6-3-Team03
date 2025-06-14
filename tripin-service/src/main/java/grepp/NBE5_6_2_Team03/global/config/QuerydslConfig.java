@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.global.config.querydsl;
+package grepp.NBE5_6_2_Team03.global.config;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;

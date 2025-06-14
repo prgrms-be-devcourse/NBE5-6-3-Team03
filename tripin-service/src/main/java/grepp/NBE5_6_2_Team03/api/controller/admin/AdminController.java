@@ -6,7 +6,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoUpdateRequest
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
 
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
-import grepp.NBE5_6_2_Team03.global.message.AdminSuccessResponseMessage;
+import grepp.NBE5_6_2_Team03.global.message.AdminSuccessMessage;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.Collections;
 import java.util.Map;
@@ -28,7 +28,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
-
+    // TODO 해당 url들이 restful인지 확인하기
+    // 해당 반환값들이 정말 필요한지 확인해보기
     private final AdminService adminService;
 
     @GetMapping("/dashboard")
@@ -49,7 +50,7 @@ public class AdminController {
         @RequestBody UserInfoUpdateRequest request
     ) {
         adminService.updateUserInfo(id, request);
-        return ApiResponse.success(AdminSuccessResponseMessage.USER_INFO_UPDATED.getMessage());
+        return ApiResponse.success(AdminSuccessMessage.USER_INFO_UPDATED.getMessage());
     }
 
     @PatchMapping("/user-info/{id}/lock")
@@ -57,7 +58,7 @@ public class AdminController {
         @PathVariable("id") Long userId
     ) {
         adminService.lockUser(userId);
-        return ApiResponse.success(AdminSuccessResponseMessage.USER_LOCKED.getMessage());
+        return ApiResponse.success(AdminSuccessMessage.USER_LOCKED.getMessage());
     }
 
     @PatchMapping("/user-info/{id}/unlock")
@@ -65,7 +66,7 @@ public class AdminController {
         @PathVariable("id") Long userId
     ) {
         adminService.unlockUser(userId);
-        return ApiResponse.success(AdminSuccessResponseMessage.USER_UNLOCKED.getMessage());
+        return ApiResponse.success(AdminSuccessMessage.USER_UNLOCKED.getMessage());
     }
 
     @DeleteMapping("/user-info/{id}/delete")
@@ -73,7 +74,7 @@ public class AdminController {
         @PathVariable("id") Long id
     ) {
         adminService.deleteById(id);
-        return ApiResponse.success(AdminSuccessResponseMessage.USER_DELETED.getMessage());
+        return ApiResponse.success(AdminSuccessMessage.USER_DELETED.getMessage());
     }
 
     @GetMapping("/statistic")

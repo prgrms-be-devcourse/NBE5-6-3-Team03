@@ -5,7 +5,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
 
 import grepp.NBE5_6_2_Team03.domain.place.PlaceService;
-import grepp.NBE5_6_2_Team03.global.message.AdminSuccessResponseMessage;
+import grepp.NBE5_6_2_Team03.global.message.AdminSuccessMessage;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +28,6 @@ public class PlacesController {
     @GetMapping("/info")
     public ApiResponse<Map<String, Object>> getPlaces(@ModelAttribute PlaceSearchRequest searchRequest ) {
         Page<PlaceResponse> places = placeService.findPlacesPageable(searchRequest);
-
         return ApiResponse.success(createPlaceInfoResponse(places));
     }
 
@@ -37,18 +35,6 @@ public class PlacesController {
     public ApiResponse<Map<String, Object>> editPlace(@PathVariable("id") String id) {
         PlaceResponse place = placeService.findById(id);
         return ApiResponse.success(createPlaceInfoResponse(place));
-    }
-
-    @PostMapping("/{id}/edit")
-    public ApiResponse<AdminSuccessResponseMessage> editPlace(@PathVariable("id") String id, PlaceRequest place) {
-        placeService.updatePlace(id, place);
-        return ApiResponse.success(AdminSuccessResponseMessage.PLACE_UPDATED);
-    }
-
-    @PostMapping("/{id}/delete")
-    public ApiResponse<AdminSuccessResponseMessage>  deletePlace(@PathVariable("id") String id) {
-        placeService.deleteById(id);
-        return ApiResponse.success(AdminSuccessResponseMessage.PLACE_DELETED);
     }
 
     private Map<String, Object> createPlaceInfoResponse(Object obj) {
@@ -64,6 +50,18 @@ public class PlacesController {
         body.put("cities", cities);
 
         return body;
+    }
+
+    @PostMapping("/{id}/edit")
+    public ApiResponse<AdminSuccessMessage> editPlace(@PathVariable("id") String id, PlaceRequest place) {
+        placeService.updatePlace(id, place);
+        return ApiResponse.success(AdminSuccessMessage.PLACE_UPDATED);
+    }
+
+    @PostMapping("/{id}/delete")
+    public ApiResponse<AdminSuccessMessage>  deletePlace(@PathVariable("id") String id) {
+        placeService.deleteById(id);
+        return ApiResponse.success(AdminSuccessMessage.PLACE_DELETED);
     }
 
 }

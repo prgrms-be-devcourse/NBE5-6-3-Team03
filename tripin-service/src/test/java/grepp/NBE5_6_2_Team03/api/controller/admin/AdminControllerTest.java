@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
 import grepp.NBE5_6_2_Team03.global.exception.CannotUpdateException;
-import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -20,6 +20,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+// FIXME : @WebMvcTest(PlaceController.class) 사용한 테스트로 변경
 @SpringBootTest
 class AdminControllerTest {
 
@@ -97,7 +98,7 @@ class AdminControllerTest {
         // when and then
         assertThatThrownBy(() -> adminController.lockUser(alreadyLockedUserId))
             .isInstanceOf(CannotUpdateException.class)
-            .hasMessage(Message.ALREADY_LOCKED.getDescription());
+            .hasMessage(ExceptionMessage.ALREADY_LOCKED.getDescription());
 
     }
 
@@ -110,7 +111,7 @@ class AdminControllerTest {
         // when and then
         assertThatThrownBy(() -> adminController.lockUser(nonExistingUserId))
             .isInstanceOf(NotFoundException.class)
-            .hasMessage(Message.USER_NOT_FOUND.getDescription());
+            .hasMessage(ExceptionMessage.USER_NOT_FOUND.getDescription());
     }
 
     @Test
@@ -134,7 +135,7 @@ class AdminControllerTest {
         // when and then
         assertThatThrownBy(() -> adminController.unlockUser(alreadyLockedUserId))
             .isInstanceOf(CannotUpdateException.class)
-            .hasMessage(Message.ALREADY_UNLOCKED.getDescription());
+            .hasMessage(ExceptionMessage.ALREADY_UNLOCKED.getDescription());
 
     }
 
@@ -147,7 +148,7 @@ class AdminControllerTest {
         // when and then
         assertThatThrownBy(() -> adminController.unlockUser(nonExistingUserId))
             .isInstanceOf(NotFoundException.class)
-            .hasMessage(Message.USER_NOT_FOUND.getDescription());
+            .hasMessage(ExceptionMessage.USER_NOT_FOUND.getDescription());
     }
 
 

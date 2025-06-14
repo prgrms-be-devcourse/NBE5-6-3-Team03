@@ -4,6 +4,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
+import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceRepository;
 import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
@@ -21,22 +22,23 @@ import org.springframework.transaction.annotation.Transactional;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+    private final PlaceQueryRepository placeQueryRepository;
 
     public List<PlaceResponse> findAll() {
         List<Place> places =  placeRepository.findAll();
-        return places.stream().map(this::convertToDto).collect(Collectors.toList());
+        return places.stream().map(PlaceResponse::of).collect(Collectors.toList());
     }
 
     public Page<PlaceResponse> findPlacesPageable(PlaceSearchRequest req) {
-        Page<Place> places = placeRepository.findPaged(req.getCountry(), req.getCity(), req.getPageable());
+        Page<Place> places = placeQueryRepository.findPaged(req.getCountry(), req.getCity(), req.getPageable());
         log.debug("Found {} places", places.getTotalElements());
-        return places.map(this::convertToDto);
+        return places.map(PlaceResponse::of);
     }
 
     public PlaceResponse findById(String id) {
         Place place = placeRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLACE_NOT_FOUND));
-        return convertToDto(place);
+        return PlaceResponse.of(place);
     }
 
     public List<String> getCountries() {
@@ -66,16 +68,6 @@ public class PlaceService {
         Place place = placeRepository.findByPlaceId(id)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLACE_NOT_FOUND));
         placeRepository.delete(place);
-    }
-
-    private PlaceResponse convertToDto(Place place) {
-        return PlaceResponse.fromEntity(
-            place.getPlaceId(),
-            place.getCountry(),
-            place.getCity(),
-            place.getPlaceName(),
-            place.getLatitude(),
-            place.getLongitude());
     }
 
 }

@@ -9,14 +9,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 
+@Repository
 @RequiredArgsConstructor
-public class PlaceRepositoryCustomImpl implements PlaceRepositoryCustom {
+public class PlaceQueryRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
     private final QPlace place = QPlace.place;
 
-    @Override
     public Page<Place> findPaged(String country, String city, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 

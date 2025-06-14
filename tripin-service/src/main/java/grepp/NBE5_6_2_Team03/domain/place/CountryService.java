@@ -19,13 +19,12 @@ public class CountryService {
 
     public CountryResponse getCountryResponse(String cityName) {
         Country country = getCityEntity(cityName);
-        return CountryResponse.from(country);
+        return CountryResponse.of(country);
     }
 
     public List<CountryResponse> getAllCities() {
         List<Country> cities = countryRepository.findAll();
         return CountryResponse.fromList(cities);
     }
-
 
 }

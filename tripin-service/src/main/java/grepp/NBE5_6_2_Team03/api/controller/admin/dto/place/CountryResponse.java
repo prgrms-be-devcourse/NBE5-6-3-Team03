@@ -19,7 +19,7 @@ public class CountryResponse {
         this.radius = radius;
     }
 
-    public static CountryResponse from(Country country) {
+    public static CountryResponse of(Country country) {
         return new CountryResponse(
             country.getCityName(),
             country.getLatitude(),
@@ -30,7 +30,7 @@ public class CountryResponse {
 
     public static List<CountryResponse> fromList(List<Country> cities) {
         return cities.stream()
-            .map(CountryResponse::from)
+            .map(CountryResponse::of)
             .collect(Collectors.toList());
     }
 
