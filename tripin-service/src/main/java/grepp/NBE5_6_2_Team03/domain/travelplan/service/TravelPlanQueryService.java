@@ -7,6 +7,7 @@ import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,16 +15,12 @@ import java.util.List;
 import java.util.Objects;
 
 @Transactional(readOnly = true)
+@RequiredArgsConstructor
 @Service
 public class TravelPlanQueryService {
 
     private final TravelPlanQueryRepository planQueryRepository;
     private final ExchangeService exchangeService;
-
-    public TravelPlanQueryService(TravelPlanQueryRepository planQueryRepository, ExchangeService exchangeService) {
-        this.planQueryRepository = planQueryRepository;
-        this.exchangeService = exchangeService;
-    }
 
     public TravelPlanAdjustResponse getAdjustmentInfo(Long travelPlanId){
         TravelPlan travelPlan = planQueryRepository.getTravelPlanFetchScheduleAndExpense(travelPlanId);

@@ -1,112 +1,87 @@
 package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleResponse;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.service.TravelScheduleService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
+import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
+import grepp.NBE5_6_2_Team03.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
+import org.springframework.web.bind.annotation.*;
+
+@RequestMapping("/schedule")
 @RequiredArgsConstructor
-@RequestMapping("/plan/{travelPlanId}/schedule")
+@RestController
 public class TravelScheduleController {
 
     private final TravelScheduleService travelScheduleService;
 
     @GetMapping
-    public String list(@PathVariable("travelPlanId") Long travelPlanId,
-                       @AuthenticationPrincipal CustomUserDetails customUser,
-                       Model model) {
-        Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
-        model.addAttribute("groupedSchedules", groupedSchedules);
-        model.addAttribute("travelPlanId", travelPlanId);
-        model.addAttribute("username", customUser.getUsername());
-        return "schedule/schedule-list";
+    public ApiResponse<Map<String, Object>> list(@RequestParam("travelPlanId") Long travelPlanId,
+                                                 @AuthenticationPrincipal CustomUserDetails customUser) {
+        Map<LocalDate, Map<ScheduleStatus, List<TravelScheduleResponse>>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("groupedSchedules", groupedSchedules);
+        response.put("travelPlanId", travelPlanId);
+        response.put("username", customUser.getUsername());
+
+        return ApiResponse.success(response);
     }
 
-    @GetMapping("/add")
-    public String addForm(@PathVariable("travelPlanId") Long travelPlanId,
-                          @AuthenticationPrincipal CustomUserDetails customUser,
-                          Model model) {
-        model.addAttribute("travelPlanId", travelPlanId);
-        model.addAttribute("username", customUser.getUsername());
-        model.addAttribute("request", new TravelScheduleRequest());
-        return "schedule/schedule-form";
+    @GetMapping("/{travelScheduleId}")
+    public ApiResponse<TravelScheduleResponse> findSchedule(@PathVariable("travelScheduleId") Long travelScheduleId,
+                                                            @AuthenticationPrincipal CustomUserDetails customUser) {
+        TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
+        return ApiResponse.success(TravelScheduleResponse.fromEntity(customUser.getUsername(), schedule));
     }
 
     @PostMapping("/add")
-    public String addSchedule(@PathVariable("travelPlanId") Long travelPlanId,
-                              @ModelAttribute TravelScheduleRequest request,
-                              Model model) {
-        model.addAttribute("travelPlanId", travelPlanId);
-
+    public ApiResponse<Object> addSchedule(@RequestParam("travelPlanId") Long travelPlanId,
+                                           @RequestBody TravelScheduleRequest request,
+                                           @AuthenticationPrincipal CustomUserDetails customUser) {
         try {
-            travelScheduleService.addSchedule(travelPlanId, request);
+            TravelSchedule travelSchedule =  travelScheduleService.addSchedule(travelPlanId, request);
+            return ApiResponse.success(TravelScheduleResponse.fromEntity(customUser.getUsername(), travelSchedule));
         } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("request", request);
-            return "schedule/schedule-form";
+            return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
-
-        return "redirect:/plan/" + travelPlanId + "/schedule";
     }
 
-    @GetMapping("/{travelScheduleId}/edit")
-    public String editForm(@PathVariable("travelPlanId") Long travelPlanId,
-                           @PathVariable("travelScheduleId") Long travelScheduleId,
-                           @AuthenticationPrincipal CustomUserDetails customUser,
-                           Model model) {
-        TravelSchedule schedule = travelScheduleService.findById(travelScheduleId);
-
-        model.addAttribute("travelPlanId", travelPlanId);
-        model.addAttribute("travelScheduleId", travelScheduleId);
-        model.addAttribute("username", customUser.getUsername());
-        model.addAttribute("request", TravelScheduleRequest.fromEntity(schedule));
-        return "schedule/schedule-form";
-    }
-
-    @PostMapping("/{travelScheduleId}/edit")
-    public String editSchedule(@PathVariable("travelPlanId") Long travelPlanId,
-                               @PathVariable("travelScheduleId") Long travelScheduleId,
-                               @ModelAttribute TravelScheduleRequest request,
-                               Model model) {
-        model.addAttribute("travelPlanId", travelPlanId);
-
+    @PutMapping("/{travelScheduleId}/edit")
+    public ApiResponse<Object> editSchedule(@PathVariable("travelScheduleId") Long travelScheduleId,
+                                            @RequestBody TravelScheduleRequest request,
+                                            @AuthenticationPrincipal CustomUserDetails customUser) {
         try {
-            travelScheduleService.editSchedule(travelScheduleId, request);
+            TravelSchedule travelSchedule =  travelScheduleService.editSchedule(travelScheduleId, request);
+            return ApiResponse.success(TravelScheduleResponse.fromEntity(customUser.getUsername(), travelSchedule));
         } catch (IllegalArgumentException e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("request", request);
-            return "schedule/schedule-form";
+            return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
-
-        return "redirect:/plan/" + travelPlanId + "/schedule";
     }
 
-    @PostMapping("/{travelScheduleId}/delete")
-    public String deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
-                                 @PathVariable("travelScheduleId") Long travelScheduleId) {
+    @DeleteMapping("/{travelScheduleId}/delete")
+    public ApiResponse<Map<String, Object>> deleteSchedule(@PathVariable("travelScheduleId") Long travelScheduleId) {
         travelScheduleService.deleteSchedule(travelScheduleId);
-        return "redirect:/plan/" + travelPlanId + "/schedule";
+        return ApiResponse.noContent();
     }
 
-    @PostMapping("/{travelScheduleId}/status")
-    public String scheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
-                                 @PathVariable("travelScheduleId") Long travelScheduleId) {
-        travelScheduleService.scheduleStatus(travelScheduleId);
-        return "redirect:/plan/" + travelPlanId + "/schedule";
+    @PatchMapping("/{travelScheduleId}/status")
+    public ApiResponse<Map<String, Object>> scheduleStatus(@PathVariable("travelScheduleId") Long travelScheduleId) {
+        ScheduleStatus scheduleStatus =  travelScheduleService.scheduleStatus(travelScheduleId);
+        return ApiResponse.success(Map.of(
+            "travelScheduleId", travelScheduleId,
+            "scheduleStatus", scheduleStatus.name(),
+            "message", "일정 상태가 변경되었습니다."
+        ));
     }
 }
