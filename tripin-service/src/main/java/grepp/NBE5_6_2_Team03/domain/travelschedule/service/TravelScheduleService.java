@@ -20,7 +20,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
 public class TravelScheduleService {
@@ -28,7 +28,7 @@ public class TravelScheduleService {
     private final TravelScheduleRepository travelScheduleRepository;
     private final TravelPlanRepository travelPlanRepository;
 
-
+    @Transactional
     public TravelSchedule addSchedule(Long travelPlanId, TravelScheduleRequest request) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
@@ -39,6 +39,7 @@ public class TravelScheduleService {
         return travelScheduleRepository.save(schedule);
     }
 
+    @Transactional
     public TravelSchedule editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
@@ -58,6 +59,7 @@ public class TravelScheduleService {
         return schedule;
     }
 
+    @Transactional
     public void deleteSchedule(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
@@ -65,6 +67,7 @@ public class TravelScheduleService {
         travelScheduleRepository.delete(schedule);
     }
 
+    @Transactional
     public ScheduleStatus scheduleStatus(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
@@ -73,7 +76,6 @@ public class TravelScheduleService {
         return schedule.getScheduleStatus();
     }
 
-    @Transactional(readOnly = true)
     public Map<LocalDate, Map<ScheduleStatus, List<TravelScheduleResponse>>> getGroupedSchedules(Long travelPlanId) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
@@ -93,7 +95,6 @@ public class TravelScheduleService {
         return groupedSchedules;
     }
 
-    @Transactional(readOnly = true)
     public TravelSchedule findById(Long travelScheduleId) {
         return travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
