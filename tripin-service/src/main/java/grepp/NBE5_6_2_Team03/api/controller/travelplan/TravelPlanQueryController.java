@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController
 @RequestMapping("/plan")
 @RequiredArgsConstructor
+@RestController
 public class TravelPlanQueryController {
 
     private final TravelPlanQueryService travelPlanQueryService;

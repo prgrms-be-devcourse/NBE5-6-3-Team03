@@ -18,9 +18,9 @@ import java.util.Map;
 
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-@RequiredArgsConstructor
 @RequestMapping("/schedule")
+@RequiredArgsConstructor
+@RestController
 public class TravelScheduleController {
 
     private final TravelScheduleService travelScheduleService;
