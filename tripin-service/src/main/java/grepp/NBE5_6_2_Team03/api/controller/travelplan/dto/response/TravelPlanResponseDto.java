@@ -21,7 +21,7 @@ public class TravelPlanResponseDto {
         this.country = plan.getCountry();
         this.name = plan.getName();
         this.publicMoney = plan.getPublicMoney();
-        this.count = plan.getCount();
+        this.count = plan.getApplicants();
         this.travelStartDate = plan.getTravelStartDate();
         this.travelEndDate = plan.getTravelEndDate();
     }

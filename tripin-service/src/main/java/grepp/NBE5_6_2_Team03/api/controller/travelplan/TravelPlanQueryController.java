@@ -4,6 +4,8 @@ import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAd
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanQueryService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
+
+import grepp.NBE5_6_2_Team03.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;

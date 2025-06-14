@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ResponseCode {
-    OK("2000", HttpStatus.OK,"success"),
+    OK("200", HttpStatus.OK,"success"),
     BAD_REQUEST("4000", HttpStatus.BAD_REQUEST,"bad request"),
     UNAUTHORIZED("4001", HttpStatus.UNAUTHORIZED, "unAuthorized"),
     INVALID_TOKEN("4002", HttpStatus.UNAUTHORIZED, "invalid token"),

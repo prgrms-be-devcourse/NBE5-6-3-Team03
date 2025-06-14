@@ -1,90 +1,63 @@
 package grepp.NBE5_6_2_Team03.domain.travelplan.service;
 
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanRequestDto;
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanResponseDto;
-import grepp.NBE5_6_2_Team03.domain.travelplan.CountryStatus;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanEditRequest;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanSaveRequest;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanInfo;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlansResponse;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
-import jakarta.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@Service
+import java.time.LocalDate;
+import java.util.List;
+
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
+@Service
 public class TravelPlanService {
 
     private final TravelPlanRepository travelPlanRepository;
     private final UserRepository userRepository;
 
-    public List<TravelPlanResponseDto> getPlansByUser(Long userid) {
+    public TravelPlanInfo getMyPlan(Long id) {
+        TravelPlan plan = travelPlanRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계획입니다."));
 
+        return TravelPlanInfo.of(plan);
+    }
+
+    public TravelPlansResponse getMyPlans(Long userid, String username) {
         List<TravelPlan> plans = travelPlanRepository.findByUserId(userid);
-        return plans.stream()
-            .map(TravelPlanResponseDto::new)
-            .collect(Collectors.toList());
+        List<TravelPlanInfo> responses  = plans.stream()
+                .map(TravelPlanInfo::of)
+                .toList();
+
+        return new TravelPlansResponse(username, responses);
     }
 
     @Transactional
-    public void createPlan(Long userid, TravelPlanRequestDto planDto) {
+    public Long create(TravelPlanSaveRequest request, Long userid) {
+        validateTravelPlan(request.getTravelStartDate(), request.getTravelEndDate());
 
         User user = userRepository.findById(userid)
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
-        validateTravelPlan(planDto.getTravelStartDate(), planDto.getTravelEndDate());
-
-        CountryStatus status = CountryStatus.fromCountryName(planDto.getCountry());
-
-        TravelPlan plan = TravelPlan.builder()
-            .user(user)
-            .countryStatus(status)
-            .name(planDto.getName())
-            .country(planDto.getCountry())
-            .publicMoney(planDto.getPublicMoney())
-            .count(planDto.getCount())
-            .travelStartDate(planDto.getTravelStartDate())
-            .travelEndDate(planDto.getTravelEndDate())
-            .build();
-
-        travelPlanRepository.save(plan);
-    }
-
-    public TravelPlanRequestDto getPlan(Long id) {
-        TravelPlan plan = travelPlanRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계획입니다."));
-
-        return TravelPlanRequestDto.builder()
-            .name(plan.getName())
-            .country(plan.getCountry())
-            .publicMoney(plan.getPublicMoney())
-            .count(plan.getCount())
-            .travelStartDate(plan.getTravelStartDate())
-            .travelEndDate(plan.getTravelEndDate())
-            .build();
+        travelPlanRepository.save(request.toEntity(user));
+        return travelPlanRepository.save(request.toEntity(user)).getTravelPlanId();
     }
 
     @Transactional
-    public void updatePlan(Long id, TravelPlanRequestDto planDto) {
-        TravelPlan existingPlan = travelPlanRepository.findById(id)
+    public Long modifyPlan(TravelPlanEditRequest request, Long id) {
+        TravelPlan plan = travelPlanRepository.findById(id)
             .orElseThrow(() -> new IllegalArgumentException("여행 계획을 찾을 수 없습니다."));
 
-        validateTravelPlan(planDto.getTravelStartDate(), planDto.getTravelEndDate());
-
-        CountryStatus status = CountryStatus.fromCountryName(planDto.getCountry());
-
-        existingPlan.setCountryStatus(status);
-        existingPlan.setName(planDto.getName());
-        existingPlan.setCountry(planDto.getCountry());
-        existingPlan.setPublicMoney(planDto.getPublicMoney());
-        existingPlan.setCount(planDto.getCount());
-        existingPlan.setTravelStartDate(planDto.getTravelStartDate());
-        existingPlan.setTravelEndDate(planDto.getTravelEndDate());
-
-        travelPlanRepository.save(existingPlan);
+        validateTravelPlan(request.getTravelStartDate(), request.getTravelEndDate());
+        modifyPlan(request, plan);
+        return plan.getTravelPlanId();
     }
 
     @Transactional
@@ -95,9 +68,19 @@ public class TravelPlanService {
         travelPlanRepository.delete(plan);
     }
 
+    private void modifyPlan(TravelPlanEditRequest request, TravelPlan plan) {
+        plan.modify(
+                request.getName(),
+                request.getCountry(),
+                request.getApplicants(),
+                request.getCurrentUnit(),
+                request.getPublicMoney(),
+                request.getTravelStartDate(),
+                request.getTravelEndDate()
+        );
+    }
 
     private void validateTravelPlan(LocalDate travelStartDate, LocalDate travelEndDate) {
-
         if (travelStartDate.isAfter(travelEndDate)) {
             throw new IllegalArgumentException("여행 시작일은 여행 종료일보다 빠르거나 같아야 합니다.");
         }

@@ -1,5 +1,7 @@
 package grepp.NBE5_6_2_Team03.api.controller.mail;
 
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
+import grepp.NBE5_6_2_Team03.domain.mail.service.MimeMailService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;

@@ -19,7 +19,7 @@ public class ExpenseRequest {
     }
 
     public Expense toEntity(TravelSchedule schedule) {
-        String currencyCode = schedule.getTravelPlan().getCountryStatus().getCode();
+        String currencyCode = schedule.getTravelPlan().getCountry().getCode();
 
         return Expense.builder()
             .travelSchedule(schedule)
