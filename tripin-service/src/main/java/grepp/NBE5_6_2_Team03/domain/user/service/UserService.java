@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
-import static grepp.NBE5_6_2_Team03.global.exception.Message.*;
+import static grepp.NBE5_6_2_Team03.global.message.ExceptionMessage.*;
 import static grepp.NBE5_6_2_Team03.global.exception.Reason.*;
 
 @Transactional(readOnly = true)

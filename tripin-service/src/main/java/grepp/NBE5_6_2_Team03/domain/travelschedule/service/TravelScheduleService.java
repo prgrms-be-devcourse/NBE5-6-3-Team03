@@ -7,7 +7,7 @@ import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.repository.TravelScheduleRepository;
-import grepp.NBE5_6_2_Team03.global.exception.Message;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class TravelScheduleService {
     @Transactional
     public void addSchedule(Long travelPlanId, TravelScheduleRequest request) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
-            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLANNED_NOT_FOUND));
 
         validateTravelSchedule(request.getDeparture(), request.getDestination(), request.getTransportation(), request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
@@ -40,7 +40,7 @@ public class TravelScheduleService {
     @Transactional
     public Long editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
 
         TravelPlan plan = schedule.getTravelPlan();
         validateTravelSchedule(request.getDeparture(), request.getDestination(), request.getTransportation(), request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
@@ -60,7 +60,7 @@ public class TravelScheduleService {
     @Transactional
     public void deleteSchedule(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
 
         travelScheduleRepository.delete(schedule);
     }
@@ -68,14 +68,14 @@ public class TravelScheduleService {
     @Transactional
     public void scheduleStatus(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
 
         schedule.toggleStatus();
     }
 
     public Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> getGroupedSchedules(Long travelPlanId) {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
-            .orElseThrow(() -> new NotFoundException(Message.PLANNED_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLANNED_NOT_FOUND));
 
         List<TravelSchedule> schedules = travelScheduleRepository.findSortedSchedules(plan);
         Map<LocalDate, Map<ScheduleStatus, List<TravelSchedule>>> groupedSchedules = new LinkedHashMap<>();
@@ -94,7 +94,7 @@ public class TravelScheduleService {
 
     public TravelSchedule findById(Long travelScheduleId) {
         return travelScheduleRepository.findById(travelScheduleId)
-            .orElseThrow(() -> new NotFoundException(Message.SCHEDULE_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
     }
 
     private void validateTravelSchedule(String departure, String destination, String transportation, LocalDate travelScheduleDate, LocalDate travelStartDate, LocalDate travelEndDate) {

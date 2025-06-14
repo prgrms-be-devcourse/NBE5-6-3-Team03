@@ -7,10 +7,10 @@ import lombok.Getter;
 
 @Getter
 public class CountryResponse {
-    private String city;
-    private Double latitude;
-    private Double longitude;
-    private int radius;
+    private final String city;
+    private final Double latitude;
+    private final Double longitude;
+    private final int radius;
 
     public CountryResponse(String city, Double latitude, Double longitude, int radius) {
         this.city = city;
@@ -19,7 +19,7 @@ public class CountryResponse {
         this.radius = radius;
     }
 
-    public static CountryResponse from(Country country) {
+    public static CountryResponse of(Country country) {
         return new CountryResponse(
             country.getCityName(),
             country.getLatitude(),
@@ -30,7 +30,7 @@ public class CountryResponse {
 
     public static List<CountryResponse> fromList(List<Country> cities) {
         return cities.stream()
-            .map(CountryResponse::from)
+            .map(CountryResponse::of)
             .collect(Collectors.toList());
     }
 

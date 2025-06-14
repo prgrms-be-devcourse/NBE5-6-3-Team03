@@ -8,7 +8,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class CountriesStatisticResponse {
 
-    String country;
-    long count;
+    private String country;
+    private long count;
 
 }

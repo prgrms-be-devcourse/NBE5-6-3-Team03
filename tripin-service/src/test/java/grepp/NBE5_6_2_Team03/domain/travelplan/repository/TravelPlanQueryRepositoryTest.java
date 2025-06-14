@@ -2,6 +2,8 @@ package grepp.NBE5_6_2_Team03.domain.travelplan.repository;
 
 import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.expense.repository.ExpenseRepository;
+import grepp.NBE5_6_2_Team03.domain.travelplan.Country;
+
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -39,7 +42,7 @@ class TravelPlanQueryRepositoryTest {
     @Test
     void getTravelPlanFetchScheduleAndExpense() {
         //given
-        TravelPlan travelPlan = createTravelPlan("일본", "여행 계획", 10000, 2);
+        TravelPlan travelPlan = createTravelPlan(Country.JAPAN, "여행 계획", 10000, 2);
         travelPlanRepository.save(travelPlan);
 
         TravelRoute travelRoute = createTravelRoute();
@@ -48,8 +51,8 @@ class TravelPlanQueryRepositoryTest {
         TravelSchedule travelSchedule3 = createTravelSchedule(travelPlan, travelRoute, "일정 내용3", "장소 이름3");
         travelScheduleRepository.saveAll(List.of(travelSchedule, travelSchedule2, travelSchedule3));
 
-        Expense expense = createExpense(travelSchedule, 1000,0);
-        Expense expense2 = createExpense(travelSchedule2, 2000,0);
+        Expense expense = createExpense(travelSchedule, 1000);
+        Expense expense2 = createExpense(travelSchedule2, 2000);
         expenseRepository.saveAll(List.of(expense, expense2));
 
         //when
@@ -70,12 +73,12 @@ class TravelPlanQueryRepositoryTest {
         return new TravelRoute("출발지", "목적지", "이동수단");
     }
 
-    private TravelPlan createTravelPlan(String country, String name, int publicMoney, int count){
+    private TravelPlan createTravelPlan(Country country, String name, int publicMoney, int applicants){
         return TravelPlan.builder()
                 .country(country)
                 .name(name)
                 .publicMoney(publicMoney)
-                .count(count)
+                .applicants(applicants)
                 .build();
     }
 
@@ -88,10 +91,9 @@ class TravelPlanQueryRepositoryTest {
                 .build();
     }
 
-    private Expense createExpense(TravelSchedule travelSchedule, int expectedPrice, int payedPrice){
+    private Expense createExpense(TravelSchedule travelSchedule, int payedPrice){
         return Expense.builder()
                 .travelSchedule(travelSchedule)
-                .expectPrice(expectedPrice)
                 .payedPrice(payedPrice)
                 .build();
     }
