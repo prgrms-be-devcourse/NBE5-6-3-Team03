@@ -42,9 +42,6 @@ class UserControllerTest {
     private UserService userService;
 
     @MockitoBean
-    private TravelPlanService planService;
-
-    @MockitoBean
     private SecurityContextUpdater updater;
 
     @DisplayName("회원 가입을 요청 할때 이메일 값이 잘못된다면 회원가입 예외가 발생한다")
