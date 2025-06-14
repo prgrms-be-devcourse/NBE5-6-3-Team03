@@ -3,7 +3,6 @@ package grepp.NBE5_6_2_Team03.api.controller.user;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
-import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanService;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.file.FileStore;
 import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
@@ -40,9 +39,6 @@ class UserControllerTest {
 
     @MockitoBean
     private UserService userService;
-
-    @MockitoBean
-    private TravelPlanService planService;
 
     @MockitoBean
     private SecurityContextUpdater updater;

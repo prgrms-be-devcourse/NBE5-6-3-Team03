@@ -41,9 +41,9 @@ public class TravelPlanAdjustResponse {
                                               int remainMoney, int personalPrice, int lastestExchangeRate, int exchangePersonalPrice, String curUnit, int rateCompareResult) {
         return TravelPlanAdjustResponse.builder()
                 .expenses(expenseInfos)
-                .country(travelPlan.getCountry())
+                .country(travelPlan.getCountry().getCountryName())
                 .publicMoney(travelPlan.getPublicMoney())
-                .count(travelPlan.getCount())
+                .count(travelPlan.getApplicants())
                 .totalPrice(totalPrice)
                 .personalPrice(personalPrice)
                 .remainMoney(remainMoney)
