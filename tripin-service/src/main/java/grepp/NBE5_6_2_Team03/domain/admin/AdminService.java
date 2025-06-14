@@ -33,7 +33,7 @@ public class AdminService {
     public Page<UserInfoResponse> findUsersPage(UserSearchRequest userSearchRequest) {
         boolean isLocked = userSearchRequest.isLocked();
         Pageable pageable = userSearchRequest.getPageable();
-        Page<User> lockedUserInfos = userQueryRepository.findUsersByLockStatus(isLocked, pageable);
+        Page<User> lockedUserInfos = userQueryRepository.findUsersPage(isLocked, pageable);
         return lockedUserInfos.map(UserInfoResponse::of);
     }
 
@@ -49,14 +49,6 @@ public class AdminService {
             request.getPhoneNumber(),
             null
         );
-    }
-
-    public boolean isDuplicatedEmail(String email) {
-        return userRepository.findByEmail(email).isPresent();
-    }
-
-    public boolean isDuplicatedUsername(String username) {
-        return userRepository.findByName(username).isPresent();
     }
 
     @Transactional
@@ -96,6 +88,14 @@ public class AdminService {
 
     public List<CountriesStatisticResponse> getCountriesStatistics() {
         return travelPlanQueryRepository.getCountriesStatistics();
+    }
+
+    public boolean isDuplicatedEmail(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+
+    public boolean isDuplicatedUsername(String username) {
+        return userRepository.findByName(username).isPresent();
     }
 
 }
