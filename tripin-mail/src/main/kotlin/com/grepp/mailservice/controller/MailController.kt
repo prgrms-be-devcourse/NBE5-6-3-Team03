@@ -18,13 +18,13 @@ class MailController(private val mailSendService: MailSendService) {
     @PostMapping("/send-code")
     fun sendSimpleMail(@RequestBody request: CodeMailRequest): ApiResponse<CodeMailResponse> {
         val code = mailSendService.sendCodeMail(request.to, request.codeType)
-        return ApiResponse.success(CodeMailResponse(request.to, code))
+        return ApiResponse.noContent()
     }
 
     @PostMapping("/send-html")
     fun sendSettlementMail(@RequestBody request: HtmlMailRequest): ApiResponse<Void> {
         mailSendService.sendHtmlMail(request)
-        return (ApiResponse.noContent())
+        return ApiResponse.noContent()
     }
 
 }
