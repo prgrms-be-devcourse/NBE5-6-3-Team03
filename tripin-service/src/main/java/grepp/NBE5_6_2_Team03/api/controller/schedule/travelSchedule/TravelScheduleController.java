@@ -66,8 +66,8 @@ public class TravelScheduleController {
     }
 
     @DeleteMapping("/{travelScheduleId}")
-    public ApiResponse<Map<String, Object>> deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
-                                                           @PathVariable("travelScheduleId") Long travelScheduleId) {
+    public ApiResponse<Void> deleteSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+                               @PathVariable("travelScheduleId") Long travelScheduleId) {
         travelScheduleService.deleteSchedule(travelScheduleId);
         return ApiResponse.noContent();
     }
