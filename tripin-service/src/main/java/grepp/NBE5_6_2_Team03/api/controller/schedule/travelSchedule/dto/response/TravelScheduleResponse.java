@@ -4,7 +4,7 @@ import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 public class TravelScheduleResponse {
@@ -15,14 +15,15 @@ public class TravelScheduleResponse {
     private final String content;
     private final String placeName;
     private final String status;
-    private final LocalDate travelScheduleDate;
+    private final LocalDateTime travelScheduleDate;
     private final String departure;
     private final String destination;
     private final String transportation;
+    private final int price;
 
     @Builder
     public TravelScheduleResponse(String username, Long travelScheduleId, Long travelPlanId, String content, String placeName,
-                                  String status, LocalDate travelDate, String departure, String destination, String transportation) {
+                                  String status, LocalDateTime travelDate, String departure, String destination, String transportation, int price) {
         this.username = username;
         this.travelScheduleId = travelScheduleId;
         this.travelPlanId = travelPlanId;
@@ -33,6 +34,7 @@ public class TravelScheduleResponse {
         this.departure = departure;
         this.destination = destination;
         this.transportation = transportation;
+        this.price = price;
     }
 
     public static TravelScheduleResponse fromEntity(TravelSchedule schedule) {
@@ -51,6 +53,7 @@ public class TravelScheduleResponse {
             .departure(schedule.getTravelRoute().getDeparture())
             .destination(schedule.getTravelRoute().getDestination())
             .transportation(schedule.getTravelRoute().getTransportation())
+            .price(schedule.getPrice())
             .build();
     }
 }

@@ -16,4 +16,7 @@ public interface TravelScheduleRepository extends JpaRepository<TravelSchedule, 
         "WHERE s.travelPlan = :plan " +
         "ORDER BY s.travelScheduleDate ASC, s.scheduleStatus DESC")
     List<TravelSchedule> findSortedSchedules(@Param("plan") TravelPlan plan);
+
+    @Query("select coalesce(sum(e.price), 0) from TravelSchedule e where e.travelPlan.travelPlanId = :travelPlanId")
+    int sumPriceByPlanId(@Param("travelPlanId") Long travelPlanId);
 }
