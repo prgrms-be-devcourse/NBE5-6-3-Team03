@@ -10,7 +10,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static grepp.NBE5_6_2_Team03.domain.expense.QExpense.expense;
 import static grepp.NBE5_6_2_Team03.domain.travelplan.QTravelPlan.travelPlan;
 import static grepp.NBE5_6_2_Team03.domain.travelschedule.QTravelSchedule.travelSchedule;
 
@@ -20,11 +19,10 @@ public class TravelPlanQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public TravelPlan getTravelPlanFetchScheduleAndExpense(Long travelPlanId){
+    public TravelPlan getTravelPlanFetchSchedule(Long travelPlanId){
         return queryFactory.selectDistinct(travelPlan)
             .from(travelPlan)
             .leftJoin(travelPlan.travelSchedules, travelSchedule).fetchJoin()
-            .leftJoin(travelSchedule.expense, expense).fetchJoin()
             .where(travelPlan.travelPlanId.eq(travelPlanId))
             .fetchOne();
     }
