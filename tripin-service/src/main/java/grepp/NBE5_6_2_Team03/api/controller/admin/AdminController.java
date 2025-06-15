@@ -52,7 +52,7 @@ public class AdminController {
         @PathVariable("id") Long id
     ) {
         adminService.deleteUserById(id);
-        return ApiResponse.success(AdminSuccessMessage.USER_DELETED.getMessage());
+        return ApiResponse.noContent();
     }
 
     @PatchMapping("/user-info/{id}/lock")
