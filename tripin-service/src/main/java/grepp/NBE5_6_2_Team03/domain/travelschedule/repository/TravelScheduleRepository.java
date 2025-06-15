@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TravelScheduleRepository extends JpaRepository<TravelSchedule, Long> {
 
@@ -19,4 +20,7 @@ public interface TravelScheduleRepository extends JpaRepository<TravelSchedule, 
 
     @Query("select coalesce(sum(e.price), 0) from TravelSchedule e where e.travelPlan.travelPlanId = :travelPlanId")
     int sumPriceByPlanId(@Param("travelPlanId") Long travelPlanId);
+
+    @Query("SELECT s FROM TravelSchedule s JOIN FETCH s.travelPlan WHERE s.travelScheduleId = :id")
+    Optional<TravelSchedule> findByIdWithTravelPlan(@Param("id") Long id);
 }

@@ -91,7 +91,7 @@ public class TravelScheduleService {
     }
 
     public TravelSchedule findById(Long travelScheduleId) {
-        return travelScheduleRepository.findById(travelScheduleId)
+        return travelScheduleRepository.findByIdWithTravelPlan(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
     }
 
