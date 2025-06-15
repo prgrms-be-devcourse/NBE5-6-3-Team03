@@ -1,14 +1,13 @@
 package grepp.NBE5_6_2_Team03.domain.travelschedule;
 
 import grepp.NBE5_6_2_Team03.domain.BaseEntity;
-import grepp.NBE5_6_2_Team03.domain.expense.Expense;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -24,9 +23,6 @@ public class TravelSchedule extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private TravelPlan travelPlan;
 
-    @OneToOne(mappedBy = "travelSchedule", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private Expense expense;
-
     @Embedded
     private TravelRoute travelRoute;
 
@@ -35,44 +31,33 @@ public class TravelSchedule extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private ScheduleStatus scheduleStatus;
-    private LocalDate travelScheduleDate;
+    private LocalDateTime travelScheduleDate;
+    private int expense;
 
     protected TravelSchedule() {}
 
     @Builder
-    private TravelSchedule(TravelPlan travelPlan, TravelRoute travelRoute, String content,
-                           String placeName, ScheduleStatus scheduleStatus, LocalDate travelScheduleDate) {
+    private TravelSchedule(TravelPlan travelPlan, TravelRoute travelRoute, String content, String placeName,
+                           ScheduleStatus scheduleStatus, LocalDateTime travelScheduleDate, int expense) {
         this.travelPlan = travelPlan;
         this.travelRoute = travelRoute;
         this.content = content;
         this.placeName = placeName;
         this.scheduleStatus = scheduleStatus;
         this.travelScheduleDate = travelScheduleDate;
+        this.expense = expense;
         travelPlan.getTravelSchedules().add(this);
     }
 
-    public void edit(TravelRoute travelRoute, String content, String placeName, LocalDate travelScheduleDate) {
+    public void edit(TravelRoute travelRoute, String content, String placeName, LocalDateTime travelScheduleDate, int expense) {
         this.travelRoute = travelRoute;
         this.content = content;
         this.placeName = placeName;
         this.travelScheduleDate = travelScheduleDate;
+        this.expense = expense;
     }
 
-    public boolean isCompleted() {
-        return this.scheduleStatus == ScheduleStatus.COMPLETED;
-    }
-
-    public void toggleStatus() {
-        if (isCompleted()) {
-            this.scheduleStatus = ScheduleStatus.PLANNED;
-        } else {
-            this.scheduleStatus = ScheduleStatus.COMPLETED;
-        }
-    }
-
-    public void deleteExpense() {
-        if (this.expense != null) {
-            this.expense = null;
-        }
+    public void editStatus(ScheduleStatus status) {
+        this.scheduleStatus = status;
     }
 }
