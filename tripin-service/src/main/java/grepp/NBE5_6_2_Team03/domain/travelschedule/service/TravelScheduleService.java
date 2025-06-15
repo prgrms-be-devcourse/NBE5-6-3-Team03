@@ -1,12 +1,12 @@
 package grepp.NBE5_6_2_Team03.domain.travelschedule.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleStatusRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleResponse;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
-import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.repository.TravelScheduleRepository;
 import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
@@ -68,12 +68,12 @@ public class TravelScheduleService {
     }
 
     @Transactional
-    public ScheduleStatus scheduleStatus(Long travelScheduleId) {
+    public TravelSchedule editScheduleStatus(Long travelScheduleId, TravelScheduleStatusRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
 
-        schedule.toggleStatus();
-        return schedule.getScheduleStatus();
+        schedule.editStatus(request.getStatus());
+        return schedule;
     }
 
     public Map<LocalDate, List<TravelScheduleResponse>> getGroupedSchedules(Long travelPlanId) {

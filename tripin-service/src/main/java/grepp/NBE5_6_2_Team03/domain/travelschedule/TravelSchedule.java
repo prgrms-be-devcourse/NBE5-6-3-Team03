@@ -57,15 +57,7 @@ public class TravelSchedule extends BaseEntity {
         this.price = price;
     }
 
-    public boolean isCompleted() {
-        return this.scheduleStatus == ScheduleStatus.COMPLETED;
-    }
-
-    public void toggleStatus() {
-        if (isCompleted()) {
-            this.scheduleStatus = ScheduleStatus.PLANNED;
-        } else {
-            this.scheduleStatus = ScheduleStatus.COMPLETED;
-        }
+    public void editStatus(ScheduleStatus status) {
+        this.scheduleStatus = status;
     }
 }

@@ -1,9 +1,10 @@
 package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleStatusRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleResponse;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleStatusResponse;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
-import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.service.TravelScheduleService;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import grepp.NBE5_6_2_Team03.global.response.ResponseCode;
@@ -72,13 +73,10 @@ public class TravelScheduleController {
     }
 
     @PatchMapping("/{travelScheduleId}/status")
-    public ApiResponse<Map<String, Object>> scheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
-                                                           @PathVariable("travelScheduleId") Long travelScheduleId) {
-        ScheduleStatus scheduleStatus =  travelScheduleService.scheduleStatus(travelScheduleId);
-        return ApiResponse.success(Map.of(
-            "travelScheduleId", travelScheduleId,
-            "scheduleStatus", scheduleStatus.name(),
-            "message", "일정 상태가 변경되었습니다."
-        ));
+    public ApiResponse<TravelScheduleStatusResponse> editScheduleStatus(@PathVariable("travelPlanId") Long travelPlanId,
+                                                                        @PathVariable("travelScheduleId") Long travelScheduleId,
+                                                                        @RequestBody TravelScheduleStatusRequest request) {
+        TravelSchedule travelSchedule = travelScheduleService.editScheduleStatus(travelScheduleId, request);
+        return ApiResponse.success(TravelScheduleStatusResponse.fromEntity(travelSchedule));
     }
 }
