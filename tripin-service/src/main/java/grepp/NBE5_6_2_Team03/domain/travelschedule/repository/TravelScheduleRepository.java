@@ -16,4 +16,6 @@ public interface TravelScheduleRepository extends JpaRepository<TravelSchedule, 
         "WHERE s.travelPlan = :plan " +
         "ORDER BY s.travelScheduleDate ASC, s.scheduleStatus DESC")
     List<TravelSchedule> findSortedSchedules(@Param("plan") TravelPlan plan);
+
+    List<TravelSchedule> findByTravelPlanId(Long travelPlanId);
 }
