@@ -32,29 +32,29 @@ public class TravelSchedule extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ScheduleStatus scheduleStatus;
     private LocalDateTime travelScheduleDate;
-    private int price;
+    private int expense;
 
     protected TravelSchedule() {}
 
     @Builder
     private TravelSchedule(TravelPlan travelPlan, TravelRoute travelRoute, String content, String placeName,
-                           ScheduleStatus scheduleStatus, LocalDateTime travelScheduleDate, int price) {
+                           ScheduleStatus scheduleStatus, LocalDateTime travelScheduleDate, int expense) {
         this.travelPlan = travelPlan;
         this.travelRoute = travelRoute;
         this.content = content;
         this.placeName = placeName;
         this.scheduleStatus = scheduleStatus;
         this.travelScheduleDate = travelScheduleDate;
-        this.price = price;
+        this.expense = expense;
         travelPlan.getTravelSchedules().add(this);
     }
 
-    public void edit(TravelRoute travelRoute, String content, String placeName, LocalDateTime travelScheduleDate, int price) {
+    public void edit(TravelRoute travelRoute, String content, String placeName, LocalDateTime travelScheduleDate, int expense) {
         this.travelRoute = travelRoute;
         this.content = content;
         this.placeName = placeName;
         this.travelScheduleDate = travelScheduleDate;
-        this.price = price;
+        this.expense = expense;
     }
 
     public void editStatus(ScheduleStatus status) {

@@ -19,12 +19,12 @@ public class TravelScheduleResponse {
     private final String departure;
     private final String destination;
     private final String transportation;
-    private final int price;
+    private final int expense;
     private final CurrentUnit currentUnit;
 
     @Builder
     public TravelScheduleResponse(Long travelScheduleId, Long travelPlanId, String content, String placeName, String status,
-                                  LocalDateTime travelDate, String departure, String destination, String transportation, int price, CurrentUnit currentUnit) {
+                                  LocalDateTime travelDate, String departure, String destination, String transportation, int expense, CurrentUnit currentUnit) {
         this.travelScheduleId = travelScheduleId;
         this.travelPlanId = travelPlanId;
         this.content = content;
@@ -34,7 +34,7 @@ public class TravelScheduleResponse {
         this.departure = departure;
         this.destination = destination;
         this.transportation = transportation;
-        this.price = price;
+        this.expense = expense;
         this.currentUnit = currentUnit;
     }
 
@@ -49,7 +49,7 @@ public class TravelScheduleResponse {
             .departure(schedule.getTravelRoute().getDeparture())
             .destination(schedule.getTravelRoute().getDestination())
             .transportation(schedule.getTravelRoute().getTransportation())
-            .price(schedule.getPrice())
+            .expense(schedule.getExpense())
             .currentUnit(schedule.getTravelPlan().getCurrentUnit())
             .build();
     }

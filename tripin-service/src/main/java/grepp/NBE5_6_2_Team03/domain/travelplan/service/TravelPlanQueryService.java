@@ -55,7 +55,7 @@ public class TravelPlanQueryService {
 
     private int getTotalExpenses(List<TravelSchedule> schedules) {
         return schedules.stream()
-            .map(TravelSchedule::getPrice)
+            .map(TravelSchedule::getExpense)
             .mapToInt(Integer::intValue)
             .sum();
     }

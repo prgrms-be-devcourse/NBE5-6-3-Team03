@@ -29,7 +29,7 @@ public class TravelScheduleExpenseInfo {
                         travelSchedule.getTravelRoute(),
                         travelSchedule.getContent(),
                         travelSchedule.getPlaceName(),
-                        travelSchedule.getPrice()
+                        travelSchedule.getExpense()
                 ))
                .toList();
     }

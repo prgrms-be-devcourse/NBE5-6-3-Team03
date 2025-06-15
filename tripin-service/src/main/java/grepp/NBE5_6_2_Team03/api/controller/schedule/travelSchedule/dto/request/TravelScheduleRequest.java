@@ -24,20 +24,20 @@ public class TravelScheduleRequest {
     @NotBlank
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDateTime travelScheduleDate;
-    private int price;
+    private int expense;
 
     public TravelScheduleRequest() {
     }
 
     @Builder
-    private TravelScheduleRequest(String departure, String destination, String transportation, String content, String placeName, LocalDateTime travelScheduleDate, int price) {
+    private TravelScheduleRequest(String departure, String destination, String transportation, String content, String placeName, LocalDateTime travelScheduleDate, int expense) {
         this.departure = departure;
         this.destination = destination;
         this.transportation = transportation;
         this.content = content;
         this.placeName = placeName;
         this.travelScheduleDate = travelScheduleDate;
-        this.price = price;
+        this.expense = expense;
     }
 
     public TravelSchedule toEntity(TravelPlan plan) {
@@ -50,7 +50,7 @@ public class TravelScheduleRequest {
             .travelRoute(travelRoute)
             .scheduleStatus(ScheduleStatus.PLANNED)
             .travelScheduleDate(this.travelScheduleDate)
-            .price(this.price)
+            .expense(this.expense)
             .build();
     }
 }

@@ -63,7 +63,7 @@ class TravelPlanQueryRepositoryTest {
         List<TravelSchedule> travelSchedules = findTravelPlan.getTravelSchedules();
         assertThat(travelSchedules).hasSize(3);
         assertThat(travelSchedules)
-                .extracting(TravelSchedule::getPrice)
+                .extracting(TravelSchedule::getExpense)
                 .filteredOn(Objects::nonNull)
                 .hasSize(2);
     }

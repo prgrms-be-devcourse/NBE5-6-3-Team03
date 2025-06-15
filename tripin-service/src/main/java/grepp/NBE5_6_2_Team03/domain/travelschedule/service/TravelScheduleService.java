@@ -53,7 +53,7 @@ public class TravelScheduleService {
             request.getContent(),
             request.getPlaceName(),
             request.getTravelScheduleDate(),
-            request.getPrice()
+            request.getExpense()
         );
 
         return schedule;
