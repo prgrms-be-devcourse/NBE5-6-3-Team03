@@ -43,10 +43,10 @@ public class TravelScheduleController {
     }
 
     @PostMapping("/new")
-    public ApiResponse<Object> addSchedule(@PathVariable("travelPlanId") Long travelPlanId,
-                                           @RequestBody TravelScheduleRequest request) {
+    public ApiResponse<Object> createSchedule(@PathVariable("travelPlanId") Long travelPlanId,
+                                              @RequestBody TravelScheduleRequest request) {
         try {
-            TravelSchedule travelSchedule =  travelScheduleService.addSchedule(travelPlanId, request);
+            TravelSchedule travelSchedule =  travelScheduleService.createSchedule(travelPlanId, request);
             return ApiResponse.success(TravelScheduleResponse.fromEntity(travelSchedule));
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
