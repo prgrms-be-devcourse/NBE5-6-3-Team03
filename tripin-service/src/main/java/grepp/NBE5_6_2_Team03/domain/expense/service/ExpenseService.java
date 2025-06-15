@@ -69,7 +69,7 @@ public class ExpenseService {
     }
 
     private int getTotalPayedPrice(TravelPlan plan) {
-        return expenseRepository.sumPayedPriceByPlanId(plan.getTravelPlanId());
+        return expenseRepository.sumPayedPriceByPlanId(plan.getId());
     }
 
     private void validatePayedPrice(TravelPlan plan, int newPayedPrice) {

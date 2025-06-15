@@ -31,7 +31,7 @@ public class ExpenseResponse {
         return ExpenseResponse.builder()
             .username(username)
             .expenseId(expense.getExpenseId())
-            .travelPlanId(expense.getTravelSchedule().getTravelPlan().getTravelPlanId())
+            .travelPlanId(expense.getTravelSchedule().getTravelPlan().getId())
             .travelScheduleId(expense.getTravelSchedule().getTravelScheduleId())
             .expectPrice(expense.getExpectPrice())
             .payedPrice(expense.getPayedPrice())
