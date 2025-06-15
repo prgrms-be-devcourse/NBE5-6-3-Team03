@@ -20,11 +20,11 @@ public class TravelScheduleResponse {
     private final String destination;
     private final String transportation;
     private final int expense;
-    private final CurrentUnit currentUnit;
+    private final String currentUnit;
 
     @Builder
     public TravelScheduleResponse(Long travelScheduleId, Long travelPlanId, String content, String placeName, String status,
-                                  LocalDateTime travelDate, String departure, String destination, String transportation, int expense, CurrentUnit currentUnit) {
+                                  LocalDateTime travelDate, String departure, String destination, String transportation, int expense, String currentUnit) {
         this.travelScheduleId = travelScheduleId;
         this.travelPlanId = travelPlanId;
         this.content = content;
@@ -50,7 +50,7 @@ public class TravelScheduleResponse {
             .destination(schedule.getTravelRoute().getDestination())
             .transportation(schedule.getTravelRoute().getTransportation())
             .expense(schedule.getExpense())
-            .currentUnit(schedule.getTravelPlan().getCurrentUnit())
+            .currentUnit(schedule.getTravelPlan().getCurrentUnit().getUnit())
             .build();
     }
 }
