@@ -17,7 +17,7 @@ public class TravelPlanResponseDto {
 
     public TravelPlanResponseDto(TravelPlan plan) {
 
-        this.travelPlanId = plan.getTravelPlanId();
+        this.travelPlanId = plan.getId();
         this.country = plan.getCountry().getCountryName();
         this.name = plan.getName();
         this.publicMoney = plan.getPublicMoney();

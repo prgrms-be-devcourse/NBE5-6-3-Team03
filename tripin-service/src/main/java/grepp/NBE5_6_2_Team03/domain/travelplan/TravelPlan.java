@@ -17,12 +17,11 @@ public class TravelPlan extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long travelPlanId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 
     @OneToMany(mappedBy = "travelPlan", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<TravelSchedule> travelSchedules = new ArrayList<>();
@@ -58,7 +57,6 @@ public class TravelPlan extends BaseEntity {
     public void modify(String name, Country country, int applicants,
                        CurrentUnit currentUnit, int publicMoney,
                        LocalDate travelStartDate, LocalDate travelEndDate) {
-
         this.name = name;
         this.country = country;
         this.applicants = applicants;

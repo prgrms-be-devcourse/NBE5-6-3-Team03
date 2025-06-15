@@ -20,10 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
@@ -92,7 +89,17 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
 
         Optional<User> user = userRepository.findByEmail(email);
         user.ifPresent(u -> updateFailCount(u, email));
+
         response.setStatus(401);
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("failCount", getFailCount(email));
+        responseBody.put("message", "Authentication failed");
+        objectMapper.writeValue(response.getWriter(), responseBody);
+    }
+
+    private String getFailCount(String email) {
+        String key = findKey(email);
+        return redisTemplate.opsForValue().get(key);
     }
 
     private void updateFailCount(User u, String email) {

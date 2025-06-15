@@ -68,7 +68,7 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUserBy(Long userId) {
+    public void deleteByUserId(Long userId) {
         travelPlanRepository.deleteByUserId(userId);
         userRepository.deleteById(userId);
     }
