@@ -34,7 +34,7 @@ class AdminControllerTest {
         // given
         UserSearchRequest request = UserSearchRequest
             .builder()
-            .locked(true)
+            .isLocked(true)
             .page(0)
             .size(10)
             .build();
@@ -61,7 +61,7 @@ class AdminControllerTest {
         // given
         UserSearchRequest request = UserSearchRequest
             .builder()
-            .locked(false)
+            .isLocked(false)
             .page(0)
             .size(5)
             .build();

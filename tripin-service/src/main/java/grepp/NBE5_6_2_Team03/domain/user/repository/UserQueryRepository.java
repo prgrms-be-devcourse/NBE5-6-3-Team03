@@ -36,7 +36,9 @@ public class UserQueryRepository {
 
     public Page<User> findUsersPage(Boolean isLocked, Pageable pageable) {
 
-        BooleanExpression lockStatus = createLockStatusCondition(isLocked);
+        BooleanExpression lockStatus = Optional.ofNullable(isLocked)
+            .map(user.isLocked::eq)
+            .orElse(null);
 
         List<User> users = queryFactory
             .selectFrom(user)
@@ -53,10 +55,4 @@ public class UserQueryRepository {
         return new PageImpl<>(users, pageable, total);
     }
 
-    private BooleanExpression createLockStatusCondition(Boolean isLocked) {
-        return Optional.ofNullable(isLocked)
-            .map(user.isLocked::eq)
-            .orElse(null);
-
-    }
 }

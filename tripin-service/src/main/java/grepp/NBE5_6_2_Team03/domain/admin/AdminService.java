@@ -31,7 +31,7 @@ public class AdminService {
     private final TravelPlanQueryRepository travelPlanQueryRepository;
 
     public Page<UserInfoResponse> findUsersPage(UserSearchRequest userSearchRequest) {
-        Boolean isLocked = userSearchRequest.getLocked();
+        Boolean isLocked = userSearchRequest.getIsLocked();
         Pageable pageable = userSearchRequest.getPageable();
         Page<User> lockedUserInfos = userQueryRepository.findUsersPage(isLocked, pageable);
         return lockedUserInfos.map(UserInfoResponse::of);
