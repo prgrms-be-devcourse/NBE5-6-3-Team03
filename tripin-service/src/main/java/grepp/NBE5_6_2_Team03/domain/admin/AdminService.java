@@ -101,4 +101,5 @@ public class AdminService {
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND));
         return UserInfoResponse.of(user);
     }
+
 }

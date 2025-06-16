@@ -1,6 +1,7 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.StatisticResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserModifyRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchPageResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
@@ -25,6 +26,11 @@ public class AdminController {
     @PostMapping("/users")
     public ApiResponse<UserSearchPageResponse> getUsers(@RequestBody UserSearchRequest request) {
         return ApiResponse.success(adminService.findUsersPage(request));
+    }
+
+    @GetMapping("/users/{id}")
+    public ApiResponse<UserInfoResponse> getUser(@PathVariable Long id) {
+        return ApiResponse.success(adminService.findById(id));
     }
 
     @PatchMapping("/users/{id}")
