@@ -1,6 +1,6 @@
 package grepp.NBE5_6_2_Team03.global.initializer.dataseed;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.CountryResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.CountryResponse;
 import grepp.NBE5_6_2_Team03.domain.place.CountryService;
 import grepp.NBE5_6_2_Team03.domain.place.GooglePlaceService;
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;

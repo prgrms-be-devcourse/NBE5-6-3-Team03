@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.api.controller.admin.dto.place;
+package grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response;
 
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter @Setter
 @AllArgsConstructor
 @Builder
-public class PlaceResponse {
+public class PlaceInfoResponse {
     private String placeId;
     private String country;
     private String city;
@@ -17,8 +17,8 @@ public class PlaceResponse {
     private Double latitude;
     private Double longitude;
 
-    public static PlaceResponse of(Place place) {
-        return PlaceResponse.builder()
+    public static PlaceInfoResponse of(Place place) {
+        return PlaceInfoResponse.builder()
             .placeId(place.getPlaceId())
             .country(place.getCountry())
             .city(place.getCity())
