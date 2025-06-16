@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class TravelRecommendResponse {
-    private String message;
+    private String title;
     private List<TravelRecommendation> recommendations;
 }
 

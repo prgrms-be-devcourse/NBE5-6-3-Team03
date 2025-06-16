@@ -23,7 +23,7 @@ public interface TravelRecommendAiService {
         예산을 절대 초과하지 마. 초과하면 추천하지 말고 예산 내에서 가능한 여행지를 간단히 추천해.
          JSON 형식으로만 주고,다음과 같은 형식으로 줘야 해
          
-        - 최상단에 "message" 키: 예를 들면 "힐링이 필요한 당신을 위해, istj 유형과 동행하는 구성원을 고려한 맞춤형 일본 여행지를 추천해드립니다"
+        - 최상단에 "title" 키: 예를 들면 "힐링이 필요한 당신을 위해, istj 유형과 동행하는 구성원을 고려한 맞춤형 일본 여행지를 추천해드립니다"
         - "recommendations" 키 안에는 여행지 리스트 (2개)
         - 각 여행지는 다음 필드를 포함해:
             - destination: 여행지 이름
@@ -35,7 +35,7 @@ public interface TravelRecommendAiService {
         
         ex)
         {
-          "message": "힐링이 필요한 당신을 위해, istj 유형과 동행하는 구성원을 고려한 맞춤형 일본 여행지를 추천해드립니다.",
+          "title": "힐링이 필요한 당신을 위해, istj 유형과 동행하는 구성원을 고려한 맞춤형 일본 여행지를 추천해드립니다.",
           "recommendations": [
             {
               "destination": "교토",
