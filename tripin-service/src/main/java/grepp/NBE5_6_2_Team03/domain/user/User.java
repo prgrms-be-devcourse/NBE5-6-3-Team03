@@ -74,15 +74,13 @@ public class User extends BaseEntity {
         this.isLocked = true;
     }
 
+    public void modify(String name, String phoneNumber, boolean isLocked) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.isLocked = isLocked;
+    }
+
     public boolean isAdmin() {
         return this.role == Role.ROLE_ADMIN;
-    }
-
-    public void modifyName(String name) {
-        this.name = name;
-    }
-
-    public void modifyPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 }
