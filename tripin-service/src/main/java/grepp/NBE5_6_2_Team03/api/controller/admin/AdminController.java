@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.StatisticResponse;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserDetailResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserModifyRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchPageResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
