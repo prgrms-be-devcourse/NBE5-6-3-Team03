@@ -7,6 +7,7 @@ import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleEditResponse;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleResponse;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleStatusResponse;
+import grepp.NBE5_6_2_Team03.domain.schedule.treveltimeai.service.TravelTimeAiService;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.service.TravelScheduleService;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
@@ -22,6 +23,7 @@ import java.util.Map;
 public class TravelScheduleController {
 
     private final TravelScheduleService travelScheduleService;
+    private final TravelTimeAiService travelTimeAiService;
 
     @GetMapping("/group")
     public ApiResponse<GroupedTravelSchedulesResponse> findSchedulesGroupByDate(@PathVariable("travelPlanId") Long travelPlanId) {
