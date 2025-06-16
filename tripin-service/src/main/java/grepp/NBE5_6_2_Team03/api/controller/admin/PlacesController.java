@@ -1,8 +1,8 @@
 package grepp.NBE5_6_2_Team03.api.controller.admin;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.CountryCityInfo;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.request.PlaceRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.request.PlaceSearchRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.CountryCityInfo;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.PlaceDetailResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.PlaceInfoListResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.PlaceInfoResponse;
@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,12 +21,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin/places")
+@RequestMapping("/admin")
 public class PlacesController {
     private final PlaceService placeService;
 
-    @GetMapping
-    public ApiResponse<PlaceInfoListResponse> getPlaces(@ModelAttribute PlaceSearchRequest searchRequest ) {
+    @GetMapping("/places")
+    public ApiResponse<PlaceInfoListResponse> getPlaces(@RequestBody PlaceSearchRequest searchRequest ) {
         Page<PlaceInfoResponse> places = placeService.findPlacesPage(searchRequest);
         CountryCityInfo countryCityInfo = placeService.getCountryCityInfo();
         PlaceInfoListResponse response = PlaceInfoListResponse.of(
@@ -38,7 +37,7 @@ public class PlacesController {
         return ApiResponse.success(response);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/places/{id}")
     public ApiResponse<PlaceDetailResponse> getPlaceById(@PathVariable("id") String id) {
         PlaceInfoResponse place = placeService.findById(id);
         CountryCityInfo countryCityInfo = placeService.getCountryCityInfo();
@@ -50,7 +49,7 @@ public class PlacesController {
         return ApiResponse.success(response);
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/places/{id}")
     public ApiResponse<AdminSuccessMessage> updatePlace(
         @PathVariable("id") String id,
         @RequestBody PlaceRequest place
@@ -59,7 +58,7 @@ public class PlacesController {
         return ApiResponse.success(AdminSuccessMessage.PLACE_UPDATED);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/places/{id}")
     public ApiResponse<Void>  deletePlace(@PathVariable("id") String id) {
         placeService.deleteById(id);
         return ApiResponse.noContent();
