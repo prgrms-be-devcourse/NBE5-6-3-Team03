@@ -11,7 +11,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class UserInfoUpdateRequest {
 
-    private Long id;
     @EmailCheck
     private String email;
     @NameCheck
