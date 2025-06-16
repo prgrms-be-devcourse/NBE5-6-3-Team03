@@ -7,6 +7,9 @@ import lombok.Data;
 public class TravelRecommendRequest {
     private String country;
     private String mood;
+    private String mbti;
+    private String participant;
     private String budget;
+
 
 }
