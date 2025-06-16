@@ -32,7 +32,7 @@ public class TravelPlanInfo {
 
     public static TravelPlanInfo of(TravelPlan plan){
         return TravelPlanInfo.builder()
-                .travelPlanId(plan.getTravelPlanId())
+                .travelPlanId(plan.getId())
                 .country(plan.getCountry().getCountryName())
                 .name(plan.getName())
                 .publicMoney(plan.getPublicMoney())

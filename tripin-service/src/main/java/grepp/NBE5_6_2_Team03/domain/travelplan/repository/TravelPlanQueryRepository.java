@@ -23,7 +23,7 @@ public class TravelPlanQueryRepository {
         return queryFactory.selectDistinct(travelPlan)
             .from(travelPlan)
             .leftJoin(travelPlan.travelSchedules, travelSchedule).fetchJoin()
-            .where(travelPlan.travelPlanId.eq(travelPlanId))
+            .where(travelPlan.id.eq(travelPlanId))
             .fetchOne();
     }
 
@@ -31,7 +31,7 @@ public class TravelPlanQueryRepository {
         return queryFactory
             .select(Projections.constructor(CountriesStatisticResponse.class,
                 travelPlan.country,
-                travelPlan.travelPlanId.count()
+                travelPlan.id.count()
             ))
             .from(travelPlan)
             .groupBy(travelPlan.country)
@@ -43,7 +43,7 @@ public class TravelPlanQueryRepository {
         return queryFactory
             .select(Projections.constructor(MonthlyStatisticResponse.class,
                 Expressions.dateTimeTemplate(Integer.class, "month({0})", travelPlan.travelStartDate),
-                travelPlan.travelPlanId.count()
+                travelPlan.id.count()
             ))
             .from(travelPlan)
             .groupBy(Expressions.dateTimeTemplate(Integer.class, "month({0})", travelPlan.travelStartDate))

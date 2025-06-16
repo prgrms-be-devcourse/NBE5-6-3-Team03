@@ -3,6 +3,7 @@ package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleStatusRequest;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.GroupedTravelSchedulesResponse;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleEditResponse;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleResponse;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleStatusResponse;
@@ -11,13 +12,9 @@ import grepp.NBE5_6_2_Team03.domain.travelschedule.service.TravelScheduleService
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import grepp.NBE5_6_2_Team03.global.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RequestMapping("/travel-plans/{travelPlanId}/schedule")
 @RequiredArgsConstructor
@@ -26,14 +23,9 @@ public class TravelScheduleController {
 
     private final TravelScheduleService travelScheduleService;
 
-    @GetMapping
-    public ApiResponse<Map<String, Object>> list(@PathVariable("travelPlanId") Long travelPlanId) {
-        Map<LocalDate, List<TravelScheduleResponse>> groupedSchedules = travelScheduleService.getGroupedSchedules(travelPlanId);
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("groupedSchedules", groupedSchedules);
-        response.put("travelPlanId", travelPlanId);
-
+    @GetMapping("/group")
+    public ApiResponse<GroupedTravelSchedulesResponse> findSchedulesGroupByDate(@PathVariable("travelPlanId") Long travelPlanId) {
+        GroupedTravelSchedulesResponse response = travelScheduleService.getGroupedSchedules(travelPlanId);
         return ApiResponse.success(response);
     }
 

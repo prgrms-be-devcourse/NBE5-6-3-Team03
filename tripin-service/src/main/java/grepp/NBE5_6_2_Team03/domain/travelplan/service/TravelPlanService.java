@@ -47,7 +47,7 @@ public class TravelPlanService {
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
         travelPlanRepository.save(request.toEntity(user));
-        return travelPlanRepository.save(request.toEntity(user)).getTravelPlanId();
+        return travelPlanRepository.save(request.toEntity(user)).getId();
     }
 
     @Transactional
@@ -57,7 +57,7 @@ public class TravelPlanService {
 
         validateTravelPlan(request.getTravelStartDate(), request.getTravelEndDate());
         modifyPlan(request, plan);
-        return plan.getTravelPlanId();
+        return plan.getId();
     }
 
     @Transactional

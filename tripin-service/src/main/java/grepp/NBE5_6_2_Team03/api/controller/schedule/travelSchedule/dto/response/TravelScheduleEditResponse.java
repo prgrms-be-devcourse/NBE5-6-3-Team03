@@ -37,7 +37,7 @@ public class TravelScheduleEditResponse {
     public static TravelScheduleEditResponse fromEntity(TravelSchedule schedule) {
         return TravelScheduleEditResponse.builder()
             .travelScheduleId(schedule.getTravelScheduleId())
-            .travelPlanId(schedule.getTravelPlan().getTravelPlanId())
+            .travelPlanId(schedule.getTravelPlan().getId())
             .content(schedule.getContent())
             .placeName(schedule.getPlaceName())
             .status(schedule.getScheduleStatus().name())
