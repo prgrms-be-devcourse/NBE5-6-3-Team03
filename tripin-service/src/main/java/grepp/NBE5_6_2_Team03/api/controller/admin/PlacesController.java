@@ -59,9 +59,9 @@ public class PlacesController {
     }
 
     @PostMapping("/{id}/delete")
-    public ApiResponse<AdminSuccessMessage>  deletePlace(@PathVariable("id") String id) {
+    public ApiResponse<Void>  deletePlace(@PathVariable("id") String id) {
         placeService.deleteById(id);
-        return ApiResponse.success(AdminSuccessMessage.PLACE_DELETED);
+        return ApiResponse.noContent();
     }
 
 }
