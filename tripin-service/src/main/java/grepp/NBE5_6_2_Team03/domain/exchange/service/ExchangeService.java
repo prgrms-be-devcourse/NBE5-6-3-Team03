@@ -9,6 +9,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import grepp.NBE5_6_2_Team03.domain.exchange.type.ExchangeRateComparison;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -64,10 +66,17 @@ public class ExchangeService {
         return exchangeRateQueryRepository.getRecentAverageRate(curUnit);
     }
 
-    public int compareLatestRateToAverageRate(String curUnit) {
+    public ExchangeRateComparison compareLatestRateToAverageRate(String curUnit) {
         int latest = getLatestExchangeRateInt(curUnit);
         int average = getRecentAverageRate(curUnit);
-        return Integer.compare(latest, average);
+
+        if (latest > average) {
+            return ExchangeRateComparison.HIGHER;
+        } else if (latest < average) {
+            return ExchangeRateComparison.LOWER;
+        } else {
+            return ExchangeRateComparison.SAME;
+        }
     }
 
     public int exchangeToWon(String curUnit, int foreignCurrency) {

@@ -3,6 +3,7 @@ package grepp.NBE5_6_2_Team03.domain.adjustment.service;
 import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentResponse;
 import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentExpenseInfo;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
+import grepp.NBE5_6_2_Team03.domain.exchange.type.ExchangeRateComparison;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.adjustment.respository.AdjustmentRepository;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
@@ -44,11 +45,11 @@ public class AdjustmentService {
         int personalPriceWon = travelPlan.getCurrentUnit().isKRW() ? personalPrice : exchangeService.exchangeToWon(curUnit, personalPrice);
         int personalPriceForeign = travelPlan.getCurrentUnit().isKRW() ? exchangeService.exchangeToForeign(curUnit, personalPrice) : personalPrice;
 
-        int rateCompareResult = exchangeService.compareLatestRateToAverageRate(curUnit);
+        ExchangeRateComparison compareLatestRateToAverageRate = exchangeService.compareLatestRateToAverageRate(curUnit);
 
         List<AdjustmentExpenseInfo> expenses = AdjustmentExpenseInfo.convertBy(completedSchedules);
 
-        return AdjustmentResponse.of(expenses, travelPlan, totalExpense, lastestExchangeRate, rateCompareResult,
+        return AdjustmentResponse.of(expenses, travelPlan, totalExpense, lastestExchangeRate, compareLatestRateToAverageRate,
                                      remainMoneyWon, remainMoneyForeign, needToPay, personalPriceWon, personalPriceForeign);
     }
 
