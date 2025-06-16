@@ -29,7 +29,7 @@ public class AdjustmentService {
             .collect(Collectors.toList());
 
         String curUnit = travelPlan.getCurrentUnit().getUnit();
-        int sumExpenses = getSumExpenses(completedSchedules);
+        int totalExpense = getTotalExpense(completedSchedules);
         int applicants = travelPlan.getApplicants();
         int remainMoney = getRemainMoney(travelPlan.getPublicMoney(), completedSchedules);
 
@@ -48,15 +48,15 @@ public class AdjustmentService {
 
         List<AdjustmentExpenseInfo> expenses = AdjustmentExpenseInfo.convertBy(completedSchedules);
 
-        return AdjustmentResponse.of(expenses, travelPlan, sumExpenses, lastestExchangeRate, rateCompareResult,
-                                           remainMoneyWon, remainMoneyForeign, needToPay, personalPriceWon, personalPriceForeign);
+        return AdjustmentResponse.of(expenses, travelPlan, totalExpense, lastestExchangeRate, rateCompareResult,
+                                     remainMoneyWon, remainMoneyForeign, needToPay, personalPriceWon, personalPriceForeign);
     }
 
     private int getRemainMoney(int publicMoney, List<TravelSchedule> schedules) {
-        return publicMoney - getSumExpenses(schedules);
+        return publicMoney - getTotalExpense(schedules);
     }
 
-    private int getSumExpenses(List<TravelSchedule> schedules) {
+    private int getTotalExpense(List<TravelSchedule> schedules) {
         return schedules.stream()
             .mapToInt(TravelSchedule::getExpense)
             .sum();

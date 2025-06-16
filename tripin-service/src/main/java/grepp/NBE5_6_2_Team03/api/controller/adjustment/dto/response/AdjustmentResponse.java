@@ -14,7 +14,7 @@ public class AdjustmentResponse {
     private final String curUnit;
     private final int publicMoney;
     private final int applicants;
-    private final int sumExpenses;
+    private final int totalExpense;
     private final int lastestExchangeRate;
     private final int rateCompareResult;
     private final int remainMoneyWon;
@@ -25,14 +25,14 @@ public class AdjustmentResponse {
 
     @Builder
     private AdjustmentResponse(List<AdjustmentExpenseInfo> expenses, String country, String curUnit, int publicMoney,
-                               int applicants, int sumExpenses, int lastestExchangeRate, int rateCompareResult, int remainMoneyWon,
+                               int applicants, int totalExpense, int lastestExchangeRate, int rateCompareResult, int remainMoneyWon,
                                int remainMoneyForeign, boolean needToPay, int personalPriceWon, int personalPriceForeign) {
         this.expenses = expenses;
         this.country = country;
         this.curUnit = curUnit;
         this.publicMoney = publicMoney;
         this.applicants = applicants;
-        this.sumExpenses = sumExpenses;
+        this.totalExpense = totalExpense;
         this.lastestExchangeRate = lastestExchangeRate;
         this.rateCompareResult = rateCompareResult;
         this.remainMoneyWon = remainMoneyWon;
@@ -42,7 +42,7 @@ public class AdjustmentResponse {
         this.personalPriceForeign = personalPriceForeign;
     }
 
-    public static AdjustmentResponse of(List<AdjustmentExpenseInfo> expenseInfos, TravelPlan travelPlan, int sumExpenses, int lastestExchangeRate,
+    public static AdjustmentResponse of(List<AdjustmentExpenseInfo> expenseInfos, TravelPlan travelPlan, int totalExpense, int lastestExchangeRate,
                                         int rateCompareResult, int remainMoneyWon, int remainMoneyForeign, boolean needToPay, int personalPriceWon, int personalPriceForeign) {
         return AdjustmentResponse.builder()
             .expenses(expenseInfos)
@@ -50,7 +50,7 @@ public class AdjustmentResponse {
             .curUnit(travelPlan.getCurrentUnit().getUnit())
             .publicMoney(travelPlan.getPublicMoney())
             .applicants(travelPlan.getApplicants())
-            .sumExpenses(sumExpenses)
+            .totalExpense(totalExpense)
             .lastestExchangeRate(lastestExchangeRate)
             .rateCompareResult(rateCompareResult)
             .remainMoneyWon(remainMoneyWon)
