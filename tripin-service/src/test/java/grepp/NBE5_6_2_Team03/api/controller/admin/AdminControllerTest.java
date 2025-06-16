@@ -34,13 +34,13 @@ class AdminControllerTest {
         // given
         UserSearchRequest request = UserSearchRequest
             .builder()
-            .locked(true)
+            .isLocked(true)
             .page(0)
             .size(10)
             .build();
 
         // when
-        ApiResponse<Page<UserInfoResponse>> result = adminController.userInfos(request);
+        ApiResponse<Page<UserInfoResponse>> result = adminController.getUserInfos(request);
 
         // then
         List<UserInfoResponse> content = result.data().getContent();
@@ -61,13 +61,13 @@ class AdminControllerTest {
         // given
         UserSearchRequest request = UserSearchRequest
             .builder()
-            .locked(false)
+            .isLocked(false)
             .page(0)
             .size(5)
             .build();
 
         // when
-        ApiResponse<Page<UserInfoResponse>> result = adminController.userInfos(request);
+        ApiResponse<Page<UserInfoResponse>> result = adminController.getUserInfos(request);
 
         // then
         List<UserInfoResponse> content = result.data().getContent();
