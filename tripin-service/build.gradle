@@ -67,9 +67,13 @@ dependencies {
 
 	// h2
 	testImplementation 'com.h2database:h2'
+
 	// mail
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+	// s3
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 }
 
 clean {
