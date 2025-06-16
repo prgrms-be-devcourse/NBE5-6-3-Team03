@@ -3,8 +3,8 @@ package grepp.NBE5_6_2_Team03.domain.user.service;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.mail.CodeType;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
-import grepp.NBE5_6_2_Team03.global.exception.Message;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,7 +37,7 @@ public class UserMailService {
         redisTemplate.opsForValue().set(key, value, Duration.ofMinutes(5));
 
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new NotFoundException(Message.USER_NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND));
 
         String code = mailService.sendCodeToEmail(codeType, email);
         String encodedPassword = passwordEncoder.encode(code);
