@@ -1,17 +1,19 @@
 package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request;
 
+import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
+import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
-import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
-import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 
 @Getter @Setter
-public class TravelScheduleRequest {
+public class TravelScheduleEditRequest {
 
     private TravelRoute travelRoute;
 
@@ -24,11 +26,11 @@ public class TravelScheduleRequest {
     private LocalDateTime travelScheduleDate;
     private int expense;
 
-    public TravelScheduleRequest() {
+    public TravelScheduleEditRequest() {
     }
 
     @Builder
-    private TravelScheduleRequest(TravelRoute travelRoute, String content, String placeName, LocalDateTime travelScheduleDate, int expense) {
+    private TravelScheduleEditRequest(TravelRoute travelRoute, String content, String placeName, LocalDateTime travelScheduleDate, int expense) {
         this.travelRoute = travelRoute;
         this.content = content;
         this.placeName = placeName;

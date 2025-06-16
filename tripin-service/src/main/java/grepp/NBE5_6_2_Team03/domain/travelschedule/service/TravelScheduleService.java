@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.travelschedule.service;
 
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleStatusRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.GroupedTravelSchedulesResponse;
@@ -31,21 +32,22 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLANNED_NOT_FOUND));
 
-        validateTravelSchedule(request.getDeparture(), request.getDestination(), request.getTransportation(), request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
+        validateTravelSchedule(request.getTravelRoute().getDeparture(), request.getTravelRoute().getDestination(), request.getTravelRoute().getTransportation(),
+                               request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
         TravelSchedule schedule = request.toEntity(plan);
         return travelScheduleRepository.save(schedule);
     }
 
     @Transactional
-    public TravelSchedule editSchedule(Long travelScheduleId, TravelScheduleRequest request) {
+    public TravelSchedule editSchedule(Long travelScheduleId, TravelScheduleEditRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
 
         TravelPlan plan = schedule.getTravelPlan();
-        validateTravelSchedule(request.getDeparture(), request.getDestination(), request.getTransportation(), request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
-
-        TravelRoute travelRoute = new TravelRoute(request.getDeparture(), request.getDestination(), request.getTransportation());
+        TravelRoute travelRoute = request.getTravelRoute();
+        validateTravelSchedule(request.getTravelRoute().getDeparture(), request.getTravelRoute().getDestination(), request.getTravelRoute().getTransportation(),
+                               request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
         schedule.edit(
             travelRoute,
