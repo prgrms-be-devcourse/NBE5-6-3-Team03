@@ -41,7 +41,7 @@ public class TravelScheduleResponse {
     public static TravelScheduleResponse fromEntity(TravelSchedule schedule) {
         return TravelScheduleResponse.builder()
             .travelScheduleId(schedule.getTravelScheduleId())
-            .travelPlanId(schedule.getTravelPlan().getTravelPlanId())
+            .travelPlanId(schedule.getTravelPlan().getId())
             .content(schedule.getContent())
             .placeName(schedule.getPlaceName())
             .status(schedule.getScheduleStatus().name())

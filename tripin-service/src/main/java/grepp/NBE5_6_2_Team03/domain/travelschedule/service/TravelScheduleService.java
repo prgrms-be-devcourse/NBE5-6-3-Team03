@@ -2,22 +2,21 @@ package grepp.NBE5_6_2_Team03.domain.travelschedule.service;
 
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleStatusRequest;
-import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleResponse;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.GroupedTravelSchedulesResponse;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.repository.TravelScheduleRepository;
-import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -76,18 +75,9 @@ public class TravelScheduleService {
         return schedule;
     }
 
-    public Map<LocalDate, List<TravelScheduleResponse>> getGroupedSchedules(Long travelPlanId) {
-        TravelPlan plan = travelPlanRepository.findById(travelPlanId)
-            .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLANNED_NOT_FOUND));
-
-        List<TravelSchedule> schedules = travelScheduleRepository.findSortedSchedules(plan);
-
-        return schedules.stream()
-            .collect(Collectors.groupingBy(
-                schedule -> schedule.getTravelScheduleDate().toLocalDate(),
-                LinkedHashMap::new,
-                Collectors.mapping(TravelScheduleResponse::fromEntity, Collectors.toList())
-            ));
+    public GroupedTravelSchedulesResponse getGroupedSchedules(Long travelPlanId) {
+        List<TravelSchedule> travelPlans = travelScheduleRepository.findByTravelPlanId(travelPlanId);
+        return GroupedTravelSchedulesResponse.from(travelPlans);
     }
 
     public TravelSchedule findById(Long travelScheduleId) {
@@ -110,6 +100,6 @@ public class TravelScheduleService {
     }
 
     private int getTotalPrice(TravelPlan plan) {
-        return travelScheduleRepository.sumPriceByPlanId(plan.getTravelPlanId());
+        return travelScheduleRepository.sumPriceByPlanId(plan.getId());
     }
 }
