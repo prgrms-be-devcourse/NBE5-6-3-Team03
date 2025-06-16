@@ -29,7 +29,7 @@ public class AdminController {
     }
 
     @GetMapping("/users/{id}")
-    public ApiResponse<UserInfoResponse> getUser(@PathVariable Long id) {
+    public ApiResponse<UserDetailResponse> getUser(@PathVariable Long id) {
         return ApiResponse.success(adminService.findById(id));
     }
 
