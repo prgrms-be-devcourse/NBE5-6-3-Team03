@@ -27,15 +27,15 @@ public class MailController {
     private final ObjectMapper objectMapper;
 
     @PostMapping("/send")
-    public ApiResponse sendSettlementMail(@RequestParam Long planId,
+    public ApiResponse<Void> sendSettlementMail(@RequestParam Long planId,
         @AuthenticationPrincipal CustomUserDetails customUser) {
 
         AdjustmentResponse response = travelPlanQueryService.getAdjustmentInfo(planId);
 
-        Map<String, Object> templateModel = objectMapper.convertValue(response,
-            new TypeReference<>() {
-            });
-        Map<String, Object> wrappedModel = Map.of("response", templateModel);
+//        Map<String, Object> templateModel = objectMapper.convertValue(response,
+//            new TypeReference<>() {
+//            });
+//        Map<String, Object> wrappedModel = Map.of("response", response);
 
 //        mailServiceClient.sendHtml(     // 메일 서버로 전송
 //            customUser.getUser().getEmail(),
@@ -48,7 +48,7 @@ public class MailController {
             customUser.getUser().getEmail(),
             "정산 결과 안내",
             "settlement-summary",
-            wrappedModel
+            response
         );
         return ApiResponse.noContent();
     }
