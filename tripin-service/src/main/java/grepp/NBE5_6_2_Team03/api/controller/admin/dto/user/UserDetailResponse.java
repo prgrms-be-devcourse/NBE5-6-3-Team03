@@ -13,7 +13,7 @@ public class UserDetailResponse {
     private String email;
     private String name;
     private String phoneNumber;
-    private Boolean locked;
+    private Boolean isLocked;
     private Role role;
 
     public static UserDetailResponse of(User user) {
