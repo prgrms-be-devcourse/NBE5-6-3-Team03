@@ -11,17 +11,17 @@ public class TravelPlanResponseDto {
     private final String country;
     private final String name;
     private final int publicMoney;
-    private final int count;
+    private final int applicants;
     private final LocalDate travelStartDate;
     private final LocalDate travelEndDate;
 
     public TravelPlanResponseDto(TravelPlan plan) {
 
-        this.travelPlanId = plan.getTravelPlanId();
-        this.country = plan.getCountry();
+        this.travelPlanId = plan.getId();
+        this.country = plan.getCountry().getCountryName();
         this.name = plan.getName();
         this.publicMoney = plan.getPublicMoney();
-        this.count = plan.getCount();
+        this.applicants = plan.getApplicants();
         this.travelStartDate = plan.getTravelStartDate();
         this.travelEndDate = plan.getTravelEndDate();
     }

@@ -3,32 +3,35 @@ package grepp.NBE5_6_2_Team03.api.controller.travelplan;
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanQueryService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
+import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
-@RequestMapping("/plan")
+import java.util.HashMap;
+import java.util.Map;
+
+@RequestMapping("/travel-plans")
 @RequiredArgsConstructor
+@RestController
 public class TravelPlanQueryController {
 
     private final TravelPlanQueryService travelPlanQueryService;
 
     @GetMapping("/{travelPlanId}/expense")
-    public String getAdjustmentInfo(@PathVariable("travelPlanId") Long travelPlanId, Model model,
-        @AuthenticationPrincipal CustomUserDetails customUser) {
-        TravelPlanAdjustResponse response = travelPlanQueryService.getAdjustmentInfo(travelPlanId);
-        model.addAttribute("response", response);
-        model.addAttribute("user", customUser);
-        model.addAttribute("username", customUser.getUsername());
-        model.addAttribute("userEmail", customUser.getUser().getEmail());
+    public ApiResponse<Map<String, Object>> getAdjustmentInfo(@PathVariable("travelPlanId") Long travelPlanId, @AuthenticationPrincipal CustomUserDetails customUser) {
+        TravelPlanAdjustResponse travelPlanAdjustResponse = travelPlanQueryService.getAdjustmentInfo(travelPlanId);
 
-        return "plan/expense";
+        Map<String, Object> response = new HashMap<>();
+        response.put("response", travelPlanAdjustResponse);
+        response.put("username", customUser.getUsername());
+        response.put("userEmail", customUser.getUser().getEmail());
+
+        return ApiResponse.success(response);
     }
 }

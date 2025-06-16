@@ -34,12 +34,12 @@ public class MailConfig {
 
     private Properties getMailProperties() {
         Properties properties = new Properties();
-        properties.setProperty("mail.transport.protocol", "smtp");
-        properties.setProperty("mail.smtp.auth", "true");
-        properties.setProperty("mail.smtp.starttls.enable", "true");
-        properties.setProperty("mail.debug", "true");
-        properties.setProperty("mail.smtp.ssl.trust","*");
-        properties.setProperty("mail.smtp.ssl.enable","true");
+        properties.setProperty("code.transport.protocol", "smtp");
+        properties.setProperty("code.smtp.auth", "true");
+        properties.setProperty("code.smtp.starttls.enable", "true");
+        properties.setProperty("code.debug", "true");
+        properties.setProperty("code.smtp.ssl.trust","*");
+        properties.setProperty("code.smtp.ssl.enable","true");
         return properties;
     }
 }

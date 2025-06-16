@@ -8,7 +8,6 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter @Setter
@@ -24,19 +23,21 @@ public class TravelScheduleRequest {
 
     @NotBlank
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate travelScheduleDate;
+    private LocalDateTime travelScheduleDate;
+    private int expense;
 
     public TravelScheduleRequest() {
     }
 
     @Builder
-    private TravelScheduleRequest(String departure, String destination, String transportation, String content, String placeName, LocalDate travelScheduleDate) {
+    private TravelScheduleRequest(String departure, String destination, String transportation, String content, String placeName, LocalDateTime travelScheduleDate, int expense) {
         this.departure = departure;
         this.destination = destination;
         this.transportation = transportation;
         this.content = content;
         this.placeName = placeName;
         this.travelScheduleDate = travelScheduleDate;
+        this.expense = expense;
     }
 
     public TravelSchedule toEntity(TravelPlan plan) {
@@ -49,17 +50,7 @@ public class TravelScheduleRequest {
             .travelRoute(travelRoute)
             .scheduleStatus(ScheduleStatus.PLANNED)
             .travelScheduleDate(this.travelScheduleDate)
-            .build();
-    }
-
-    public static TravelScheduleRequest fromEntity(TravelSchedule schedule) {
-        return TravelScheduleRequest.builder()
-            .departure(schedule.getTravelRoute().getDeparture())
-            .destination(schedule.getTravelRoute().getDestination())
-            .transportation(schedule.getTravelRoute().getTransportation())
-            .content(schedule.getContent())
-            .placeName(schedule.getPlaceName())
-            .travelScheduleDate(schedule.getTravelScheduleDate())
+            .expense(this.expense)
             .build();
     }
 }

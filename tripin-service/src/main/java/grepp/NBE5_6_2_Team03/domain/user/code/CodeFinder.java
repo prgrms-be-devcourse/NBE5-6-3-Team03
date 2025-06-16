@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.domain.user.mail;
+package grepp.NBE5_6_2_Team03.domain.user.code;
 
 import grepp.NBE5_6_2_Team03.global.exception.BusinessException;
 import org.springframework.stereotype.Component;

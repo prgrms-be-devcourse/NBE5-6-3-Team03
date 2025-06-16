@@ -10,7 +10,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import static grepp.NBE5_6_2_Team03.domain.expense.QExpense.expense;
 import static grepp.NBE5_6_2_Team03.domain.travelplan.QTravelPlan.travelPlan;
 import static grepp.NBE5_6_2_Team03.domain.travelschedule.QTravelSchedule.travelSchedule;
 
@@ -20,12 +19,11 @@ public class TravelPlanQueryRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public TravelPlan getTravelPlanFetchScheduleAndExpense(Long travelPlanId){
+    public TravelPlan getTravelPlanFetchSchedule(Long travelPlanId){
         return queryFactory.selectDistinct(travelPlan)
             .from(travelPlan)
             .leftJoin(travelPlan.travelSchedules, travelSchedule).fetchJoin()
-            .leftJoin(travelSchedule.expense, expense).fetchJoin()
-            .where(travelPlan.travelPlanId.eq(travelPlanId))
+            .where(travelPlan.id.eq(travelPlanId))
             .fetchOne();
     }
 
@@ -33,7 +31,7 @@ public class TravelPlanQueryRepository {
         return queryFactory
             .select(Projections.constructor(CountriesStatisticResponse.class,
                 travelPlan.country,
-                travelPlan.travelPlanId.count()
+                travelPlan.id.count()
             ))
             .from(travelPlan)
             .groupBy(travelPlan.country)
@@ -45,7 +43,7 @@ public class TravelPlanQueryRepository {
         return queryFactory
             .select(Projections.constructor(MonthlyStatisticResponse.class,
                 Expressions.dateTimeTemplate(Integer.class, "month({0})", travelPlan.travelStartDate),
-                travelPlan.travelPlanId.count()
+                travelPlan.id.count()
             ))
             .from(travelPlan)
             .groupBy(Expressions.dateTimeTemplate(Integer.class, "month({0})", travelPlan.travelStartDate))

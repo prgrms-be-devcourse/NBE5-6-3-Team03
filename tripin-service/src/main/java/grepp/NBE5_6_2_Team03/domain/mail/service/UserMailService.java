@@ -4,11 +4,9 @@ import grepp.NBE5_6_2_Team03.domain.mail.dto.CodeMailResponse;
 import grepp.NBE5_6_2_Team03.domain.mail.dto.CodeType;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserRepository;
-import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
+import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
 import java.time.Duration;
-import java.util.Collections;
-import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -27,12 +25,12 @@ public class UserMailService {
     private final MailServiceClient mailServiceClient;
 
     @Transactional
-    public Map<String, Boolean> sendTemporaryPassword(String email) {
+    public Boolean sendTemporaryPassword(String email) {
         String key = "tempPw:" + email;
         String value = "requested";
 
         if (redisTemplate.hasKey(key)) {
-            return Collections.singletonMap("success", false);
+            return false;
         }
 
         redisTemplate.opsForValue().set(key, value, Duration.ofMinutes(5));
@@ -49,7 +47,7 @@ public class UserMailService {
                 return true;
             })
             .orElse(false);
-        return Collections.singletonMap("success", result);
+        return true;
 
     }
 }
