@@ -2,12 +2,15 @@ package grepp.NBE5_6_2_Team03.api.controller.travelplan;
 
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.request.TravelPlanSaveRequest;
+import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.CountryCountView;
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanInfo;
 import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlansResponse;
 
 import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanService;
+import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanStatisticsService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 public class TravelPlanController {
 
     private final TravelPlanService travelPlanService;
+    private final TravelPlanStatisticsService travelPlanStatisticsService;
 
     @GetMapping("/{id}")
     public ApiResponse<TravelPlanInfo> getTravelPlan(@PathVariable("id") Long travelPlanId) {
@@ -45,6 +49,12 @@ public class TravelPlanController {
     public ApiResponse<Void> deletePlan(@PathVariable("id") Long id) {
         travelPlanService.deletePlan(id);
         return ApiResponse.noContent();
+    }
+
+    @GetMapping("/top-countries")
+    public ApiResponse<List<CountryCountView>> getFrequentCountries() {
+        List<CountryCountView> topCountries = travelPlanStatisticsService.getTopCountriesLastMonth();
+        return ApiResponse.success(topCountries);
     }
 
 }

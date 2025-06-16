@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.mail.service;
 
+import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentResponse;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import java.util.Map;
@@ -18,14 +19,14 @@ public class MimeMailService {
     private final TemplateEngine templateEngine;
 
     public void sendSettlementMail(String to, String subject, String templateName,
-        Map<String, Object> templateModel) {
+        AdjustmentResponse response) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             Context context = new Context();
-            context.setVariables(templateModel);
+            context.setVariable("response", response);
             String html = templateEngine.process("mail/settlement-summary", context);
 
             helper.setTo(to);
