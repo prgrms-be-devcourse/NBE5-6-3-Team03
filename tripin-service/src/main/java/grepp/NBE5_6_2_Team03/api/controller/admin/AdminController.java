@@ -38,6 +38,13 @@ public class AdminController {
         return ApiResponse.success(adminService.findUsersPage(request));
     }
 
+    @GetMapping("/user-info/{id}")
+    public ApiResponse<UserInfoResponse> getUserInfo(
+        @PathVariable Long id
+    ) {
+        return ApiResponse.success(adminService.findById(id));
+    }
+
     @PatchMapping("/user-info/{id}")
     public ApiResponse<String> updateUserInfo(
         @PathVariable("id") Long id,

@@ -98,4 +98,9 @@ public class AdminService {
         return userRepository.findByName(username).isPresent();
     }
 
+    public UserInfoResponse findById(Long id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND));
+        return UserInfoResponse.of(user);
+    }
 }
