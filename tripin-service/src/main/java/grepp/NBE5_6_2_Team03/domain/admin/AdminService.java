@@ -46,9 +46,11 @@ public class AdminService {
                 () -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND)
         );
 
-        user.modifyName(request.getName());
-        user.modifyPhoneNumber(request.getPhoneNumber());
-        user.modifyIsLocked(request.getIsLocked());
+        user.modify(
+                request.getName(),
+                request.getPhoneNumber(),
+                request.isLocked()
+        );
     }
 
     @Transactional

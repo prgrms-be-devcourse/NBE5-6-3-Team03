@@ -60,19 +60,27 @@ public class User extends BaseEntity {
         this.isLocked = isLocked;
     }
 
+    public void unlock() {
+        if (!this.isLocked) {
+            throw new CannotUpdateException(ExceptionMessage.ALREADY_UNLOCKED.getDescription());
+        }
+        this.isLocked = false;
+    }
+
+    public void lock() {
+        if (this.isLocked) {
+            throw new CannotUpdateException(ExceptionMessage.ALREADY_LOCKED.getDescription());
+        }
+        this.isLocked = true;
+    }
+
+    public void modify(String name, String phoneNumber, boolean isLocked) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.isLocked = isLocked;
+    }
+
     public boolean isAdmin() {
         return this.role == Role.ROLE_ADMIN;
-    }
-
-    public void modifyName(String name) {
-        this.name = name;
-    }
-
-    public void modifyPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public void modifyIsLocked(boolean isLocked) {
-        this.isLocked = isLocked;
     }
 }

@@ -29,11 +29,11 @@ public class AdminController {
     }
 
     @GetMapping("/users/{id}")
-    public ApiResponse<UserDetailResponse> getUser(@PathVariable Long id) {
+    public ApiResponse<UserDetailResponse> getUser(@PathVariable("id") Long id) {
         return ApiResponse.success(adminService.findById(id));
     }
 
-    @PatchMapping("/users/{id}")
+    @PutMapping("/users/{id}")
     public ApiResponse<String> updateUserInfo(@RequestBody UserModifyRequest request, @PathVariable("id") Long id) {
         adminService.updateUserInfo(request, id);
         return ApiResponse.success(AdminSuccessMessage.USER_INFO_UPDATED.getMessage());
