@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.time.LocalDateTime;
 
 @Getter
-public class TravelScheduleResponse {
+public class TravelScheduleEditResponse {
 
     private final Long travelScheduleId;
     private final Long travelPlanId;
@@ -21,7 +21,7 @@ public class TravelScheduleResponse {
     private final String currentUnit;
 
     @Builder
-    public TravelScheduleResponse(Long travelScheduleId, Long travelPlanId, String content, String placeName, String status,
+    public TravelScheduleEditResponse(Long travelScheduleId, Long travelPlanId, String content, String placeName, String status,
                                   LocalDateTime travelDate, TravelRoute travelRoute, int expense, String currentUnit) {
         this.travelScheduleId = travelScheduleId;
         this.travelPlanId = travelPlanId;
@@ -34,8 +34,8 @@ public class TravelScheduleResponse {
         this.currentUnit = currentUnit;
     }
 
-    public static TravelScheduleResponse fromEntity(TravelSchedule schedule) {
-        return TravelScheduleResponse.builder()
+    public static TravelScheduleEditResponse fromEntity(TravelSchedule schedule) {
+        return TravelScheduleEditResponse.builder()
             .travelScheduleId(schedule.getTravelScheduleId())
             .travelPlanId(schedule.getTravelPlan().getId())
             .content(schedule.getContent())

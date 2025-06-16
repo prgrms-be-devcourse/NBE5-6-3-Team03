@@ -73,7 +73,7 @@ public class SecurityConfig {
                         (auth) -> auth
                                 .requestMatchers("/css/**", "/assets/**", "/js/**").permitAll()
                                 .requestMatchers("/", "/map/**", "/users/**", "/users/email/**").permitAll()
-                                .requestMatchers("/travel-plans", "/travel-plans/**", "/schedule/**").hasRole("USER")
+                                .requestMatchers("/travel-plans", "/travel-plans/**").hasRole("USER")
                                 .requestMatchers("/api/**", "/mail/send", "/users/home", "/travel-plans", "/users/my-page").hasRole("USER")
                                 .requestMatchers("/admin/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
