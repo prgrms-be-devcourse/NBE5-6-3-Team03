@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response;
+package grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response;
 
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import lombok.Builder;
@@ -7,9 +7,9 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class TravelPlanAdjustResponse {
+public class AdjustmentResponse {
 
-    private final List<TravelScheduleExpenseInfo> expenses;
+    private final List<AdjustmentExpenseInfo> expenses;
     private final String country;
     private final String curUnit;
     private final int publicMoney;
@@ -24,9 +24,9 @@ public class TravelPlanAdjustResponse {
     private final int personalPriceForeign;
 
     @Builder
-    private TravelPlanAdjustResponse(List<TravelScheduleExpenseInfo> expenses, String country, String curUnit, int publicMoney,
-                                     int applicants, int sumExpenses, int lastestExchangeRate, int rateCompareResult, int remainMoneyWon,
-                                     int remainMoneyForeign, boolean needToPay, int personalPriceWon, int personalPriceForeign) {
+    private AdjustmentResponse(List<AdjustmentExpenseInfo> expenses, String country, String curUnit, int publicMoney,
+                               int applicants, int sumExpenses, int lastestExchangeRate, int rateCompareResult, int remainMoneyWon,
+                               int remainMoneyForeign, boolean needToPay, int personalPriceWon, int personalPriceForeign) {
         this.expenses = expenses;
         this.country = country;
         this.curUnit = curUnit;
@@ -42,9 +42,9 @@ public class TravelPlanAdjustResponse {
         this.personalPriceForeign = personalPriceForeign;
     }
 
-    public static TravelPlanAdjustResponse of(List<TravelScheduleExpenseInfo> expenseInfos, TravelPlan travelPlan, int sumExpenses, int lastestExchangeRate,
-                                              int rateCompareResult, int remainMoneyWon, int remainMoneyForeign, boolean needToPay, int personalPriceWon, int personalPriceForeign) {
-        return TravelPlanAdjustResponse.builder()
+    public static AdjustmentResponse of(List<AdjustmentExpenseInfo> expenseInfos, TravelPlan travelPlan, int sumExpenses, int lastestExchangeRate,
+                                        int rateCompareResult, int remainMoneyWon, int remainMoneyForeign, boolean needToPay, int personalPriceWon, int personalPriceForeign) {
+        return AdjustmentResponse.builder()
             .expenses(expenseInfos)
             .country(travelPlan.getCountry().getCountryName())
             .curUnit(travelPlan.getCurrentUnit().getUnit())

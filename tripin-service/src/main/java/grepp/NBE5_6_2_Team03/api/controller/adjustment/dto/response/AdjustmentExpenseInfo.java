@@ -1,4 +1,4 @@
-package grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response;
+package grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response;
 
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
@@ -8,7 +8,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Getter
-public class TravelScheduleExpenseInfo {
+public class AdjustmentExpenseInfo {
 
     private String placeName;
     private String content;
@@ -16,16 +16,16 @@ public class TravelScheduleExpenseInfo {
     private int expense;
 
     @Builder
-    private TravelScheduleExpenseInfo(String placeName, String content, TravelRoute travelRoute, int expense) {
+    private AdjustmentExpenseInfo(String placeName, String content, TravelRoute travelRoute, int expense) {
         this.placeName = placeName;
         this.content = content;
         this.travelRoute = travelRoute;
         this.expense = expense;
     }
 
-    public static List<TravelScheduleExpenseInfo> convertBy(List<TravelSchedule> travelSchedules) {
+    public static List<AdjustmentExpenseInfo> convertBy(List<TravelSchedule> travelSchedules) {
        return travelSchedules.stream()
-                .map(travelSchedule -> TravelScheduleExpenseInfo.of(
+                .map(travelSchedule -> AdjustmentExpenseInfo.of(
                         travelSchedule.getTravelRoute(),
                         travelSchedule.getContent(),
                         travelSchedule.getPlaceName(),
@@ -34,8 +34,8 @@ public class TravelScheduleExpenseInfo {
                .toList();
     }
 
-    public static TravelScheduleExpenseInfo of(TravelRoute travelRoute, String content, String placeName, int expense){
-        return TravelScheduleExpenseInfo.builder()
+    public static AdjustmentExpenseInfo of(TravelRoute travelRoute, String content, String placeName, int expense){
+        return AdjustmentExpenseInfo.builder()
                 .travelRoute(travelRoute)
                 .content(content)
                 .placeName(placeName)

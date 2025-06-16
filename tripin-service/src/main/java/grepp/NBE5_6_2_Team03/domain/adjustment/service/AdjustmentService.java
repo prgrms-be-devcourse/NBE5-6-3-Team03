@@ -1,10 +1,10 @@
-package grepp.NBE5_6_2_Team03.domain.travelplan.service;
+package grepp.NBE5_6_2_Team03.domain.adjustment.service;
 
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelScheduleExpenseInfo;
+import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentResponse;
+import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentExpenseInfo;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
-import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanQueryRepository;
+import grepp.NBE5_6_2_Team03.domain.adjustment.respository.AdjustmentRepository;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
-public class TravelPlanQueryService {
+public class AdjustmentService {
 
-    private final TravelPlanQueryRepository planQueryRepository;
+    private final AdjustmentRepository planQueryRepository;
     private final ExchangeService exchangeService;
 
-    public TravelPlanAdjustResponse getAdjustmentInfo(Long travelPlanId){
+    public AdjustmentResponse getAdjustmentInfo(Long travelPlanId){
         TravelPlan travelPlan = planQueryRepository.getTravelPlanWithSchedules(travelPlanId);
         List<TravelSchedule> completedSchedules = travelPlan.getTravelSchedules().stream()
             .filter(s -> s.getScheduleStatus() == ScheduleStatus.COMPLETED)
@@ -46,9 +46,9 @@ public class TravelPlanQueryService {
 
         int rateCompareResult = exchangeService.compareLatestRateToAverageRate(curUnit);
 
-        List<TravelScheduleExpenseInfo> expenses = TravelScheduleExpenseInfo.convertBy(completedSchedules);
+        List<AdjustmentExpenseInfo> expenses = AdjustmentExpenseInfo.convertBy(completedSchedules);
 
-        return TravelPlanAdjustResponse.of(expenses, travelPlan, sumExpenses, lastestExchangeRate, rateCompareResult,
+        return AdjustmentResponse.of(expenses, travelPlan, sumExpenses, lastestExchangeRate, rateCompareResult,
                                            remainMoneyWon, remainMoneyForeign, needToPay, personalPriceWon, personalPriceForeign);
     }
 
