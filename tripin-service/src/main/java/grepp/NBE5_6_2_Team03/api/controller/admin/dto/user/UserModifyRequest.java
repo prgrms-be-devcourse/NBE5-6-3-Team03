@@ -13,5 +13,7 @@ public class UserModifyRequest {
     @PhoneNumberCheck
     private String phoneNumber;
 
+    private Boolean isLocked;
+
     public UserModifyRequest() {}
 }
