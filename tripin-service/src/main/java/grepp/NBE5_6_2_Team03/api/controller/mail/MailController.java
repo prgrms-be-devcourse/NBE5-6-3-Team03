@@ -1,12 +1,10 @@
 package grepp.NBE5_6_2_Team03.api.controller.mail;
 
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
-import grepp.NBE5_6_2_Team03.domain.mail.service.MimeMailService;
+import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentResponse;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import grepp.NBE5_6_2_Team03.api.controller.travelplan.dto.response.TravelPlanAdjustResponse;
 import grepp.NBE5_6_2_Team03.domain.mail.service.MailServiceClient;
-import grepp.NBE5_6_2_Team03.domain.travelplan.service.TravelPlanQueryService;
+import grepp.NBE5_6_2_Team03.domain.adjustment.service.AdjustmentService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -22,13 +20,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class MailController {
 
     private final MailServiceClient mailServiceClient;
-    private final TravelPlanQueryService travelPlanQueryService;
+    private final AdjustmentService travelPlanQueryService;
     private final ObjectMapper objectMapper;
 
     @PostMapping("/send")
     public String sendSettlementMail(@RequestParam Long planId, @AuthenticationPrincipal CustomUserDetails customUser) {
 
-        TravelPlanAdjustResponse response = travelPlanQueryService.getAdjustmentInfo(planId);
+        AdjustmentResponse response = travelPlanQueryService.getAdjustmentInfo(planId);
 
         Map<String, Object> templateModel = objectMapper.convertValue(response, new TypeReference<>() {});
         Map<String, Object> wrappedModel = Map.of("response", templateModel);

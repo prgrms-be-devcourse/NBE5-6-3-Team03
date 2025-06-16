@@ -6,7 +6,7 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserModifyRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchPageResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
-import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanQueryRepository;
+import grepp.NBE5_6_2_Team03.domain.adjustment.respository.AdjustmentRepository;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import grepp.NBE5_6_2_Team03.domain.user.repository.UserQueryRepository;
@@ -29,7 +29,7 @@ public class AdminService {
     private final UserRepository userRepository;
     private final UserQueryRepository userQueryRepository;
     private final TravelPlanRepository travelPlanRepository;
-    private final TravelPlanQueryRepository travelPlanQueryRepository;
+    private final AdjustmentRepository travelPlanQueryRepository;
 
     public UserSearchPageResponse findUsersPage(UserSearchRequest userSearchRequest) {
         Page<UserInfoResponse> userInfoResponsePage =
