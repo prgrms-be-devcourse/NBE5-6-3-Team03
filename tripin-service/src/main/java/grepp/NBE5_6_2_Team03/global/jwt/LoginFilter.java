@@ -78,9 +78,13 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         String token = jwtUtil.createJwt(userId, username, email, role, 30 * 24 * 60 * 60 * 1000L);
 
         response.addHeader("Authorization", "Bearer " + token);
+        Map<String, Object> result = new HashMap<>();
+        result.put("message", "로그인 성공");
+        result.put("token", token);
+
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("{\"message\": \"로그인 성공\"}");
+        response.getWriter().write(objectMapper.writeValueAsString(result));
     }
 
     @Override

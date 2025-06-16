@@ -46,7 +46,6 @@ public class TravelPlanService {
         User user = userRepository.findById(userid)
             .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
 
-        travelPlanRepository.save(request.toEntity(user));
         return travelPlanRepository.save(request.toEntity(user)).getId();
     }
 
