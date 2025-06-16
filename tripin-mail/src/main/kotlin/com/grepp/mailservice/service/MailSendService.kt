@@ -34,7 +34,7 @@ class MailSendService(
         val mimeMessage: MimeMessage = mailSender.createMimeMessage()
         val helper = MimeMessageHelper(mimeMessage, true, "UTF-8")
         val context = Context().apply { setVariables(request.templateModel)}
-        val html = templateEngine.process("mail/${request.templateName}", context)
+        val html = templateEngine.process("code/${request.templateName}", context)
 
         helper.setTo(request.to)
         helper.setSubject(request.subject)

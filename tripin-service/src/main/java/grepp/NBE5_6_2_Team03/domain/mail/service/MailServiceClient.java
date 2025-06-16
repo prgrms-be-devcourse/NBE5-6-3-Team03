@@ -32,7 +32,8 @@ public class MailServiceClient {
             .doOnError(error -> log.error("코드 메일 요청 실패", error));
     }
 
-    public Mono<Void> sendHtml(String to, String subject, String templateName, Map<String, Object> model) {
+    public Mono<Void> sendHtml(String to, String subject, String templateName,
+        Map<String, Object> model) {
         HtmlMailRequest request = new HtmlMailRequest(to, subject, templateName, model);
         return webClient.post()
             .uri(mailServiceUrl + "/api/mail/send-html")

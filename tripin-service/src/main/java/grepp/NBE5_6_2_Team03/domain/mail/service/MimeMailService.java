@@ -17,10 +17,11 @@ public class MimeMailService {
     private final JavaMailSender mailSender;
     private final TemplateEngine templateEngine;
 
-    public void sendSettlementMail(String to, String subject, String templateName, Map<String, Object> templateModel) {
+    public void sendSettlementMail(String to, String subject, String templateName,
+        Map<String, Object> templateModel) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
 
-        try{
+        try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
             Context context = new Context();
@@ -31,8 +32,8 @@ public class MimeMailService {
             helper.setSubject(subject);
             helper.setText(html, true);
             mailSender.send(mimeMessage);
-        }catch (MessagingException e){
-            throw new RuntimeException("send mail failed",e);
+        } catch (MessagingException e) {
+            throw new RuntimeException("send mail failed", e);
         }
     }
 }
