@@ -18,16 +18,13 @@ public class AdjustmentResponse {
     private final int totalExpense;
     private final int lastestExchangeRate;
     private final ExchangeRateComparison compareLatestRateToAverageRate;
-    private final int remainMoneyWon;
-    private final int remainMoneyForeign;
-    private final boolean needToPay;
-    private final int personalPriceWon;
-    private final int personalPriceForeign;
+    private final AdjustmentAmount adjustmentAmount;
+    private final PersonalAdjustmentAmount personalAdjustmentAmount;
 
     @Builder
     private AdjustmentResponse(List<AdjustmentExpenseInfo> expenses, String country, String curUnit, int publicMoney,
                                int applicants, int totalExpense, int lastestExchangeRate, ExchangeRateComparison compareLatestRateToAverageRate,
-                               int remainMoneyWon, int remainMoneyForeign, boolean needToPay, int personalPriceWon, int personalPriceForeign) {
+                               AdjustmentAmount adjustmentAmount, PersonalAdjustmentAmount personalAdjustmentAmount) {
         this.expenses = expenses;
         this.country = country;
         this.curUnit = curUnit;
@@ -36,16 +33,13 @@ public class AdjustmentResponse {
         this.totalExpense = totalExpense;
         this.lastestExchangeRate = lastestExchangeRate;
         this.compareLatestRateToAverageRate = compareLatestRateToAverageRate;
-        this.remainMoneyWon = remainMoneyWon;
-        this.remainMoneyForeign = remainMoneyForeign;
-        this.needToPay = needToPay;
-        this.personalPriceWon = personalPriceWon;
-        this.personalPriceForeign = personalPriceForeign;
+        this.adjustmentAmount = adjustmentAmount;
+        this.personalAdjustmentAmount = personalAdjustmentAmount;
     }
 
     public static AdjustmentResponse of(List<AdjustmentExpenseInfo> expenseInfos, TravelPlan travelPlan, int totalExpense,
-                                        int lastestExchangeRate, ExchangeRateComparison compareLatestRateToAverageRate, int remainMoneyWon,
-                                        int remainMoneyForeign, boolean needToPay, int personalPriceWon, int personalPriceForeign) {
+                                        int lastestExchangeRate, ExchangeRateComparison compareLatestRateToAverageRate,
+                                        AdjustmentAmount adjustmentAmount, PersonalAdjustmentAmount personalAdjustmentAmount) {
         return AdjustmentResponse.builder()
             .expenses(expenseInfos)
             .country(travelPlan.getCountry().getCountryName())
@@ -55,11 +49,8 @@ public class AdjustmentResponse {
             .totalExpense(totalExpense)
             .lastestExchangeRate(lastestExchangeRate)
             .compareLatestRateToAverageRate(compareLatestRateToAverageRate)
-            .remainMoneyWon(remainMoneyWon)
-            .remainMoneyForeign(remainMoneyForeign)
-            .needToPay(needToPay)
-            .personalPriceWon(personalPriceWon)
-            .personalPriceForeign(personalPriceForeign)
+            .adjustmentAmount(adjustmentAmount)
+            .personalAdjustmentAmount(personalAdjustmentAmount)
             .build();
     }
 }

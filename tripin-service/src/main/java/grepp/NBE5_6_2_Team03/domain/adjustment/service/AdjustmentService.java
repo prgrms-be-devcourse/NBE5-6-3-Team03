@@ -1,7 +1,9 @@
 package grepp.NBE5_6_2_Team03.domain.adjustment.service;
 
+import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentAmount;
 import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentResponse;
 import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentExpenseInfo;
+import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.PersonalAdjustmentAmount;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import grepp.NBE5_6_2_Team03.domain.exchange.type.ExchangeRateComparison;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
@@ -30,27 +32,24 @@ public class AdjustmentService {
             .collect(Collectors.toList());
 
         String curUnit = travelPlan.getCurrentUnit().getUnit();
+        boolean isKRW = travelPlan.getCurrentUnit().isKRW();
         int totalExpense = getTotalExpense(completedSchedules);
         int applicants = travelPlan.getApplicants();
+
         int remainMoney = getRemainMoney(travelPlan.getPublicMoney(), completedSchedules);
-
-        int adjustmentAmount = Math.abs(remainMoney);
-        boolean needToPay = remainMoney < 0;
-
         int lastestExchangeRate = exchangeService.getLatestExchangeRateInt(curUnit);
-        int remainMoneyWon  = travelPlan.getCurrentUnit().isKRW() ? adjustmentAmount : exchangeService.exchangeToWon(curUnit, adjustmentAmount);
-        int remainMoneyForeign = travelPlan.getCurrentUnit().isKRW() ? exchangeService.exchangeToForeign(curUnit, adjustmentAmount) : adjustmentAmount;
-
-        int personalPrice = adjustmentAmount / applicants;
-        int personalPriceWon = travelPlan.getCurrentUnit().isKRW() ? personalPrice : exchangeService.exchangeToWon(curUnit, personalPrice);
-        int personalPriceForeign = travelPlan.getCurrentUnit().isKRW() ? exchangeService.exchangeToForeign(curUnit, personalPrice) : personalPrice;
 
         ExchangeRateComparison compareLatestRateToAverageRate = exchangeService.compareLatestRateToAverageRate(curUnit);
 
+        AdjustmentAmount adjustmentAmount = calculateAdjustmentAmount(remainMoney, isKRW, curUnit);
+
+        int personalAmount = Math.abs(remainMoney) / applicants;
+        PersonalAdjustmentAmount personalAdjustmentAmount = calculatePersonalAdjustmentAmount(remainMoney, personalAmount, isKRW, curUnit);
+
         List<AdjustmentExpenseInfo> expenses = AdjustmentExpenseInfo.convertBy(completedSchedules);
 
-        return AdjustmentResponse.of(expenses, travelPlan, totalExpense, lastestExchangeRate, compareLatestRateToAverageRate,
-                                     remainMoneyWon, remainMoneyForeign, needToPay, personalPriceWon, personalPriceForeign);
+        return AdjustmentResponse.of(expenses, travelPlan, totalExpense, lastestExchangeRate,
+                                     compareLatestRateToAverageRate, adjustmentAmount, personalAdjustmentAmount);
     }
 
     private int getRemainMoney(int publicMoney, List<TravelSchedule> schedules) {
@@ -61,5 +60,29 @@ public class AdjustmentService {
         return schedules.stream()
             .mapToInt(TravelSchedule::getExpense)
             .sum();
+    }
+
+    private AdjustmentAmount calculateAdjustmentAmount(int remainMoney, boolean isKRW, String curUnit) {
+        int won = isKRW ? Math.abs(remainMoney) : exchangeService.exchangeToWon(curUnit, Math.abs(remainMoney));
+        int foreign = isKRW ? exchangeService.exchangeToForeign(curUnit, Math.abs(remainMoney)) : Math.abs(remainMoney);
+
+        return AdjustmentAmount.builder()
+            .wonToPay(remainMoney < 0 ? won : 0)
+            .foreignToPay(remainMoney < 0 ? foreign : 0)
+            .wonToReceive(remainMoney > 0 ? won : 0)
+            .foreignToReceive(remainMoney > 0 ? foreign : 0)
+            .build();
+    }
+
+    private PersonalAdjustmentAmount calculatePersonalAdjustmentAmount(int remainMoney, int personalAmount, boolean isKRW, String curUnit) {
+        int won = isKRW ? personalAmount : exchangeService.exchangeToWon(curUnit, personalAmount);
+        int foreign = isKRW ? exchangeService.exchangeToForeign(curUnit, personalAmount) : personalAmount;
+
+        return PersonalAdjustmentAmount.builder()
+            .personalWonToPay(remainMoney < 0 ? won : 0)
+            .personalForeignToPay(remainMoney < 0 ? foreign : 0)
+            .personalWonToReceive(remainMoney > 0 ? won : 0)
+            .personalForeignToReceive(remainMoney > 0 ? foreign : 0)
+            .build();
     }
 }
