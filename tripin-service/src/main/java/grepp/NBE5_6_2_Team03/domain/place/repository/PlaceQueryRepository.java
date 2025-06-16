@@ -34,6 +34,7 @@ public class PlaceQueryRepository {
         List<Place> content = jpaQueryFactory
             .selectFrom(place)
             .where(builder)
+            .orderBy(place.country.asc(), place.city.asc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
