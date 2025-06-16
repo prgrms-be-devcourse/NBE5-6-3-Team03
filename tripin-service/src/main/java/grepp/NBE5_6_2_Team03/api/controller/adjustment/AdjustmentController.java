@@ -24,10 +24,10 @@ public class AdjustmentController {
 
     @GetMapping("/{travelPlanId}/adjustment")
     public ApiResponse<Map<String, Object>> getAdjustmentInfo(@PathVariable("travelPlanId") Long travelPlanId, @AuthenticationPrincipal CustomUserDetails customUser) {
-        AdjustmentResponse travelPlanAdjustResponse = travelPlanQueryService.getAdjustmentInfo(travelPlanId);
+        AdjustmentResponse adjustmentResponse = travelPlanQueryService.getAdjustmentInfo(travelPlanId);
 
         Map<String, Object> response = new HashMap<>();
-        response.put("response", travelPlanAdjustResponse);
+        response.put("response", adjustmentResponse);
         response.put("username", customUser.getUsername());
         response.put("userEmail", customUser.getUser().getEmail());
 
