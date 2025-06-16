@@ -11,10 +11,7 @@ import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,8 +23,8 @@ public class MailController {
     private final AdjustmentService travelPlanQueryService;
     private final ObjectMapper objectMapper;
 
-    @PostMapping("/send")
-    public ApiResponse<Void> sendSettlementMail(@RequestParam Long planId,
+    @PostMapping("/send/{plan-id}")
+    public ApiResponse<Void> sendSettlementMail(@PathVariable("plan-id") Long planId,
         @AuthenticationPrincipal CustomUserDetails customUser) {
 
         AdjustmentResponse response = travelPlanQueryService.getAdjustmentInfo(planId);
