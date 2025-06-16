@@ -1,7 +1,9 @@
 package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule;
 
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleStatusRequest;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleEditResponse;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleResponse;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleStatusResponse;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
@@ -56,10 +58,10 @@ public class TravelScheduleController {
     @PutMapping("/{travelScheduleId}")
     public ApiResponse<Object> editSchedule(@PathVariable("travelPlanId") Long travelPlanId,
                                             @PathVariable("travelScheduleId") Long travelScheduleId,
-                                            @RequestBody TravelScheduleRequest request) {
+                                            @RequestBody TravelScheduleEditRequest request) {
         try {
             TravelSchedule travelSchedule =  travelScheduleService.editSchedule(travelScheduleId, request);
-            return ApiResponse.success(TravelScheduleResponse.fromEntity(travelSchedule));
+            return ApiResponse.success(TravelScheduleEditResponse.fromEntity(travelSchedule));
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }
