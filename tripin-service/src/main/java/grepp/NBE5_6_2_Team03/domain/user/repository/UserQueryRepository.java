@@ -1,6 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.user.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.QTestQueryDsl;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.TestQueryDsl;
@@ -41,6 +42,7 @@ public class UserQueryRepository {
         List<User> users = queryFactory
             .selectFrom(user)
             .where(lockStatus)
+            .orderBy(user.role.asc())
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
