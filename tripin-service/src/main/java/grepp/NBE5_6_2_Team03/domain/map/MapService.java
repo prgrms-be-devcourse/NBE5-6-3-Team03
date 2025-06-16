@@ -35,7 +35,7 @@ public class MapService {
     }
 
     public MapResponse getPlace(String placeId) {
-        Place place = placeRepository.findByPlaceId(placeId)
+        Place place = placeRepository.findById(placeId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLACE_NOT_FOUND));
         return convertToResponse(place);
     }

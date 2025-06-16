@@ -18,7 +18,7 @@ public class PlaceQueryRepository {
     private final JPAQueryFactory jpaQueryFactory;
     private final QPlace place = QPlace.place;
 
-    public Page<Place> findPaged(String country, String city, Pageable pageable) {
+    public Page<Place> findPlacesPage(String country, String city, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
 
         if (country != null && !country.isBlank()) {
@@ -42,4 +42,5 @@ public class PlaceQueryRepository {
 
         return new PageImpl<>(content, pageable, total);
     }
+
 }

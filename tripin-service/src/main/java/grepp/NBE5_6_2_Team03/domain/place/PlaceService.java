@@ -1,8 +1,9 @@
 package grepp.NBE5_6_2_Team03.domain.place;
 
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceRequest;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceResponse;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.CountryCityInfo;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.request.PlaceRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.PlaceInfoResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.request.PlaceSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.place.entity.Place;
 import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.place.repository.PlaceRepository;
@@ -24,34 +25,36 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceQueryRepository placeQueryRepository;
 
-    public List<PlaceResponse> findAll() {
+    @Transactional(readOnly = true)
+    public List<PlaceInfoResponse> findAll() {
         List<Place> places =  placeRepository.findAll();
-        return places.stream().map(PlaceResponse::of).collect(Collectors.toList());
+        return places.stream().map(PlaceInfoResponse::of).collect(Collectors.toList());
     }
 
-    public Page<PlaceResponse> findPlacesPageable(PlaceSearchRequest req) {
-        Page<Place> places = placeQueryRepository.findPaged(req.getCountry(), req.getCity(), req.getPageable());
+    @Transactional(readOnly = true)
+    public Page<PlaceInfoResponse> findPlacesPage(PlaceSearchRequest req) {
+        Page<Place> places = placeQueryRepository.findPlacesPage(req.getCountry(), req.getCity(), req.getPageable());
         log.debug("Found {} places", places.getTotalElements());
-        return places.map(PlaceResponse::of);
+        return places.map(PlaceInfoResponse::of);
     }
 
-    public PlaceResponse findById(String id) {
+    @Transactional(readOnly = true)
+    public PlaceInfoResponse findById(String id) {
         Place place = placeRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLACE_NOT_FOUND));
-        return PlaceResponse.of(place);
+        return PlaceInfoResponse.of(place);
     }
 
-    public List<String> getCountries() {
-       return placeRepository.findDistinctCountries();
-    }
-
-    public List<String> getCities() {
-        return placeRepository.findDistinctCities();
+    @Transactional(readOnly = true)
+    public CountryCityInfo getCountryCityInfo() {
+        List<String> countries = placeRepository.findDistinctCountries();
+        List<String> cities = placeRepository.findDistinctCities();
+        return CountryCityInfo.of(countries, cities);
     }
 
     @Transactional
     public void updatePlace(String id, PlaceRequest formPlace) {
-        Place place = placeRepository.findByPlaceId(id)
+        Place place = placeRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLACE_NOT_FOUND));
 
         place.update(
@@ -65,7 +68,7 @@ public class PlaceService {
 
     @Transactional
     public void deleteById(String id) {
-        Place place = placeRepository.findByPlaceId(id)
+        Place place = placeRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLACE_NOT_FOUND));
         placeRepository.delete(place);
     }
