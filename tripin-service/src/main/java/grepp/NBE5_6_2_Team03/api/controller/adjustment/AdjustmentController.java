@@ -22,7 +22,7 @@ public class AdjustmentController {
 
     private final AdjustmentService travelPlanQueryService;
 
-    @GetMapping("/{travelPlanId}/expense")
+    @GetMapping("/{travelPlanId}/adjustment")
     public ApiResponse<Map<String, Object>> getAdjustmentInfo(@PathVariable("travelPlanId") Long travelPlanId, @AuthenticationPrincipal CustomUserDetails customUser) {
         AdjustmentResponse travelPlanAdjustResponse = travelPlanQueryService.getAdjustmentInfo(travelPlanId);
 
