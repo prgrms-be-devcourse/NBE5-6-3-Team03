@@ -77,4 +77,12 @@ public class User extends BaseEntity {
     public boolean isAdmin() {
         return this.role == Role.ROLE_ADMIN;
     }
+
+    public void modifyName(String name) {
+        this.name = name;
+    }
+
+    public void modifyPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 }
