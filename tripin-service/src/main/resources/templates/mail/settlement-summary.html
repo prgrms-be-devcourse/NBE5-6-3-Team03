@@ -2,62 +2,176 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>정산 결과 안내</title>
+  <title>여행 정산 결과</title>
+  <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'SUIT', sans-serif;
+      background-color: #f0fdf4;
+      color: #1a202c;
+    }
+
+    .container {
+      max-width: 640px;
+      margin: 40px auto;
+      padding: 32px;
+      background-color: #fff;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+
+    .header h2 {
+      font-size: 24px;
+      font-weight: 700;
+      color: #15803d;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background-color: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      color: #6b7280;
+      margin-bottom: 6px;
+    }
+
+    .card p {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .card.red p {
+      color: #dc2626;
+    }
+
+    .card.blue p {
+      color: #2563eb;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #1d4ed8;
+      margin-bottom: 10px;
+    }
+
+    .result {
+      border: 1px solid #fca5a5;
+      background-color: #fee2e2;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .result strong {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 6px;
+    }
+
+    .expenses {
+      margin-top: 30px;
+    }
+
+    .expenses ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .expenses li {
+      padding: 12px 0;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .expenses li:last-child {
+      border-bottom: none;
+    }
+
+    .tag {
+      background-color: #dcfce7;
+      color: #065f46;
+      padding: 4px 8px;
+      border-radius: 9999px;
+      font-size: 13px;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
-<body style="margin:0; padding:0; background-color:#f4f6f8; font-family:'Apple SD Gothic Neo', Arial, sans-serif; color:#1a202c; font-size:15px; line-height:1.7;">
+<body>
+<div class="container">
+  <div class="header">
+    <h2>🪙 여행 정산 결과</h2>
+    <p th:text="${response.country} + ' 여행 정산 내역'"></p>
+  </div>
 
-<div style="width:100%; padding:40px 0;">
-  <div style="max-width:640px; margin:0 auto; background-color:#ffffff; padding:30px 40px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.06); box-sizing:border-box;">
+  <div class="grid">
+    <div class="card blue">
+      <h3>공금</h3>
+      <p th:text="${response.publicMoney} + '원'">40,000원</p>
+    </div>
+    <div class="card red">
+      <h3>총 지출</h3>
+      <p th:text="${response.totalExpense} + '원'">64,030원</p>
+    </div>
+    <div class="card">
+      <h3>참가자</h3>
+      <p th:text="${response.applicants} + '명'">100명</p>
+    </div>
+    <div class="card">
+      <h3>현재 환율</h3>
+      <p th:text="${response.lastestExchangeRate}">1</p>
+    </div>
+  </div>
 
-    <h2 style="text-align:center; color:#2a4365; margin-bottom:30px; font-size:22px;">정산 결과 안내</h2>
-
-    <div style="margin-bottom:14px; padding:10px 0; border-bottom:1px solid #e2e8f0;">
-      <strong style="display:inline-block; width:160px; font-weight:600; color:#3182ce;">국가:</strong>
-      <span style="font-weight:500; color:#1a202c;" th:text="${response.country}">일본</span>
+  <div class="grid">
+    <div class="card result" th:if="${response.personalAdjustmentAmount.personalForeignToReceive != 0}">
+      <div class="section-title">💰정산 결과</div>
+      <strong>💸1인당 받을 정산금</strong>
+      <p th:text="${response.personalAdjustmentAmount.personalForeignToReceive + response.curUnit}">0원</p>
     </div>
 
-    <div style="margin-bottom:14px; padding:10px 0; border-bottom:1px solid #e2e8f0;">
-      <strong style="display:inline-block; width:160px; font-weight:600; color:#3182ce;">전체 예산:</strong>
-      <span style="font-weight:500; color:#1a202c;" th:text="${response.publicMoney} + ' ' + ${response.curUnit}">50000 JPY</span>
+    <div class="card result" th:if="${response.personalAdjustmentAmount.personalForeignToPay != 0}">
+      <div class="section-title">💰정산 결과</div>
+      <strong>💸1인당 추가금</strong>
+      <p th:text="${response.personalAdjustmentAmount.personalForeignToPay + response.curUnit}">0원</p>
     </div>
-
-    <div style="margin-bottom:14px; padding:10px 0; border-bottom:1px solid #e2e8f0;">
-      <strong style="display:inline-block; width:160px; font-weight:600; color:#3182ce;">사용 인원:</strong>
-      <span style="font-weight:500; color:#1a202c;" th:text="${response.count} + ' 명'">3 명</span>
-    </div>
-
-    <div style="margin-bottom:14px; padding:10px 0; border-bottom:1px solid #e2e8f0;">
-      <strong style="display:inline-block; width:160px; font-weight:600; color:#3182ce;">총 지출:</strong>
-      <span style="font-weight:500; color:#1a202c;" th:text="${response.totalExpense} + ' ' + ${response.curUnit}">36000 JPY</span>
-    </div>
-
-    <div style="margin-bottom:14px; padding:10px 0; border-bottom:1px solid #e2e8f0;">
-      <strong style="display:inline-block; width:160px; font-weight:600; color:#3182ce;">남은 금액:</strong>
-      <span style="font-weight:500; color:#1a202c;" th:text="${response.remainMoney} + ' ' + ${response.curUnit}">14000 JPY</span>
-    </div>
-
-    <div style="margin-bottom:14px; padding:10px 0; border-bottom:1px solid #e2e8f0;">
-      <strong style="display:inline-block; width:160px; font-weight:600; color:#3182ce;">1인당 정산금:</strong>
-      <span style="font-weight:500; color:#1a202c;" th:text="${response.personalPrice} + ' ' + ${response.curUnit}">12000 JPY</span>
-    </div>
-
-    <div style="margin-bottom:14px; padding:10px 0; border-bottom:1px solid #e2e8f0;">
-      <strong style="display:inline-block; width:160px; font-weight:600; color:#3182ce;">최신 환율:</strong>
-      <span style="font-weight:500; color:#1a202c;" th:text="${response.lastestExchangeRate}">9.1</span>
-    </div>
-
-    <div style="margin-bottom:14px; padding:10px 0;">
-      <strong style="display:inline-block; width:160px; font-weight:600; color:#3182ce;">환산 금액(1인당):</strong>
-      <span style="font-weight:500; color:#1a202c;" th:text="${response.exchangePersonalPrice} + ' 원'">109200 원</span>
-    </div>
-
-    <div style="margin-top:40px; text-align:center; font-size:13px; color:#888888;">
-      본 메일은 여행 정산 시스템에서 자동으로 발송되었습니다.<br/>
-      문의: travel@yourservice.com
-    </div>
-
+  <div class="expenses">
+    <div class="section-title">📄 지출 내역</div>
+    <p>총 <span th:text="${#lists.size(response.expenses)}">6</span>개의 지출 항목</p>
+    <ul>
+      <li th:each="item : ${response.expenses}">
+        <span th:text="${item.content}">카페</span>
+        <span class="tag" th:text="${item.expense} + '원'">3,000원</span>
+      </li>
+    </ul>
   </div>
 </div>
-
 </body>
 </html>

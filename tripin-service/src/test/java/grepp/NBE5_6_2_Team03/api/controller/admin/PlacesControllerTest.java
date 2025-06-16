@@ -2,7 +2,8 @@ package grepp.NBE5_6_2_Team03.api.controller.admin;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.PlaceSearchRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.request.PlaceSearchRequest;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.place.response.PlaceInfoListResponse;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ class PlacesControllerTest {
 
         for (int i = 0; i < page; i++){
             PlaceSearchRequest searchRequest = new PlaceSearchRequest(testCountry, testCity, i, size);
-            ApiResponse<Map<String, Object>> apiResponse = placesController.getPlaces(searchRequest);
+            ApiResponse<PlaceInfoListResponse> apiResponse = placesController.getPlaces(searchRequest);
             ObjectMapper objectMapper = new ObjectMapper();
 
             String jsonResult = objectMapper.writerWithDefaultPrettyPrinter()

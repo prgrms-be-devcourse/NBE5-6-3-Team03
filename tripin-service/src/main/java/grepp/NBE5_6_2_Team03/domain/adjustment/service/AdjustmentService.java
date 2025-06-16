@@ -28,7 +28,7 @@ public class AdjustmentService {
     public AdjustmentResponse getAdjustmentInfo(Long travelPlanId){
         TravelPlan travelPlan = planQueryRepository.getTravelPlanWithSchedules(travelPlanId);
         List<TravelSchedule> completedSchedules = travelPlan.getTravelSchedules().stream()
-            .filter(s -> s.getScheduleStatus() == ScheduleStatus.COMPLETED)
+            .filter(s -> s.getScheduleStatus() == ScheduleStatus.PLANNED)
             .collect(Collectors.toList());
 
         String curUnit = travelPlan.getCurrentUnit().getUnit();

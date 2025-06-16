@@ -3,6 +3,7 @@ package grepp.NBE5_6_2_Team03.api.controller.admin;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchPageResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
 import grepp.NBE5_6_2_Team03.global.exception.CannotUpdateException;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.tuple;
@@ -40,10 +40,10 @@ class AdminControllerTest {
             .build();
 
         // when
-        ApiResponse<Page<UserInfoResponse>> result = adminController.getUserInfos(request);
+        ApiResponse<UserSearchPageResponse> result = adminController.getUsers(request);
 
         // then
-        List<UserInfoResponse> content = result.data().getContent();
+        List<UserInfoResponse> content = result.data().getResponses();
 
         assertThat(content)
             .hasSize(2)
@@ -67,10 +67,10 @@ class AdminControllerTest {
             .build();
 
         // when
-        ApiResponse<Page<UserInfoResponse>> result = adminController.getUserInfos(request);
+        ApiResponse<UserSearchPageResponse> result = adminController.getUsers(request);
 
         // then
-        List<UserInfoResponse> content = result.data().getContent();
+        List<UserInfoResponse> content = result.data().getResponses();
         ObjectMapper objectMapper = new ObjectMapper();
         String jsonResult = objectMapper.writerWithDefaultPrettyPrinter()
             .writeValueAsString(content);
