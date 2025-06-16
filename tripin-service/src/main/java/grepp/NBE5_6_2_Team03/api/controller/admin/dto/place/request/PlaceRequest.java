@@ -10,8 +10,6 @@ import jakarta.validation.constraints.DecimalMax;
 @Getter
 @AllArgsConstructor
 public class PlaceRequest {
-    private String placeId;
-
     @NotBlank(message = "국가는 필수 입력 값입니다.")
     private String country;
 
