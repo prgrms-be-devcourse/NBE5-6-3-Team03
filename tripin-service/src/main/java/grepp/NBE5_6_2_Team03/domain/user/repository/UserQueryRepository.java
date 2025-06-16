@@ -1,14 +1,12 @@
 package grepp.NBE5_6_2_Team03.domain.user.repository;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.CaseBuilder;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.QTestQueryDsl;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.TestQueryDsl;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import jakarta.persistence.EntityManager;
 import java.util.List;
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -35,21 +33,28 @@ public class UserQueryRepository {
                 .fetchOne();
     }
 
-    public Page<User> findUsersPage(Boolean isLocked, Pageable pageable) {
+    public Page<User> findUsersPage(String keyword, Boolean isLocked, Pageable pageable) {
 
-        BooleanExpression lockStatus = (isLocked != null) ? user.isLocked.eq(isLocked) : null;
+        BooleanBuilder searchTerms = new BooleanBuilder();
+
+        if (keyword != null && !keyword.isEmpty()) {
+            searchTerms.and(user.name.contains(keyword));
+        }
+
+        if (isLocked != null) {
+            searchTerms.and(user.isLocked.eq(isLocked));
+        }
 
         List<User> users = queryFactory
             .selectFrom(user)
-            .where(lockStatus)
-            .orderBy(user.role.asc())
+            .where(searchTerms)
             .offset(pageable.getOffset())
             .limit(pageable.getPageSize())
             .fetch();
 
         long total = queryFactory
             .selectFrom(user)
-            .where(lockStatus)
+            .where(searchTerms)
             .fetchCount();
 
         return new PageImpl<>(users, pageable, total);

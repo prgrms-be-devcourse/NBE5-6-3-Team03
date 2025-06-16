@@ -33,7 +33,7 @@ public class PlaceService {
 
     @Transactional(readOnly = true)
     public Page<PlaceInfoResponse> findPlacesPage(PlaceSearchRequest req) {
-        Page<Place> places = placeQueryRepository.findPlacesPage(req.getCountry(), req.getCity(), req.getPageable());
+        Page<Place> places = placeQueryRepository.findPlacesPage(req.getCountry(), req.getCity(), req.getKeyword(), req.getPageable());
         log.debug("Found {} places", places.getTotalElements());
         return places.map(PlaceInfoResponse::of);
     }

@@ -34,7 +34,7 @@ public class AdminService {
 
     public UserSearchPageResponse findUsersPage(UserSearchRequest userSearchRequest) {
         Page<UserInfoResponse> userInfoResponsePage =
-                userQueryRepository.findUsersPage(userSearchRequest.getIsLocked(), userSearchRequest.getPageable())
+                userQueryRepository.findUsersPage(userSearchRequest.getKeyword(), userSearchRequest.getIsLocked(), userSearchRequest.getPageable())
                 .map(UserInfoResponse::of);
 
         return UserSearchPageResponse.from(userInfoResponsePage);
