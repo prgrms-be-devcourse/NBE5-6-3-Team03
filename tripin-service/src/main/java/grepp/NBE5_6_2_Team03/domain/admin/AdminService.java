@@ -2,6 +2,7 @@ package grepp.NBE5_6_2_Team03.domain.admin;
 
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.CountriesStatisticResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.statistic.MonthlyStatisticResponse;
+import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserDetailResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserInfoResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserModifyRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchPageResponse;
@@ -96,10 +97,10 @@ public class AdminService {
         return userRepository.findByName(username).isPresent();
     }
 
-    public UserInfoResponse findById(Long id) {
+    public UserDetailResponse findById(Long id) {
         User user = userRepository.findById(id)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND));
-        return UserInfoResponse.of(user);
+        return UserDetailResponse.of(user);
     }
 
 }
