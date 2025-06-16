@@ -4,6 +4,7 @@ import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.QTestQueryDsl;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.TestQueryDsl;
+import grepp.NBE5_6_2_Team03.domain.user.Role;
 import grepp.NBE5_6_2_Team03.domain.user.User;
 import jakarta.persistence.EntityManager;
 import java.util.List;
@@ -33,17 +34,18 @@ public class UserQueryRepository {
                 .fetchOne();
     }
 
-    public Page<User> findUsersPage(String keyword, Boolean isLocked, Pageable pageable) {
+    public Page<User> findUsersPage(String email, Boolean isLocked, Pageable pageable) {
 
         BooleanBuilder searchTerms = new BooleanBuilder();
 
-        if (keyword != null && !keyword.isEmpty()) {
-            searchTerms.and(user.name.contains(keyword));
+        searchTerms.and(user.role.eq(Role.ROLE_USER));
+        if (email != null && !email.isEmpty()) {
+            searchTerms.and(user.email.contains(email));
         }
-
         if (isLocked != null) {
             searchTerms.and(user.isLocked.eq(isLocked));
         }
+
 
         List<User> users = queryFactory
             .selectFrom(user)

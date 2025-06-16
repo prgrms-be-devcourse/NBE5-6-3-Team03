@@ -34,7 +34,7 @@ public class AdminService {
 
     public UserSearchPageResponse findUsersPage(UserSearchRequest userSearchRequest) {
         Page<UserInfoResponse> userInfoResponsePage =
-                userQueryRepository.findUsersPage(userSearchRequest.getKeyword(), userSearchRequest.getIsLocked(), userSearchRequest.getPageable())
+                userQueryRepository.findUsersPage(userSearchRequest.getEmail(), userSearchRequest.getIsLocked(), userSearchRequest.getPageable())
                 .map(UserInfoResponse::of);
 
         return UserSearchPageResponse.from(userInfoResponsePage);
@@ -48,6 +48,7 @@ public class AdminService {
 
         user.modifyName(request.getName());
         user.modifyPhoneNumber(request.getPhoneNumber());
+        user.modifyIsLocked(request.getIsLocked());
     }
 
     @Transactional

@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable;
 
 @Getter
 public class UserSearchRequest {
-    private String keyword;
+    private String email;
     private Boolean isLocked;
     private int page;
     private int size;
@@ -15,8 +15,8 @@ public class UserSearchRequest {
     public UserSearchRequest() {}
 
     @Builder
-    private UserSearchRequest(String keyword, Boolean isLocked, int page, int size) {
-        this.keyword = keyword;
+    private UserSearchRequest(String email, Boolean isLocked, int page, int size) {
+        this.email = email;
         this.isLocked = isLocked;
         this.page = page;
         this.size = size;
