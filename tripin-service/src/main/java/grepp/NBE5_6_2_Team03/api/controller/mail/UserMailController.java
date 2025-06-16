@@ -16,7 +16,7 @@ public class UserMailController {
 
     @GetMapping("/password-reset")
     public String passwordResetForm(){
-        return "/user/password-reset";
+        return "user/password-reset";
     }
 
     @ResponseBody
