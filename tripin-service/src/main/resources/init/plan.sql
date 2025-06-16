@@ -1,6 +1,6 @@
 
 
-INSERT INTO TRAVEL_PLAN (
+INSERT INTO travel_plan (
     travel_plan_id, user_id, country, country_status, name, public_money, count,
     travel_start_date, travel_end_date
 ) VALUES
