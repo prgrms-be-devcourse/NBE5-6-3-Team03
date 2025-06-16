@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class MailController {
 
     private final MailServiceClient mailServiceClient;
-    private final AdjustmentService travelPlanQueryService;
     private final MimeMailService mimeMailService;
+    private final AdjustmentService travelPlanQueryService;
     private final ObjectMapper objectMapper;
 
     @PostMapping("/send")
