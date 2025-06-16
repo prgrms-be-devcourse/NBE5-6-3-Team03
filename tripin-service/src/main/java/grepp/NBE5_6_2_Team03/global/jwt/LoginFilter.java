@@ -81,6 +81,7 @@ public class LoginFilter extends UsernamePasswordAuthenticationFilter {
         Map<String, Object> result = new HashMap<>();
         result.put("message", "로그인 성공");
         result.put("token", token);
+        result.put("role", role);
 
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
