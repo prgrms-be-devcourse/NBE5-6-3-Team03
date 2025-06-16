@@ -70,13 +70,7 @@ public class ExchangeService {
         int latest = getLatestExchangeRateInt(curUnit);
         int average = getRecentAverageRate(curUnit);
 
-        if (latest > average) {
-            return ExchangeRateComparison.HIGHER;
-        } else if (latest < average) {
-            return ExchangeRateComparison.LOWER;
-        } else {
-            return ExchangeRateComparison.SAME;
-        }
+        return ExchangeRateComparison.compare(latest, average);
     }
 
     public int exchangeToWon(String curUnit, int foreignCurrency) {
