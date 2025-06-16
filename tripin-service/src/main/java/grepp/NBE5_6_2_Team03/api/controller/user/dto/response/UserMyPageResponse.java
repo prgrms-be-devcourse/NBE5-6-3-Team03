@@ -11,17 +11,19 @@ public class UserMyPageResponse {
     private String name;
     private String phoneNumber;
     private String storeFileName;
+    private String profileImageUrl;
 
     @Builder
-    private UserMyPageResponse(Long id, String email, String name, String phoneNumber, String storeFileName) {
+    private UserMyPageResponse(Long id, String email, String name, String phoneNumber, String storeFileName, String profileImageUrl) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.storeFileName = storeFileName;
+        this.profileImageUrl = profileImageUrl;
     }
 
-    public static UserMyPageResponse from(User user){
+    public static UserMyPageResponse from(User user, String profileImageUrl) {
         String storeFileName = user.getUploadFile() != null ? user.getUploadFile().getStoreFileName() : null;
 
         return UserMyPageResponse.builder()
@@ -30,6 +32,7 @@ public class UserMyPageResponse {
                 .name(user.getName())
                 .phoneNumber(user.getPhoneNumber())
                 .storeFileName(storeFileName)
+                .profileImageUrl(profileImageUrl)
                 .build();
     }
 }

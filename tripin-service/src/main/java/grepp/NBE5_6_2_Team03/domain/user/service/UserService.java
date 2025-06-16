@@ -57,14 +57,16 @@ public class UserService {
         modifyProfile(request, user, uploadFile);
         securityContextUpdater.updateAuthentication(user, request.getRawPassword());
 
-        return UserMyPageResponse.from(user);
+        String profileImageUrl = uploadFile != null ? fileStore.getFullPath(uploadFile.getStoreFileName()) : null;
+        return UserMyPageResponse.from(user, profileImageUrl);
     }
 
     public UserMyPageResponse getMyProfile(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
 
-        return UserMyPageResponse.from(user);
+        String profileImageUrl = user.getUploadFile() != null ? fileStore.getFullPath(user.getUploadFile().getStoreFileName()) : null;
+        return UserMyPageResponse.from(user, profileImageUrl);
     }
 
     @Transactional

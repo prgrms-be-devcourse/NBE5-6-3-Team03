@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserEditRequest;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.request.UserSignUpRequest;
 import grepp.NBE5_6_2_Team03.domain.user.User;
-import grepp.NBE5_6_2_Team03.domain.user.file.FileStore;
+import grepp.NBE5_6_2_Team03.domain.user.file.LocalStore;
 import grepp.NBE5_6_2_Team03.domain.user.service.UserService;
 import grepp.NBE5_6_2_Team03.global.config.security.SecurityContextUpdater;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +35,7 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
 
     @MockitoBean
-    private FileStore fileStore;
+    private LocalStore fileStore;
 
     @MockitoBean
     private UserService userService;
