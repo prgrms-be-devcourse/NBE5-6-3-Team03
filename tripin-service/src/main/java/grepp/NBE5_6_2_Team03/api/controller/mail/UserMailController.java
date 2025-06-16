@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import static grepp.NBE5_6_2_Team03.domain.user.code.CodeType.*;
+
 @RequiredArgsConstructor
 @RequestMapping("/users")
 @RestController
@@ -25,7 +27,7 @@ public class UserMailController {
     @ResponseBody
     @PostMapping("/email/{email}/send-mail")
     public ApiResponse<Void> sendCodeToMail(@PathVariable("email") String email) {
-        userMailService.sendTemporaryPassword(email);
+        userMailService.sendTemporaryPassword(PASSWORD, email);
         return ApiResponse.noContent();
     }
 
