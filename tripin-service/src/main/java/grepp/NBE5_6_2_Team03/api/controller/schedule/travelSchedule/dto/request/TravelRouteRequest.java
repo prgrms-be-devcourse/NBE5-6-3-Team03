@@ -15,6 +15,9 @@ public class TravelRouteRequest {
     private String transportation;
     private String expectedTime;
 
+    public TravelRouteRequest() {
+    }
+
     @Builder
     public TravelRouteRequest(String departure, String destination, String transportation) {
         this.departure = departure;
