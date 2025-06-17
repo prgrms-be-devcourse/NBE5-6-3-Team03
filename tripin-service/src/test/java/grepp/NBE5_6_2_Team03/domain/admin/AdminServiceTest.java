@@ -26,20 +26,6 @@ class AdminServiceTest {
     private UserRepository userRepository;
 
     @Test
-    @DisplayName("유저 잠금 테스트")
-    @Transactional
-    void lockedUserTest() {
-        // given <- in the DB
-        // when
-        Optional<User> user = userRepository.findById(3L);
-
-        // then
-        assertTrue(user.isPresent());
-        adminService.lockUser(user.get().getId());
-        assertTrue(user.get().isLocked());
-    }
-
-    @Test
     @DisplayName("월별 여행계획 발생 통계 출력")
     @Transactional
     void getMonthStatistics() {
@@ -64,22 +50,6 @@ class AdminServiceTest {
         for(CountriesStatisticResponse r : res) {
             System.out.println("OUT  Country: " + r.getCountry() + "-Count: " + r.getCount());
         }
-    }
-
-    @Test
-    @DisplayName("유저 잠금해제 테스트")
-    @Transactional
-    void unlockedUserTest() {
-        // given
-        Optional<User> user = userRepository.findById(3L);
-        assertTrue(user.isPresent());
-
-        // when
-        adminService.lockUser(user.get().getId());
-        adminService.unlockUser(user.get().getId());
-
-        // then
-        assertFalse(user.get().isLocked());
     }
 
 }

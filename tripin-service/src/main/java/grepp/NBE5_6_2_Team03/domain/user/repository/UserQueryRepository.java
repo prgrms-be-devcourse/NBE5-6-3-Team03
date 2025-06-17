@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.user.repository;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.QTestQueryDsl;
@@ -35,20 +36,18 @@ public class UserQueryRepository {
                 .fetchOne();
     }
 
-    public Page<User> findUsersPage(Boolean isLocked, Pageable pageable) {
-
-        BooleanExpression lockStatus = (isLocked != null) ? user.isLocked.eq(isLocked) : null;
+    public Page<User> findUsersPage(String email, Boolean isLocked, Pageable pageable) {
 
         List<User> users = queryFactory
                 .selectFrom(user)
-                .where(lockStatus, user.role.eq(ROLE_USER))
+                .where(user.email.contains(email), user.role.eq(ROLE_USER), user.isLocked.eq(isLocked))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         long total = queryFactory
                 .selectFrom(user)
-                .where(lockStatus, user.role.eq(ROLE_USER))
+                .where(user.email.contains(email), user.role.eq(ROLE_USER), user.isLocked.eq(isLocked))
                 .fetchCount();
 
         return new PageImpl<>(users, pageable, total);
