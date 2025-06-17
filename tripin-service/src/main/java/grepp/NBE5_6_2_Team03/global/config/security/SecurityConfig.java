@@ -59,7 +59,7 @@ public class SecurityConfig {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
 
-                        config.setAllowedOriginPatterns(List.of("https://tripin-grepp.vercel.app/"));
+                        config.setAllowedOriginPatterns(List.of("https://tripin-grepp.vercel.app"));
                         config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH","DELETE", "OPTIONS"));
                         config.setAllowedHeaders(List.of("*"));
                         config.setAllowCredentials(true);
