@@ -1,7 +1,7 @@
 package grepp.NBE5_6_2_Team03.domain.user.repository;
 
-import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.QTestQueryDsl;
 import grepp.NBE5_6_2_Team03.api.controller.user.dto.response.TestQueryDsl;
@@ -40,17 +40,28 @@ public class UserQueryRepository {
 
         List<User> users = queryFactory
                 .selectFrom(user)
-                .where(user.email.contains(email), user.role.eq(ROLE_USER), user.isLocked.eq(isLocked))
+                .where(ContainsEmailAndEqIsLocked(email, isLocked), user.role.eq(ROLE_USER))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         long total = queryFactory
                 .selectFrom(user)
-                .where(user.email.contains(email), user.role.eq(ROLE_USER), user.isLocked.eq(isLocked))
+                .where(ContainsEmailAndEqIsLocked(email, isLocked), user.role.eq(ROLE_USER))
                 .fetchCount();
 
         return new PageImpl<>(users, pageable, total);
     }
 
+    public BooleanExpression ContainsEmailAndEqIsLocked(String email, Boolean isLocked) {
+        return emailContains(email).and(isLockEq(isLocked));
+    }
+
+    public BooleanExpression emailContains(String email) {
+        return email != null ? user.email.contains(email) : Expressions.TRUE;
+    }
+
+    public BooleanExpression isLockEq(Boolean isLocked) {
+        return isLocked != null ? user.isLocked.eq(isLocked) : null;
+    }
 }
