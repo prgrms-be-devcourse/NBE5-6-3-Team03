@@ -33,8 +33,8 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLANNED_NOT_FOUND));
 
-        validateTravelSchedule(request.getTravelRoute().getDeparture(),
-            request.getTravelRoute().getDestination(), request.getTravelRoute().getTransportation(),
+        validateTravelSchedule(request.getTravelRouteRequest().getDeparture(),
+            request.getTravelRouteRequest().getDestination(), request.getTravelRouteRequest().getTransportation(),
             request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
         TravelSchedule schedule = request.toEntity(plan, request, timeAiService);

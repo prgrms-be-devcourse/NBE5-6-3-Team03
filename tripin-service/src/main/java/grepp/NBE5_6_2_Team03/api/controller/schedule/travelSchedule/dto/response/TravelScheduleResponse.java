@@ -2,10 +2,9 @@ package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.respons
 
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDateTime;
 
 @Getter
 public class TravelScheduleResponse {
