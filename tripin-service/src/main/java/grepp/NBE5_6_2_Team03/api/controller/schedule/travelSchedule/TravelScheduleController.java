@@ -65,9 +65,8 @@ public class TravelScheduleController {
         @PathVariable("travelScheduleId") Long travelScheduleId,
         @RequestBody TravelScheduleEditRequest request) {
         try {
-            TravelSchedule travelSchedule = travelScheduleService.editSchedule(travelScheduleId,
-                request);
-            return ApiResponse.success(TravelScheduleEditResponse.fromEntity(travelSchedule));
+            TravelScheduleEditResponse response = travelScheduleService.editSchedule(travelScheduleId, request);
+            return ApiResponse.success(response);
         } catch (IllegalArgumentException e) {
             return ApiResponse.error(ResponseCode.BAD_REQUEST, Map.of("error", e.getMessage()));
         }

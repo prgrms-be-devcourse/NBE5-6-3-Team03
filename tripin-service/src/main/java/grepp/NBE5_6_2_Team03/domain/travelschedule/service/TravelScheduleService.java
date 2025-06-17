@@ -5,6 +5,7 @@ import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleStatusRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.GroupedTravelSchedulesResponse;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.TravelScheduleEditResponse;
 import grepp.NBE5_6_2_Team03.domain.schedule.treveltimeai.service.TravelTimeAiService;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
@@ -48,7 +49,7 @@ public class TravelScheduleService {
     }
 
     @Transactional
-    public TravelSchedule editSchedule(Long travelScheduleId, TravelScheduleEditRequest request) {
+    public TravelScheduleEditResponse editSchedule(Long travelScheduleId, TravelScheduleEditRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
 
@@ -75,7 +76,7 @@ public class TravelScheduleService {
             request.getExpense()
         );
 
-        return schedule;
+        return TravelScheduleEditResponse.fromEntity(schedule);
     }
 
     private Boolean travelRouteExist(TravelRouteRequest request) {
