@@ -60,4 +60,8 @@ public class TravelSchedule extends BaseEntity {
     public void editStatus(ScheduleStatus status) {
         this.scheduleStatus = status;
     }
+
+    public TravelRoute toResponse(TravelRoute travelRoute) {
+        return new TravelRoute(travelRoute.getDeparture(), travelRoute.getDestination(), travelRoute.getTransportation(), null);
+    }
 }
