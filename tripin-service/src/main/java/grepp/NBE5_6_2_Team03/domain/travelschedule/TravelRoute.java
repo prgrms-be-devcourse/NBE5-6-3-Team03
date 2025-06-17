@@ -10,13 +10,15 @@ public class TravelRoute {
     private String departure;
     private String destination;
     private String transportation;
+    private String expectedTime;
 
     protected TravelRoute() {
     }
 
-    public TravelRoute(String departure, String destination, String transportation) {
+    public TravelRoute(String departure, String destination, String transportation, String expectedTime) {
         this.departure = departure;
         this.destination = destination;
         this.transportation = transportation;
+        this.expectedTime = expectedTime;
     }
 }

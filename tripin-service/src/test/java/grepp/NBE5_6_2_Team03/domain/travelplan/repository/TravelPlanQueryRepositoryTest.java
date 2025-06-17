@@ -1,8 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.travelplan.repository;
 
 import grepp.NBE5_6_2_Team03.domain.adjustment.respository.AdjustmentRepository;
-import grepp.NBE5_6_2_Team03.domain.expense.Expense;
-import grepp.NBE5_6_2_Team03.domain.expense.repository.ExpenseRepository;
 import grepp.NBE5_6_2_Team03.domain.travelplan.Country;
 
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
@@ -35,9 +33,6 @@ class TravelPlanQueryRepositoryTest {
     @Autowired
     private TravelScheduleRepository travelScheduleRepository;
 
-    @Autowired
-    private ExpenseRepository expenseRepository;
-
     @DisplayName("여행 계획과 연관된 일정, 지출을 조회 한다.")
     @Test
     void getTravelPlanFetchScheduleAndExpense() {
@@ -51,12 +46,8 @@ class TravelPlanQueryRepositoryTest {
         TravelSchedule travelSchedule3 = createTravelSchedule(travelPlan, travelRoute, "일정 내용3", "장소 이름3");
         travelScheduleRepository.saveAll(List.of(travelSchedule, travelSchedule2, travelSchedule3));
 
-        Expense expense = createExpense(travelSchedule, 1000);
-        Expense expense2 = createExpense(travelSchedule2, 2000);
-        expenseRepository.saveAll(List.of(expense, expense2));
-
         //when
-        TravelPlan findTravelPlan = travelPlanQueryRepository.getTravelPlanWithSchedules(travelPlan.getTravelPlanId());
+        TravelPlan findTravelPlan = travelPlanQueryRepository.getTravelPlanWithSchedules(travelPlan.getId());
 
         //then
         assertThat(findTravelPlan).isNotNull();
@@ -70,7 +61,7 @@ class TravelPlanQueryRepositoryTest {
     }
 
     private TravelRoute createTravelRoute() {
-        return new TravelRoute("출발지", "목적지", "이동수단");
+        return new TravelRoute("출발지", "목적지", "이동수단", "예상 이동 시간");
     }
 
     private TravelPlan createTravelPlan(Country country, String name, int publicMoney, int applicants){
@@ -88,13 +79,6 @@ class TravelPlanQueryRepositoryTest {
                 .travelRoute(travelRoute)
                 .content(content)
                 .placeName(placeName)
-                .build();
-    }
-
-    private Expense createExpense(TravelSchedule travelSchedule, int payedPrice){
-        return Expense.builder()
-                .travelSchedule(travelSchedule)
-                .payedPrice(payedPrice)
                 .build();
     }
 }
