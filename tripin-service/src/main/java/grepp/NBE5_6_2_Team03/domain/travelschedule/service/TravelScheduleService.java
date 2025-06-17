@@ -79,30 +79,6 @@ public class TravelScheduleService {
         return TravelScheduleEditResponse.fromEntity(schedule);
     }
 
-    private Boolean travelRouteExist(TravelRouteRequest request) {
-        if (request == null) {
-            return false;
-        }
-        return Stream.of(request.getDeparture(), request.getDestination(), request.getTransportation())
-            .anyMatch(s -> s != null && !s.isBlank());
-    }
-
-    private void validateTravelSchedule(String departure, String destination, String transportation,
-        LocalDateTime travelScheduleDate, LocalDate travelStartDate, LocalDate travelEndDate) {
-        boolean departureExists = departure != null && !departure.isBlank();
-        boolean destinationExists = destination != null && !destination.isBlank();
-        boolean transportationExists = transportation != null && !transportation.isBlank();
-
-        if (!(departureExists == destinationExists && destinationExists == transportationExists)) {
-            throw new IllegalArgumentException("출발지, 도착지, 이동수단은 모두 입력하거나 모두 비워야 합니다.");
-        }
-
-        if (travelScheduleDate.toLocalDate().isBefore(travelStartDate)
-            || travelScheduleDate.toLocalDate().isAfter(travelEndDate)) {
-            throw new IllegalArgumentException("여행 일정 날짜는 여행 계획 날짜 안에 포함되어야 합니다.");
-        }
-    }
-
     @Transactional
     public void deleteSchedule(Long travelScheduleId) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
@@ -130,6 +106,30 @@ public class TravelScheduleService {
     public TravelSchedule findById(Long travelScheduleId) {
         return travelScheduleRepository.findByIdWithTravelPlan(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
+    }
+
+    private Boolean travelRouteExist(TravelRouteRequest request) {
+        if (request == null) {
+            return false;
+        }
+        return Stream.of(request.getDeparture(), request.getDestination(), request.getTransportation())
+            .anyMatch(s -> s != null && !s.isBlank());
+    }
+
+    private void validateTravelSchedule(String departure, String destination, String transportation,
+        LocalDateTime travelScheduleDate, LocalDate travelStartDate, LocalDate travelEndDate) {
+        boolean departureExists = departure != null && !departure.isBlank();
+        boolean destinationExists = destination != null && !destination.isBlank();
+        boolean transportationExists = transportation != null && !transportation.isBlank();
+
+        if (!(departureExists == destinationExists && destinationExists == transportationExists)) {
+            throw new IllegalArgumentException("출발지, 도착지, 이동수단은 모두 입력하거나 모두 비워야 합니다.");
+        }
+
+        if (travelScheduleDate.toLocalDate().isBefore(travelStartDate)
+            || travelScheduleDate.toLocalDate().isAfter(travelEndDate)) {
+            throw new IllegalArgumentException("여행 일정 날짜는 여행 계획 날짜 안에 포함되어야 합니다.");
+        }
     }
 
 }
