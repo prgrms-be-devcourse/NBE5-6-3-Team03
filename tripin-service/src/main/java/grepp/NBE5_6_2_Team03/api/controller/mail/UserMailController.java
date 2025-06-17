@@ -19,12 +19,6 @@ public class UserMailController {
 
     private final UserMailService userMailService;
 
-    @GetMapping("/password-reset")
-    public ApiResponse<Void> passwordResetForm() {
-        return ApiResponse.noContent();
-    }
-
-    @ResponseBody
     @PostMapping("/email/{email}/send-mail")
     public ApiResponse<Void> sendCodeToMail(@PathVariable("email") String email) {
         userMailService.sendTemporaryPassword(PASSWORD, email);
