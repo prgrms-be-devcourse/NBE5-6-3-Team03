@@ -35,9 +35,6 @@ class TravelPlanQueryRepositoryTest {
     @Autowired
     private TravelScheduleRepository travelScheduleRepository;
 
-    @Autowired
-    private ExpenseRepository expenseRepository;
-
     @DisplayName("여행 계획과 연관된 일정, 지출을 조회 한다.")
     @Test
     void getTravelPlanFetchScheduleAndExpense() {
@@ -50,10 +47,6 @@ class TravelPlanQueryRepositoryTest {
         TravelSchedule travelSchedule2 = createTravelSchedule(travelPlan, travelRoute, "일정 내용2", "장소 이름2");
         TravelSchedule travelSchedule3 = createTravelSchedule(travelPlan, travelRoute, "일정 내용3", "장소 이름3");
         travelScheduleRepository.saveAll(List.of(travelSchedule, travelSchedule2, travelSchedule3));
-
-        Expense expense = createExpense(travelSchedule, 1000);
-        Expense expense2 = createExpense(travelSchedule2, 2000);
-        expenseRepository.saveAll(List.of(expense, expense2));
 
         //when
         TravelPlan findTravelPlan = travelPlanQueryRepository.getTravelPlanWithSchedules(travelPlan.getTravelPlanId());
@@ -70,7 +63,7 @@ class TravelPlanQueryRepositoryTest {
     }
 
     private TravelRoute createTravelRoute() {
-        return new TravelRoute("출발지", "목적지", "이동수단");
+        return new TravelRoute("출발지", "목적지", "이동수단", "예상 이동 시간");
     }
 
     private TravelPlan createTravelPlan(Country country, String name, int publicMoney, int applicants){
@@ -88,13 +81,6 @@ class TravelPlanQueryRepositoryTest {
                 .travelRoute(travelRoute)
                 .content(content)
                 .placeName(placeName)
-                .build();
-    }
-
-    private Expense createExpense(TravelSchedule travelSchedule, int payedPrice){
-        return Expense.builder()
-                .travelSchedule(travelSchedule)
-                .payedPrice(payedPrice)
                 .build();
     }
 }
