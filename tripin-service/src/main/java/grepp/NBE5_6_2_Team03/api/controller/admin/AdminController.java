@@ -47,22 +47,6 @@ public class AdminController {
         return ApiResponse.noContent();
     }
 
-    @PatchMapping("/users/{id}/lock")
-    public ApiResponse<String> lockUser(
-            @PathVariable("id") Long userId
-    ) {
-        adminService.lockUser(userId);
-        return ApiResponse.success(AdminSuccessMessage.USER_LOCKED.getMessage());
-    }
-
-    @PatchMapping("/users/{id}/unlock")
-    public ApiResponse<String> unlockUser(
-            @PathVariable("id") Long userId
-    ) {
-        adminService.unlockUser(userId);
-        return ApiResponse.success(AdminSuccessMessage.USER_UNLOCKED.getMessage());
-    }
-
     @GetMapping("/statistic")
     public ApiResponse<StatisticResponse> getStatistics() {
         StatisticResponse statisticResponse = StatisticResponse

@@ -15,6 +15,8 @@ public class PlaceSearchRequest {
     private String country;
     private String city;
 
+    private String keyword;
+
     @Min(value = 0, message = "페이지는 0 이상이어야 합니다")
     @Max(value = 200, message = "페이지는 최댓값이 200입니다")
     private Integer page;
@@ -23,9 +25,10 @@ public class PlaceSearchRequest {
     @Max(value = 30, message = "페이지 크기는 30이하여야 합니다")
     private Integer size;
 
-    public PlaceSearchRequest(String country, String city, Integer page, Integer size) {
+    public PlaceSearchRequest(String country, String city, String keyword,Integer page, Integer size) {
         this.country = (country == null) ? "" : country;
         this.city = (city == null) ? "" : city;
+        this.keyword = (keyword == null) ? "" : keyword;
         this.page = (page == null) ? 0 : page;
         this.size = (size == null) ? 30 : size;
     }

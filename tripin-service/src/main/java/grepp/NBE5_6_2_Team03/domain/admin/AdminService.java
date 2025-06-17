@@ -34,7 +34,7 @@ public class AdminService {
 
     public UserSearchPageResponse findUsersPage(UserSearchRequest userSearchRequest) {
         Page<UserInfoResponse> userInfoResponsePage =
-                userQueryRepository.findUsersPage(userSearchRequest.getIsLocked(), userSearchRequest.getPageable())
+                userQueryRepository.findUsersPage(userSearchRequest.getEmail(), userSearchRequest.getIsLocked(), userSearchRequest.getPageable())
                 .map(UserInfoResponse::of);
 
         return UserSearchPageResponse.from(userInfoResponsePage);
@@ -54,31 +54,14 @@ public class AdminService {
     }
 
     @Transactional
-    public void lockUser(Long userId) {
-        User user = getModifiableUser(userId);
-        user.lock();
-    }
-
-    @Transactional
-    public void unlockUser(Long userId) {
-        User user = getModifiableUser(userId);
-        user.unlock();
-    }
-
-    @Transactional
     public void deleteUserById(Long userId) {
-        User user = getModifiableUser(userId);
-        travelPlanRepository.deleteByUserId(userId);
-        userRepository.delete(user);
-    }
-
-    private User getModifiableUser(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND));
+            .orElseThrow(() -> new NotFoundException(ExceptionMessage.USER_NOT_FOUND));
         if (user.isAdmin()) {
             throw new CannotModifyAdminException(ExceptionMessage.ADMIN_NOT_MODIFIED);
         }
-        return user;
+        travelPlanRepository.deleteByUserId(userId);
+        userRepository.delete(user);
     }
 
     public List<MonthlyStatisticResponse> getMonthStatistics() {
