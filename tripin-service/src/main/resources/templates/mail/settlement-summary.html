@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>여행 정산 결과</title>
@@ -162,6 +162,7 @@
       <strong>💸1인당 추가금</strong>
       <p th:text="${response.personalAdjustmentAmount.personalForeignToPay + response.curUnit}">0원</p>
     </div>
+  </div>
   <div class="expenses">
     <div class="section-title">📄 지출 내역</div>
     <p>총 <span th:text="${#lists.size(response.expenses)}">6</span>개의 지출 항목</p>
