@@ -1,14 +1,12 @@
 package grepp.NBE5_6_2_Team03.api.controller.mail;
 
 import grepp.NBE5_6_2_Team03.api.controller.adjustment.dto.response.AdjustmentResponse;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import grepp.NBE5_6_2_Team03.domain.mail.service.MailServiceClient;
 import grepp.NBE5_6_2_Team03.domain.adjustment.service.AdjustmentService;
 import grepp.NBE5_6_2_Team03.domain.mail.service.MimeMailService;
 import grepp.NBE5_6_2_Team03.domain.user.CustomUserDetails;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +21,7 @@ public class MailController {
     private final AdjustmentService travelPlanQueryService;
     private final ObjectMapper objectMapper;
 
-    @PostMapping("/send/{plan-id}")
+    @GetMapping("/send/{plan-id}")
     public ApiResponse<Void> sendSettlementMail(@PathVariable("plan-id") Long planId,
         @AuthenticationPrincipal CustomUserDetails customUser) {
 
