@@ -6,14 +6,23 @@ import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserModifyRequest;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchPageResponse;
 import grepp.NBE5_6_2_Team03.api.controller.admin.dto.user.UserSearchRequest;
 import grepp.NBE5_6_2_Team03.domain.admin.AdminService;
+import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import grepp.NBE5_6_2_Team03.global.message.AdminSuccessMessage;
 import grepp.NBE5_6_2_Team03.global.response.ApiResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-
 import java.util.Collections;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
@@ -22,6 +31,7 @@ import java.util.Map;
 public class AdminController {
 
     private final AdminService adminService;
+    private final ExchangeService exchangeService;
 
     @PostMapping("/users")
     public ApiResponse<UserSearchPageResponse> getUsers(@RequestBody UserSearchRequest request) {

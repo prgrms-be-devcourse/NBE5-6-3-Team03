@@ -1,18 +1,16 @@
 package grepp.NBE5_6_2_Team03.domain.exchange.service;
 
-import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeListResponse;
 import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeResponse;
 import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
 import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateQueryRepository;
 import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateRepository;
+import grepp.NBE5_6_2_Team03.domain.exchange.type.ExchangeRateComparison;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import grepp.NBE5_6_2_Team03.domain.exchange.type.ExchangeRateComparison;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -110,12 +108,11 @@ public class ExchangeService {
             .collect(Collectors.toList());
     }
 
-    public ExchangeListResponse findAllExchanges() {
-        List<ExchangeResponse> list = exchangeRateRepository.findAll()
+    public List<ExchangeResponse>findAllExchanges() {
+        return exchangeRateRepository.findAll()
             .stream()
             .map(ExchangeResponse::fromDto)
             .collect(Collectors.toList());
-        return new ExchangeListResponse(list);
     }
 
 }
