@@ -8,6 +8,11 @@ public class TravelTimeRequest {
     private String destination;
     private String transport;
 
-    public TravelTimeRequest(String departure, String destination, String transportation) {
+    public TravelTimeRequest(String departure, String destination, String transport) {
+        this.departure = departure;
+        this.destination = destination;
+        this.transport = transport;
     }
+
+
 }

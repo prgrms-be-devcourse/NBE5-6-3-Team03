@@ -12,13 +12,12 @@ import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.repository.TravelScheduleRepository;
 import grepp.NBE5_6_2_Team03.global.exception.NotFoundException;
 import grepp.NBE5_6_2_Team03.global.message.ExceptionMessage;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -34,8 +33,9 @@ public class TravelScheduleService {
         TravelPlan plan = travelPlanRepository.findById(travelPlanId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.PLANNED_NOT_FOUND));
 
-        validateTravelSchedule(request.getTravelRoute().getDeparture(), request.getTravelRoute().getDestination(), request.getTravelRoute().getTransportation(),
-                               request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
+        validateTravelSchedule(request.getTravelRoute().getDeparture(),
+            request.getTravelRoute().getDestination(), request.getTravelRoute().getTransportation(),
+            request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
         TravelSchedule schedule = request.toEntity(plan, request, timeAiService);
         return travelScheduleRepository.save(schedule);
@@ -48,8 +48,9 @@ public class TravelScheduleService {
 
         TravelPlan plan = schedule.getTravelPlan();
         TravelRoute travelRoute = request.getTravelRoute();
-        validateTravelSchedule(request.getTravelRoute().getDeparture(), request.getTravelRoute().getDestination(), request.getTravelRoute().getTransportation(),
-                               request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
+        validateTravelSchedule(request.getTravelRoute().getDeparture(),
+            request.getTravelRoute().getDestination(), request.getTravelRoute().getTransportation(),
+            request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
         schedule.edit(
             travelRoute,
@@ -71,7 +72,8 @@ public class TravelScheduleService {
     }
 
     @Transactional
-    public TravelSchedule editScheduleStatus(Long travelScheduleId, TravelScheduleStatusRequest request) {
+    public TravelSchedule editScheduleStatus(Long travelScheduleId,
+        TravelScheduleStatusRequest request) {
         TravelSchedule schedule = travelScheduleRepository.findById(travelScheduleId)
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
 
@@ -80,7 +82,8 @@ public class TravelScheduleService {
     }
 
     public GroupedTravelSchedulesResponse getGroupedSchedules(Long travelPlanId) {
-        List<TravelSchedule> travelPlans = travelScheduleRepository.findByTravelPlanId(travelPlanId);
+        List<TravelSchedule> travelPlans = travelScheduleRepository.findByTravelPlanId(
+            travelPlanId);
         return GroupedTravelSchedulesResponse.from(travelPlans);
     }
 
@@ -89,7 +92,8 @@ public class TravelScheduleService {
             .orElseThrow(() -> new NotFoundException(ExceptionMessage.SCHEDULE_NOT_FOUND));
     }
 
-    private void validateTravelSchedule(String departure, String destination, String transportation, LocalDateTime travelScheduleDate, LocalDate travelStartDate, LocalDate travelEndDate) {
+    private void validateTravelSchedule(String departure, String destination, String transportation,
+        LocalDateTime travelScheduleDate, LocalDate travelStartDate, LocalDate travelEndDate) {
         boolean departureExists = departure != null && !departure.isBlank();
         boolean destinationExists = destination != null && !destination.isBlank();
         boolean transportationExists = transportation != null && !transportation.isBlank();
@@ -98,7 +102,8 @@ public class TravelScheduleService {
             throw new IllegalArgumentException("출발지, 도착지, 이동수단은 모두 입력하거나 모두 비워야 합니다.");
         }
 
-        if (travelScheduleDate.toLocalDate().isBefore(travelStartDate) || travelScheduleDate.toLocalDate().isAfter(travelEndDate)) {
+        if (travelScheduleDate.toLocalDate().isBefore(travelStartDate)
+            || travelScheduleDate.toLocalDate().isAfter(travelEndDate)) {
             throw new IllegalArgumentException("여행 일정 날짜는 여행 계획 날짜 안에 포함되어야 합니다.");
         }
     }
