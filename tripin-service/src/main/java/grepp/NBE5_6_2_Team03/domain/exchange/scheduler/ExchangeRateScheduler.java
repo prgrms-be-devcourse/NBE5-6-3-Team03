@@ -4,9 +4,9 @@ import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeResponse;
 import grepp.NBE5_6_2_Team03.domain.exchange.service.ExchangeService;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -21,20 +21,26 @@ public class ExchangeRateScheduler {
         return exchanges == null || exchanges.length == 0;
     }
 
-//    @Scheduled(initialDelay = 0, fixedRate=1000000)     // TODO 이거 한번 데이터 받은 이후에 주석처리 해야합니다.
+    @Scheduled(initialDelay = 0, fixedRate=1000000)     // TODO 이거 한번 데이터 받은 이후에 주석처리 해야합니다.
     public void fetchExchangeRates() {
         log.info("Fetch exchange rates start");
         try {
             LocalDate today = LocalDate.now();
-            ExchangeResponse[] exchanges = exchangeService.getCurrentExchanges(today);
+//            ExchangeResponse[] exchanges = exchangeService.getCurrentExchanges(today);
+            List<ExchangeResponse[]> exchangesList = exchangeService.getMonthlyExchanges(today);
 
-            if (isEmptyExchange(exchanges)) {
-                log.info("Not Exist Exchange Rate Data Now");
-                return;
+            for (int i = 0; i < exchangesList.size(); i++) {
+                ExchangeResponse[] dailyExchanges = exchangesList.get(i);
+                LocalDate dateToSave = today.minusDays(29 - i);
+
+                if (isEmptyExchange(dailyExchanges)) {
+                    log.info("No Exchange Rate Data for " + dateToSave.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                    continue;
+                }
+
+                String formattedDateToSave = dateToSave.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                exchangeService.saveAllExchangeRates(dailyExchanges, formattedDateToSave);
             }
-
-            String formattedToday = today.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-            exchangeService.saveAllExchangeRates(exchanges,formattedToday);
 
             log.info("Fetch exchange exchanges done");
         } catch(Exception e){

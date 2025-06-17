@@ -1,5 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.exchange.service;
 
+import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeListResponse;
 import grepp.NBE5_6_2_Team03.api.controller.exchange.dto.ExchangeResponse;
 import grepp.NBE5_6_2_Team03.domain.exchange.entity.ExchangeRateEntity;
 import grepp.NBE5_6_2_Team03.domain.exchange.repository.ExchangeRateQueryRepository;
@@ -8,9 +9,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import grepp.NBE5_6_2_Team03.domain.exchange.type.ExchangeRateComparison;
+import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -36,7 +39,11 @@ public class ExchangeService {
     public ExchangeResponse[] getCurrentExchanges(LocalDate today) {
         String accessUrl = createAccessUrl(today);
         ResponseEntity<ExchangeResponse[]> exchangeResponses = restTemplate.getForEntity(accessUrl, ExchangeResponse[].class);
-        return exchangeResponses.getBody();
+        List<ExchangeResponse> filteredList = Optional.ofNullable(exchangeResponses.getBody()).stream().flatMap(Arrays::stream).filter(
+            e -> "KRW".equals(e.getCurUnit()) || "JPY(100)".equals(e.getCurUnit()) || "THB".equals(e.getCurUnit())
+        ).toList();
+//        return exchangeResponses.getBody();
+        return filteredList.toArray(new ExchangeResponse[0]);
     }
 
     public ExchangeResponse getLatest(String curUnit){
@@ -95,4 +102,20 @@ public class ExchangeService {
         double baseRate = Double.parseDouble(foreignCurrency.replace(",", ""));
         return curUnit.endsWith("(100)") ? baseRate / 100.0 : baseRate;
     }
+
+    public List<ExchangeResponse[]> getMonthlyExchanges(LocalDate today) {
+        return Stream.iterate(today.minusDays(29), date -> date.plusDays(1))
+            .limit(30)
+            .map(this::getCurrentExchanges)
+            .collect(Collectors.toList());
+    }
+
+    public ExchangeListResponse findAllExchanges() {
+        List<ExchangeResponse> list = exchangeRateRepository.findAll()
+            .stream()
+            .map(ExchangeResponse::fromDto)
+            .collect(Collectors.toList());
+        return new ExchangeListResponse(list);
+    }
+
 }
