@@ -4,6 +4,7 @@ import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request.TravelScheduleStatusRequest;
 import grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.response.GroupedTravelSchedulesResponse;
+import grepp.NBE5_6_2_Team03.domain.schedule.treveltimeai.service.TravelTimeAiService;
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
 import grepp.NBE5_6_2_Team03.domain.travelplan.repository.TravelPlanRepository;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
@@ -26,6 +27,7 @@ public class TravelScheduleService {
 
     private final TravelScheduleRepository travelScheduleRepository;
     private final TravelPlanRepository travelPlanRepository;
+    private final TravelTimeAiService timeAiService;
 
     @Transactional
     public TravelSchedule createSchedule(Long travelPlanId, TravelScheduleRequest request) {
@@ -35,7 +37,7 @@ public class TravelScheduleService {
         validateTravelSchedule(request.getTravelRoute().getDeparture(), request.getTravelRoute().getDestination(), request.getTravelRoute().getTransportation(),
                                request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
-        TravelSchedule schedule = request.toEntity(plan);
+        TravelSchedule schedule = request.toEntity(plan, request, timeAiService);
         return travelScheduleRepository.save(schedule);
     }
 

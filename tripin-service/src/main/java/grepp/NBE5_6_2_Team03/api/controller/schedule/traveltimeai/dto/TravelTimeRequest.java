@@ -7,4 +7,7 @@ public class TravelTimeRequest {
     private String departure;
     private String destination;
     private String transport;
+
+    public TravelTimeRequest(String departure, String destination, String transportation) {
+    }
 }

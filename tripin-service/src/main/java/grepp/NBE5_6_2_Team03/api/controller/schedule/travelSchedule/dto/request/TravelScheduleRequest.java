@@ -1,5 +1,8 @@
 package grepp.NBE5_6_2_Team03.api.controller.schedule.travelSchedule.dto.request;
 
+import grepp.NBE5_6_2_Team03.api.controller.schedule.traveltimeai.dto.TravelTimeRequest;
+import grepp.NBE5_6_2_Team03.api.controller.schedule.traveltimeai.dto.TravelTimeResponse;
+import grepp.NBE5_6_2_Team03.domain.schedule.treveltimeai.service.TravelTimeAiService;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelRoute;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.TravelSchedule;
 import grepp.NBE5_6_2_Team03.domain.travelschedule.ScheduleStatus;
@@ -36,7 +39,25 @@ public class TravelScheduleRequest {
         this.expense = expense;
     }
 
-    public TravelSchedule toEntity(TravelPlan plan) {
+    public TravelSchedule toEntity(TravelPlan plan,TravelScheduleRequest request, TravelTimeAiService aiService) {
+
+        if (travelRouteExist(request)) {
+
+            TravelTimeRequest aiRequest = new TravelTimeRequest(
+                this.travelRoute.getDeparture(),
+                this.travelRoute.getDestination(),
+                this.travelRoute.getTransportation()
+            );
+
+            TravelTimeResponse aiResponse = aiService.predictTime(aiRequest);
+
+            travelRoute = new TravelRoute(
+                aiRequest.getDeparture(),
+                aiRequest.getDestination(),
+                aiRequest.getTransport(),
+                aiResponse.getExpectedTime()
+            );
+        }
         return TravelSchedule.builder()
             .travelPlan(plan)
             .travelRoute(travelRoute)
@@ -47,5 +68,9 @@ public class TravelScheduleRequest {
             .travelScheduleDate(this.travelScheduleDate)
             .expense(this.expense)
             .build();
+    }
+
+    private Boolean travelRouteExist(TravelScheduleRequest travelRoute) {
+        return travelRoute != null;
     }
 }

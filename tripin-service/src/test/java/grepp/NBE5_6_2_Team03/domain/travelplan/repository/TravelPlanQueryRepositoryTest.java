@@ -1,8 +1,6 @@
 package grepp.NBE5_6_2_Team03.domain.travelplan.repository;
 
 import grepp.NBE5_6_2_Team03.domain.adjustment.respository.AdjustmentRepository;
-import grepp.NBE5_6_2_Team03.domain.expense.Expense;
-import grepp.NBE5_6_2_Team03.domain.expense.repository.ExpenseRepository;
 import grepp.NBE5_6_2_Team03.domain.travelplan.Country;
 
 import grepp.NBE5_6_2_Team03.domain.travelplan.TravelPlan;
@@ -49,7 +47,7 @@ class TravelPlanQueryRepositoryTest {
         travelScheduleRepository.saveAll(List.of(travelSchedule, travelSchedule2, travelSchedule3));
 
         //when
-        TravelPlan findTravelPlan = travelPlanQueryRepository.getTravelPlanWithSchedules(travelPlan.getTravelPlanId());
+        TravelPlan findTravelPlan = travelPlanQueryRepository.getTravelPlanWithSchedules(travelPlan.getId());
 
         //then
         assertThat(findTravelPlan).isNotNull();
