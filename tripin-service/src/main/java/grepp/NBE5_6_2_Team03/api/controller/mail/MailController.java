@@ -23,7 +23,7 @@ public class MailController {
     private final AdjustmentService travelPlanQueryService;
     private final ObjectMapper objectMapper;
 
-    @PostMapping("/send/{plan-id}")
+    @GetMapping("/send/{plan-id}")
     public ApiResponse<Void> sendSettlementMail(@PathVariable("plan-id") Long planId,
         @AuthenticationPrincipal CustomUserDetails customUser) {
 
