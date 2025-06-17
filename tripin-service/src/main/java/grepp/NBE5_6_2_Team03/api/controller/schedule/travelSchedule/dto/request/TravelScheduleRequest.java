@@ -15,7 +15,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @Setter
 public class TravelScheduleRequest {
 
-    private TravelRouteRequest travelRouteRequest;
+    private TravelRouteRequest travelRouteRequest = new TravelRouteRequest();
 
     @NotBlank
     private String content;
@@ -32,7 +32,7 @@ public class TravelScheduleRequest {
     @Builder
     private TravelScheduleRequest(TravelRouteRequest travelRouteRequest, String content, String placeName,
         LocalDateTime travelScheduleDate, int expense) {
-        this.travelRouteRequest = travelRouteRequest;
+        this.travelRouteRequest = (travelRouteRequest != null) ? travelRouteRequest : new TravelRouteRequest();
         this.content = content;
         this.placeName = placeName;
         this.travelScheduleDate = travelScheduleDate;
@@ -53,7 +53,4 @@ public class TravelScheduleRequest {
             .build();
     }
 
-    private Boolean travelRouteExist(TravelScheduleRequest request) {
-        return request.getTravelRouteRequest() != null;
-    }
 }

@@ -48,8 +48,15 @@ public class TravelRouteRequest {
     }
 
     private Boolean travelRouteNotExist(TravelRouteRequest request) {
-        return (request.getDeparture() == null || request.getDeparture().isBlank()) &&
-            (request.getDestination() == null || request.getDestination().isBlank()) &&
-            (request.getTransportation() == null || request.getTransportation().isBlank());
+        if (request.getDeparture() != null && !request.getDeparture().isBlank()) {
+            return false;
+        }
+        if (request.getDestination() != null && !request.getDestination().isBlank()) {
+            return false;
+        }
+        if (request.getTransportation() != null && !request.getTransportation().isBlank()) {
+            return false;
+        }
+        return true;
     }
 }
