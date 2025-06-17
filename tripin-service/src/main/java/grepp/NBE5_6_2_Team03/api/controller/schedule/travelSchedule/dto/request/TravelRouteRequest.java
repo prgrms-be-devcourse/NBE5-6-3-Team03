@@ -27,25 +27,26 @@ public class TravelRouteRequest {
         this.destination = request.destination;
         this.transportation = request.transportation;
 
-        if (travelRouteExist(request)) {
-            TravelTimeRequest aiRequest = new TravelTimeRequest(
-                request.getDeparture(),
-                request.getDestination(),
-                request.getTransportation()
-            );
-
-            TravelTimeResponse aiResponse = travelTimeAiService.predictTime(aiRequest);
-            this.expectedTime = aiResponse.getExpectedTime();
-
-            return new TravelRoute(departure, destination, transportation, expectedTime);
+        if (travelRouteNotExist(request)) {
+            return new TravelRoute(departure, destination, transportation, null);
         }
 
-        return new TravelRoute(departure, destination, transportation, null);
+        TravelTimeRequest aiRequest = new TravelTimeRequest(
+            request.getDeparture(),
+            request.getDestination(),
+            request.getTransportation()
+        );
+
+        TravelTimeResponse aiResponse = travelTimeAiService.predictTime(aiRequest);
+        this.expectedTime = aiResponse.getExpectedTime();
+
+        return new TravelRoute(departure, destination, transportation, expectedTime);
+
     }
 
-    private Boolean travelRouteExist(TravelRouteRequest request) {
-        return request.getDeparture() != null &&
-            request.getDestination() != null &&
-            request.getTransportation() != null;
+    private Boolean travelRouteNotExist(TravelRouteRequest request) {
+        return (request.getDeparture() == null || request.getDeparture().isBlank()) &&
+            (request.getDestination() == null || request.getDestination().isBlank()) &&
+            (request.getTransportation() == null || request.getTransportation().isBlank());
     }
 }
