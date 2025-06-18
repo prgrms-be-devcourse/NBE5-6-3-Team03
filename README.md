@@ -13,9 +13,10 @@
 ---
 # 📖 UI Flow Chart
 
-![image](https://github.com/user-attachments/assets/7e2e08ac-0f30-4dd5-8be3-d2e7a552fd8a)
+<img width="3781" alt="uiflowchart" src="https://github.com/user-attachments/assets/8f1e536d-3435-4601-b3e9-87a1377f397f" />
+
 
 ---
 # ☁️ ERD Cloud
 
-![image.png](attachment:76429b63-57fc-42a8-bfe8-162439910273:image.png)
+![erd](https://github.com/user-attachments/assets/d58ce7eb-29dd-457a-b9fa-c60609c5028b)

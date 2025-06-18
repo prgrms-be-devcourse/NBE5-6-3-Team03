@@ -134,33 +134,32 @@
   <div class="grid">
     <div class="card blue">
       <h3>공금</h3>
-      <p th:text="${response.publicMoney} + '원'">40,000원</p>
+      <p th:text="${response.publicMoney} + ${response.curUnit}">40,000원</p>
     </div>
     <div class="card red">
       <h3>총 지출</h3>
-      <p th:text="${response.totalExpense} + '원'">64,030원</p>
+      <p th:text="${response.totalExpense} + ${response.curUnit}">64,030원</p>
     </div>
     <div class="card">
       <h3>참가자</h3>
-      <p th:text="${response.applicants} + '명'">100명</p>
+      <p th:text="${response.applicants} + ${response.curUnit}">100명</p>
     </div>
     <div class="card">
       <h3>현재 환율</h3>
       <p th:text="${response.lastestExchangeRate}">1</p>
     </div>
   </div>
-
   <div class="grid">
     <div class="card result" th:if="${response.personalAdjustmentAmount.personalForeignToReceive != 0}">
       <div class="section-title">💰정산 결과</div>
       <strong>💸1인당 받을 정산금</strong>
-      <p th:text="${response.personalAdjustmentAmount.personalForeignToReceive + response.curUnit}">0원</p>
+      <p th:text="${response.personalAdjustmentAmount.personalForeignToReceive} + ${response.curUnit}">0원</p>
     </div>
 
     <div class="card result" th:if="${response.personalAdjustmentAmount.personalForeignToPay != 0}">
       <div class="section-title">💰정산 결과</div>
       <strong>💸1인당 추가금</strong>
-      <p th:text="${response.personalAdjustmentAmount.personalForeignToPay + response.curUnit}">0원</p>
+      <p th:text="${response.personalAdjustmentAmount.personalForeignToPay} + ${response.curUnit}">0원</p>
     </div>
   </div>
   <div class="expenses">
