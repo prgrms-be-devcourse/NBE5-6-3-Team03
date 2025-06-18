@@ -19,4 +19,4 @@
 ---
 # ☁️ ERD Cloud
 
-![image.png](attachment:76429b63-57fc-42a8-bfe8-162439910273:image.png)
+![erd](https://github.com/user-attachments/assets/d58ce7eb-29dd-457a-b9fa-c60609c5028b)
