@@ -39,10 +39,11 @@ public class TravelScheduleService {
         TravelRouteRequest currentTravelRouteRequest = request.getTravelRouteRequest();
 
         if (travelRouteExist(currentTravelRouteRequest)) {
-            validateTravelSchedule(currentTravelRouteRequest.getDeparture(),
-                currentTravelRouteRequest.getDestination(), currentTravelRouteRequest.getTransportation(),
-                request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
+            validateTravelScheduleRoute(currentTravelRouteRequest.getDeparture(),
+                currentTravelRouteRequest.getDestination(), currentTravelRouteRequest.getTransportation());
         }
+
+        validateTravelScheduleDate(request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
         TravelSchedule schedule = request.toEntity(plan, request, timeAiService);
         return travelScheduleRepository.save(schedule);
@@ -59,14 +60,15 @@ public class TravelScheduleService {
         TravelRouteRequest currentTravelRouteRequest = request.getTravelRouteRequest();
 
         if (travelRouteExist(currentTravelRouteRequest)) {
-            validateTravelSchedule(currentTravelRouteRequest.getDeparture(),
-                currentTravelRouteRequest.getDestination(), currentTravelRouteRequest.getTransportation(),
-                request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
+            validateTravelScheduleRoute(currentTravelRouteRequest.getDeparture(),
+                currentTravelRouteRequest.getDestination(), currentTravelRouteRequest.getTransportation());
 
             travelRoute = currentTravelRouteRequest.toEntity(currentTravelRouteRequest, timeAiService);
         } else {
             travelRoute = schedule.getTravelRoute(); // 따로 요청 사항이 없다면 기존의 route 유지
         }
+
+        validateTravelScheduleDate(request.getTravelScheduleDate(), plan.getTravelStartDate(), plan.getTravelEndDate());
 
         schedule.edit(
             travelRoute,
@@ -116,8 +118,7 @@ public class TravelScheduleService {
             .anyMatch(s -> s != null && !s.isBlank());
     }
 
-    private void validateTravelSchedule(String departure, String destination, String transportation,
-        LocalDateTime travelScheduleDate, LocalDate travelStartDate, LocalDate travelEndDate) {
+    private void validateTravelScheduleRoute(String departure, String destination, String transportation) {
         boolean departureExists = departure != null && !departure.isBlank();
         boolean destinationExists = destination != null && !destination.isBlank();
         boolean transportationExists = transportation != null && !transportation.isBlank();
@@ -125,7 +126,10 @@ public class TravelScheduleService {
         if (!(departureExists == destinationExists && destinationExists == transportationExists)) {
             throw new IllegalArgumentException("출발지, 도착지, 이동수단은 모두 입력하거나 모두 비워야 합니다.");
         }
+    }
 
+    private void validateTravelScheduleDate(LocalDateTime travelScheduleDate, LocalDate travelStartDate,
+        LocalDate travelEndDate) {
         if (travelScheduleDate.toLocalDate().isBefore(travelStartDate)
             || travelScheduleDate.toLocalDate().isAfter(travelEndDate)) {
             throw new IllegalArgumentException("여행 일정 날짜는 여행 계획 날짜 안에 포함되어야 합니다.");
