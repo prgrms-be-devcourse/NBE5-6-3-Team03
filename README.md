@@ -7,7 +7,8 @@
 ---
 # 📝 System Architecture
 
-![image](https://github.com/user-attachments/assets/5f90462d-6e6e-48ea-a825-2eb43b9043a3)
+![시스템구성도 drawio](https://github.com/user-attachments/assets/7fda2a30-c681-4162-abfc-05bc319b5708)
+
 
 ---
 # 📖 UI Flow Chart
