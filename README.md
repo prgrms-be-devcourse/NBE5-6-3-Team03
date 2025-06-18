@@ -7,7 +7,8 @@
 ---
 # 📝 System Architecture
 
-![image](https://github.com/user-attachments/assets/5f90462d-6e6e-48ea-a825-2eb43b9043a3)
+![시스템구성도 drawio](https://github.com/user-attachments/assets/d8294656-289a-4f1c-9862-609ed9111010)
+
 
 ---
 # 📖 UI Flow Chart
@@ -17,4 +18,4 @@
 ---
 # ☁️ ERD Cloud
 
-![image](https://github.com/user-attachments/assets/1df69bf9-e9be-4211-8685-c954068db00a)
+![image.png](attachment:76429b63-57fc-42a8-bfe8-162439910273:image.png)
