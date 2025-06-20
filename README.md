@@ -98,11 +98,11 @@ TripIn은 <strong>여행 계획부터 정산까지 한 번에 관리할 수 있�
 
 | 임시 비밀번호 발급 | 관리자 회원 조회 |
 |:------:|:------:|
-| <img src="https://github.com/user-attachments/assets/a0faeb89-38ff-497e-a2f7-274c8bd894bf" width="350"> | <img src="https://github.com/user-attachments/assets/96a3730a-8760-48bf-b877-ba6eec89cc08" width="350"> |
+| <img src="https://github.com/user-attachments/assets/a0faeb89-38ff-497e-a2f7-274c8bd894bf" width="400"> | <img src="https://github.com/user-attachments/assets/96a3730a-8760-48bf-b877-ba6eec89cc08" width="400"> |
 | 여행 계획 등록 | AI 기반 여행 추천 |
-| <img src="https://github.com/user-attachments/assets/b19a48f7-1575-4346-8699-c687a5695627" width="350"> | <img src="https://github.com/user-attachments/assets/333aabb3-11de-456a-82ae-d3ccf807bb52" width="350"> |
+| <img src="https://github.com/user-attachments/assets/b19a48f7-1575-4346-8699-c687a5695627" width="400"> | <img src="https://github.com/user-attachments/assets/333aabb3-11de-456a-82ae-d3ccf807bb52" width="400"> |
 | 여행 일정 등록 | 정산 |
-| <img src="https://github.com/user-attachments/assets/01f1991e-7302-438a-97a2-953334762653" width="350"> | <img src="https://github.com/user-attachments/assets/871381fe-3b43-40ce-ac9d-1afdd957d3c1" width="350"> |
+| <img src="https://github.com/user-attachments/assets/01f1991e-7302-438a-97a2-953334762653" width="400"> | <img src="https://github.com/user-attachments/assets/871381fe-3b43-40ce-ac9d-1afdd957d3c1" width="400"> |
 
 
 <br/>
