@@ -1,9 +1,11 @@
 # ✈️ TripIn
-![tripin로고](https://github.com/user-attachments/assets/e3334965-78ee-4608-95f0-68d6761cfa3a)
-
-TripIn은 **여행 계획부터 정산까지 한 번에 관리할 수 있는 여행 일정 관리 플랫폼**입니다. <br>
+<div align="center">
+<img width="250" alt="tripinlogo" src="https://github.com/user-attachments/assets/e3334965-78ee-4608-95f0-68d6761cfa3a" />
+<br>
+TripIn은 <strong>여행 계획부터 정산까지 한 번에 관리할 수 있는 여행 일정 관리 플랫폼</strong>입니다. <br>
 사용자는 개인의 여행 계획을 등록하고 여행 일정을 직접 편집할 수 있습니다. <br>
-여행 후에는 공금 및 지출 내역을 바탕으로 정산 내역을 메일로 발송하고 환율 정보를 적용하여 정확한 잔금 / 추가금 분배가 가능합니다.
+여행 후에는 공금/지출 내역을 바탕으로 정산 내역을 메일로 발송하고 환율 정보를 적용하여 정확한 잔금/추가금 분배가 가능합니다.
+</div>
 
 <br/>
 <br/>
@@ -24,28 +26,48 @@ TripIn은 **여행 계획부터 정산까지 한 번에 관리할 수 있는 여
 <br/>
 <br/>
 
+# 🎯 3차 프로젝트 목표
+2차 프로젝트 버전 업 ([2차 프로젝트 보러가기](https://github.com/prgrms-be-devcourse/NBE5-6-2-Team03))
+<br>
+### [기능 추가]
+- AI 기반 계획 추천 기능
+- 여행 계획 생성 시 화폐 단위 설정 기능
+- 정산 시 원화와 외화 함께 표시
+### [고도화]
+- 여행 일정 및 지출 도메인 통합
+- 메일 발송 서버 코틀린 기반 마이그레이션
+- 프론트엔드 Thymeleaf → React 전환
+- 배포 환경 구성 (프론트엔드 - Vercel, 백엔드 - AWS)
+
+<br/>
+<br/>
+
 # 🛠 기술 스택
+<p>
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> 
 <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/spring security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
 <img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/querydsl-0769AD?style=for-the-badge&logo=springboot&logoColor=white">
-
+</p>
+<p>
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
 <img src="https://img.shields.io/badge/redis-FF4438?style=for-the-badge&logo=redis&logoColor=white">
 <img src="https://img.shields.io/badge/langchain4j-1C3C3C?style=for-the-badge&logo=langchain&logoColor=white">
 <img src="https://img.shields.io/badge/Amazon AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white">
-<img src="https://img.shields.io/badge/vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
-
+</p>
+<p>
 <img src="https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white">
 <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+<img src="https://img.shields.io/badge/vercel-000000?style=for-the-badge&logo=vercel&logoColor=white">
+</p>
 
 
 <br/>
 <br/>
 
-# 🎯 기능 소개
+# 🌟 기능 소개
 ## [ 회원 ]
 - 회원가입
 - 로그인 및 로그아웃
